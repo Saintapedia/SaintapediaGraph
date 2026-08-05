@@ -1,0 +1,28 @@
+== Grants table ==
+
+<pre>
+{{#cargo_declare:_table=Grants
+|Funder=Page
+|Recipient=Page
+|Amount=Float
+|Year=Integer
+|Program=String
+}}
+</pre>
+
+== Funder → fundee graph (MVP) ==
+
+<pre>
+{{#saintapedia_graph:
+tables=Grants
+|fields=Funder,Recipient,Amount,Year
+|where=Year>=2023
+|order by=Amount DESC
+|limit=500
+|direction=LR
+|source_field=Funder
+|target_field=Recipient
+|edge_label=Amount
+|clickable=yes
+}}
+</pre>

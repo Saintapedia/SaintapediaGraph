@@ -1,0 +1,28 @@
+== Organizations table ==
+
+<pre>
+{{#cargo_declare:_table=Organizations
+|Name=String
+|ParentOrg=Page
+|Type=String
+|Country=String
+|Website=URL
+}}
+</pre>
+
+== Org chart (MVP) ==
+
+<pre>
+{{#saintapedia_graph:
+tables=Organizations
+|fields=_pageName=Name,ParentOrg,Type
+|where=Type="Nonprofit" OR Type="Foundation" OR Type="Company"
+|order by=Name
+|limit=200
+|direction=TD
+|node_id=Name
+|node_label=Name
+|parent_field=ParentOrg
+|clickable=yes
+}}
+</pre>

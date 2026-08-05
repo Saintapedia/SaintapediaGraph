@@ -1,0 +1,23 @@
+{
+	"@metadata": {
+		"authors": [
+			"Saintapedia contributors"
+		]
+	},
+	"saintapediagraph-desc": "{{desc|name=SaintapediaGraph|url=https://www.mediawiki.org/wiki/Extension:SaintapediaGraph}}",
+	"saintapediagraph-error-missing-tables": "Error when tables= is omitted outside dual mode.",
+	"saintapediagraph-error-missing-parent": "Error when parent_field is missing in hierarchy mode.",
+	"saintapediagraph-error-missing-edge-fields": "Error when source/target fields are incomplete.",
+	"saintapediagraph-error-missing-mode": "Error when no relationship mode parameters are provided.",
+	"saintapediagraph-error-mixed-modes": "Error when hierarchy and edge parameters are mixed.",
+	"saintapediagraph-error-missing-dual-tables": "Error when dual mode tables are incomplete.",
+	"saintapediagraph-error-dual-needs-params": "Error when dual mode is misused from the rows API.",
+	"saintapediagraph-error-no-cargo": "Error when Cargo is not installed.",
+	"saintapediagraph-error-no-results": "Error when the query returns zero graphable rows.",
+	"saintapediagraph-error-query": "Cargo query failure. $1 is the underlying message.",
+	"saintapediagraph-error-generic": "Generic error. $1 is the message.",
+	"saintapediagraph-error-expensive": "Error when the expensive parser function limit is exceeded.",
+	"saintapediagraph-error-render": "Client-side render failure (used as element title).",
+	"saintapediagraph-warning-cycles": "Warning when cycles found. $1 = cycle count (may over-count overlapping cycles).",
+	"saintapediagraph-warning-cycles-broken": "Info when edges were removed. $1 = number of edges."
+}

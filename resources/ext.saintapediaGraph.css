@@ -1,0 +1,77 @@
+/* Cycle / limit warnings from the parser function */
+.saintapedia-graph-warnings {
+	margin: 0.5em 0 0.75em;
+}
+
+.saintapedia-graph-warning {
+	color: #746000;
+	background: #fef6e7;
+	border-left: 3px solid #fc3;
+	padding: 0.4em 0.75em;
+	margin: 0.25em 0;
+}
+
+/* Loading state */
+.saintapedia-graph:not([data-processed]):not(.saintapedia-graph-error) {
+	position: relative;
+	min-height: 4em;
+}
+
+.saintapedia-graph:not([data-processed]):not(.saintapedia-graph-error)::before {
+	content: "Loading diagram…";
+	display: block;
+	color: #54595d;
+	font-size: 0.9em;
+	padding: 0.5em;
+}
+
+.saintapedia-graph {
+	overflow-x: auto;
+	margin: 1em 0;
+	padding: 0.5em;
+}
+
+.saintapedia-graph svg {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Client-side failure */
+.saintapedia-graph.saintapedia-graph-error {
+	color: inherit;
+	white-space: pre-wrap;
+	font-family: monospace;
+	font-size: 0.85em;
+	border: 1px solid #d33;
+	padding: 0.5em 0.75em;
+	margin: 0.5em 0;
+	background: #fff5f5;
+	min-height: 2em;
+}
+
+.saintapedia-graph.saintapedia-graph-error::before {
+	content: none;
+}
+
+/* Server-side error box */
+div.error.saintapedia-graph-error {
+	color: #d33;
+	border: 1px solid #d33;
+	padding: 0.5em 0.75em;
+	margin: 0.5em 0;
+	background: #fff5f5;
+	white-space: normal;
+	font-family: sans-serif;
+}
+
+.saintapedia-graph-source {
+	overflow-x: auto;
+	font-size: 0.9em;
+	background: #f8f9fa;
+	border: 1px solid #c8ccd1;
+	padding: 0.75em;
+}
+
+.saintapedia-graph noscript .saintapedia-graph-source {
+	display: block;
+}

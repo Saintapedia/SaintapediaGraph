@@ -1,0 +1,46 @@
+<noinclude>
+'''Template:Funding network''' — dual-table funding diagram for [[Help:Saintapedia Graph]]
+(nodes from Organizations, edges from Grants).
+
+Uses <code>node_id=_pageName</code> by default so Funder/Recipient page titles match.
+<code>style</code> / <code>subgraph</code> must be real Cargo columns on the nodes table.
+
+<pre>
+{{Funding network
+|nodes=Organizations
+|edges=Grants
+|style=Type
+|subgraph=Country
+|source=Funder
+|target=Recipient
+|edge_label=Amount
+|edges_where=Year>=2023
+|direction=LR
+|theme=forest
+|limit=300
+}}
+</pre>
+
+[[Category:Saintapedia Graph templates]]
+</noinclude><includeonly>{{#saintapedia_graph:
+nodes_table={{{nodes|Organizations}}}
+|nodes_fields=_pageName,Name{{#if:{{{style|}}}|,{{{style}}}}}{{#if:{{{subgraph|}}}|,{{{subgraph}}}}}
+|nodes_where={{{nodes_where|}}}
+|edges_table={{{edges|Grants}}}
+|edges_fields={{{source|Funder}}},{{{target|Recipient}}}{{#if:{{{edge_label|Amount}}}|,{{{edge_label|Amount}}}}}
+|edges_where={{{edges_where|{{{where|}}}}}}
+|node_id={{{id|_pageName}}}
+|node_label={{{label|Name}}}
+|page_field={{{page|_pageName}}}
+|source_field={{{source|Funder}}}
+|target_field={{{target|Recipient}}}
+|edge_label={{{edge_label|Amount}}}
+|style_by={{{style|}}}
+|subgraph_by={{{subgraph|}}}
+|direction={{{direction|LR}}}
+|limit={{{limit|300}}}
+|clickable={{{clickable|yes}}}
+|theme={{{theme|forest}}}
+|warn_cycles={{{warn_cycles|yes}}}
+|break_cycles={{{break_cycles|no}}}
+}}</includeonly>

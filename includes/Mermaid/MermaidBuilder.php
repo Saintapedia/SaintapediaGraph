@@ -1,0 +1,220 @@
+<?php
+
+namespace MediaWiki\Extension\SaintapediaGraph\Mermaid;
+
+/**
+ * GraphModel → Mermaid flowchart source.
+ */
+class MermaidBuilder {
+
+	private GraphModel $graph;
+	/** @var array<string, mixed> */
+	private array $options;
+
+	/**
+	 * @param GraphModel $graph
+	 * @param array<string, mixed> $options
+	 */
+	public function __construct( GraphModel $graph, array $options = [] ) {
+		global $wgSaintapediaGraphDefaultDirection, $wgSaintapediaGraphClickable,
+			$wgSaintapediaGraphDefaultTheme, $wgSaintapediaGraphStylePalette;
+
+		$this->graph = $graph;
+		$this->options = $options + [
+			'direction' => $wgSaintapediaGraphDefaultDirection ?? 'TD',
+			'clickable' => $wgSaintapediaGraphClickable ?? true,
+			'theme' => $wgSaintapediaGraphDefaultTheme ?? 'default',
+			'link_style' => '-->',
+			'style_palette' => $wgSaintapediaGraphStylePalette ?? [
+				'#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f',
+				'#edc948', '#b07aa1', '#ff9da7', '#9c755f', '#bab0ac',
+			],
+		];
+	}
+
+	/**
+	 * @return string
+	 */
+	public function build(): string {
+		$lines = [];
+
+		$theme = (string)( $this->options['theme'] ?? 'default' );
+		$init = json_encode( [
+			'theme' => $theme,
+			'securityLevel' => 'loose',
+			'flowchart' => [ 'htmlLabels' => false, 'useMaxWidth' => true ],
+		], JSON_UNESCAPED_SLASHES );
+		if ( $init !== false ) {
+			$lines[] = '%%{init: ' . $init . '}%%';
+		}
+
+		$direction = strtoupper( (string)$this->options['direction'] );
+		if ( !in_array( $direction, [ 'TD', 'TB', 'BT', 'LR', 'RL' ], true ) ) {
+			$direction = 'TD';
+		}
+		if ( $direction === 'TB' ) {
+			$direction = 'TD';
+		}
+		$lines[] = "flowchart $direction";
+
+		$link = (string)( $this->options['link_style'] ?? '-->' );
+		$allowedLinks = [ '-->', '---', '-.->', '==>', '<-->' ];
+		if ( !in_array( $link, $allowedLinks, true ) ) {
+			$link = '-->';
+		}
+
+		$subgraphs = $this->graph->getSubgraphGroups();
+		$nodesInSubgraph = [];
+		foreach ( $subgraphs as $members ) {
+			foreach ( $members as $nid ) {
+				$nodesInSubgraph[$nid] = true;
+			}
+		}
+
+		foreach ( $subgraphs as $sgKey => $memberIds ) {
+			$sgId = MermaidEscaper::subgraphId( $sgKey );
+			$sgLabel = MermaidEscaper::label( $sgKey );
+			// Concatenate — "$sgId[...]" would be parsed as array access in double quotes.
+			$lines[] = '  subgraph ' . $sgId . '["' . $sgLabel . '"]';
+			foreach ( $memberIds as $nid ) {
+				$node = $this->graph->getNodes()[$nid] ?? null;
+				if ( $node ) {
+					$lines[] = '    ' . $this->formatNode( $node );
+				}
+			}
+			$lines[] = '  end';
+		}
+
+		foreach ( $this->graph->getNodes() as $nid => $node ) {
+			if ( isset( $nodesInSubgraph[$nid] ) ) {
+				continue;
+			}
+			$lines[] = '  ' . $this->formatNode( $node );
+		}
+
+		foreach ( $this->graph->getEdges() as $edge ) {
+			if ( $edge['label'] !== null ) {
+				$el = MermaidEscaper::edgeLabel( $edge['label'] );
+				$lines[] = '  ' . $edge['from'] . " $link|$el| " . $edge['to'];
+			} else {
+				$lines[] = '  ' . $edge['from'] . " $link " . $edge['to'];
+			}
+		}
+
+		if ( !empty( $this->options['clickable'] ) ) {
+			foreach ( $this->graph->getNodes() as $node ) {
+				if ( $node['page'] === null || $node['page'] === '' ) {
+					continue;
+				}
+				$url = $this->pageUrl( $node['page'] );
+				if ( $url === null || $url === '' || !$this->isLocalPath( $url ) ) {
+					continue;
+				}
+				$tip = MermaidEscaper::clickTarget( $node['page'] );
+				$safeUrl = str_replace( '"', '%22', $url );
+				$lines[] = '  click ' . $node['id'] . ' "' . $safeUrl . '" "' . $tip . '"';
+			}
+		}
+
+		foreach ( $this->buildStyleLines() as $sl ) {
+			$lines[] = '  ' . $sl;
+		}
+
+		return implode( "\n", $lines ) . "\n";
+	}
+
+	/**
+	 * @param array $node
+	 * @return string
+	 */
+	private function formatNode( array $node ): string {
+		$label = MermaidEscaper::label( $node['label'] );
+		if ( $label === '' ) {
+			$label = $node['id'];
+		}
+		return $node['id'] . '["' . $label . '"]';
+	}
+
+	/**
+	 * @return list<string>
+	 */
+	private function buildStyleLines(): array {
+		$palette = $this->options['style_palette'] ?? [];
+		if ( !is_array( $palette ) || $palette === [] ) {
+			$palette = [
+				'#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f',
+				'#edc948', '#b07aa1', '#ff9da7', '#9c755f', '#bab0ac',
+			];
+		}
+
+		$styleValues = $this->graph->getStyleValues();
+		if ( $styleValues === [] ) {
+			return [];
+		}
+
+		$lines = [];
+		$classMembers = [];
+		$i = 0;
+		foreach ( $styleValues as $value ) {
+			$class = MermaidEscaper::className( $value );
+			$color = $palette[$i % count( $palette )];
+			$i++;
+			$lines[] = "classDef $class fill:$color,stroke:#333,color:#fff,stroke-width:1px;";
+			$classMembers[$class] = [];
+		}
+
+		foreach ( $this->graph->getNodes() as $node ) {
+			if ( $node['style'] === null ) {
+				continue;
+			}
+			$class = MermaidEscaper::className( $node['style'] );
+			$classMembers[$class][] = $node['id'];
+		}
+
+		foreach ( $classMembers as $class => $ids ) {
+			if ( $ids === [] ) {
+				continue;
+			}
+			$lines[] = 'class ' . implode( ',', $ids ) . " $class;";
+		}
+
+		return $lines;
+	}
+
+	/**
+	 * @param string $pageTitle
+	 * @return string|null
+	 */
+	private function pageUrl( string $pageTitle ): ?string {
+		if ( class_exists( \MediaWiki\Title\Title::class ) ) {
+			$title = \MediaWiki\Title\Title::newFromText( $pageTitle );
+			if ( $title ) {
+				return $title->getLocalURL();
+			}
+		}
+		if ( class_exists( \Title::class ) ) {
+			$title = \Title::newFromText( $pageTitle );
+			if ( $title ) {
+				return $title->getLocalURL();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param string $url
+	 * @return bool
+	 */
+	private function isLocalPath( string $url ): bool {
+		if ( $url === '' ) {
+			return false;
+		}
+		if ( isset( $url[0] ) && $url[0] === '/' && ( !isset( $url[1] ) || $url[1] !== '/' ) ) {
+			return true;
+		}
+		if ( preg_match( '#^(index\.php|w/index\.php)\?#', $url ) ) {
+			return true;
+		}
+		return false;
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"@metadata": {
+		"authors": [
+			"Saintapedia contributors"
+		]
+	},
+	"saintapediagraph-desc": "Saintapedia Graph — Mermaid org charts and funding networks from Extension:Cargo data",
+	"saintapediagraph-error-missing-tables": "Saintapedia Graph: the \"tables\" parameter is required (or use nodes_table + edges_table for dual mode).",
+	"saintapediagraph-error-missing-parent": "Saintapedia Graph: hierarchical diagrams need \"parent_field\".",
+	"saintapediagraph-error-missing-edge-fields": "Saintapedia Graph: edge diagrams need both \"source_field\" and \"target_field\".",
+	"saintapediagraph-error-missing-mode": "Saintapedia Graph: specify a mode — parent_field (hierarchy), source_field+target_field (edges), or nodes_table+edges_table (dual).",
+	"saintapediagraph-error-mixed-modes": "Saintapedia Graph: do not mix parent_field with source_field/target_field. Use hierarchy, edge, or dual mode only.",
+	"saintapediagraph-error-missing-dual-tables": "Saintapedia Graph: dual mode requires both \"nodes_table\" and \"edges_table\".",
+	"saintapediagraph-error-dual-needs-params": "Saintapedia Graph: dual mode must be invoked via buildFromParams (nodes_table + edges_table), not raw rows alone.",
+	"saintapediagraph-error-no-cargo": "Saintapedia Graph: Extension:Cargo is required but was not found.",
+	"saintapediagraph-error-no-results": "Saintapedia Graph: the query returned no rows to graph.",
+	"saintapediagraph-error-query": "Saintapedia Graph: Cargo query failed: $1",
+	"saintapediagraph-error-generic": "Saintapedia Graph: $1",
+	"saintapediagraph-error-expensive": "Saintapedia Graph: too many expensive parser functions on this page; remove some graphs or raise $wgExpensiveParserFunctionLimit.",
+	"saintapediagraph-error-render": "Saintapedia Graph: failed to render diagram.",
+	"saintapediagraph-warning-cycles": "Saintapedia Graph: detected $1 directed cycle(s) in the graph. Use break_cycles=yes to remove cycle-closing edges.",
+	"saintapediagraph-warning-cycles-broken": "Saintapedia Graph: removed $1 edge(s) to break directed cycle(s)."
+}

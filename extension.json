@@ -1,0 +1,117 @@
+{
+	"name": "SaintapediaGraph",
+	"version": "0.2.1",
+	"author": [
+		"Saintapedia contributors"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:SaintapediaGraph",
+	"descriptionmsg": "saintapediagraph-desc",
+	"license-name": "GPL-2.0-or-later",
+	"type": "parserhook",
+	"requires": {
+		"MediaWiki": ">= 1.39.0",
+		"extensions": {
+			"Cargo": "*"
+		}
+	},
+	"manifest_version": 2,
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\SaintapediaGraph\\": "includes/"
+	},
+	"TestAutoloadNamespaces": {
+		"MediaWiki\\Extension\\SaintapediaGraph\\Tests\\": "tests/phpunit/"
+	},
+	"MessagesDirs": {
+		"SaintapediaGraph": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"SaintapediaGraphMagic": "SaintapediaGraph.i18n.magic.php"
+	},
+	"HookHandlers": {
+		"main": {
+			"class": "MediaWiki\\Extension\\SaintapediaGraph\\Hooks"
+		}
+	},
+	"Hooks": {
+		"ParserFirstCallInit": "main"
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "SaintapediaGraph/resources"
+	},
+	"ResourceModules": {
+		"ext.saintapediaGraph": {
+			"packageFiles": [
+				"ext.saintapediaGraph.js",
+				"lib/mermaid.min.js"
+			],
+			"styles": [
+				"ext.saintapediaGraph.css"
+			],
+			"messages": [
+				"saintapediagraph-error-render"
+			],
+			"dependencies": [
+				"mediawiki.util"
+			],
+			"targets": [
+				"desktop",
+				"mobile"
+			]
+		}
+	},
+	"config": {
+		"SaintapediaGraphDefaultLimit": {
+			"value": 500,
+			"description": "Default maximum rows fetched for a diagram"
+		},
+		"SaintapediaGraphMaxLimit": {
+			"value": 1000,
+			"description": "Hard maximum nodes/edges for a diagram"
+		},
+		"SaintapediaGraphDefaultDirection": {
+			"value": "TD",
+			"description": "Default flowchart direction (TD, LR, BT, RL)"
+		},
+		"SaintapediaGraphClickable": {
+			"value": true,
+			"description": "Whether nodes link to wiki pages by default"
+		},
+		"SaintapediaGraphUseStandaloneRenderer": {
+			"value": true,
+			"description": "Emit interactive Mermaid containers (false shows source only)"
+		},
+		"SaintapediaGraphDefaultTheme": {
+			"value": "default",
+			"description": "Default Mermaid theme"
+		},
+		"SaintapediaGraphBreakCycles": {
+			"value": false,
+			"description": "If true, drop edges that close directed cycles"
+		},
+		"SaintapediaGraphWarnCycles": {
+			"value": true,
+			"description": "Warn when directed cycles are detected"
+		},
+		"SaintapediaGraphStylePalette": {
+			"value": [
+				"#4e79a7",
+				"#f28e2b",
+				"#e15759",
+				"#76b7b2",
+				"#59a14f",
+				"#edc948",
+				"#b07aa1",
+				"#ff9da7",
+				"#9c755f",
+				"#bab0ac"
+			],
+			"description": "Colors used for style_by classDefs"
+		}
+	},
+	"ConfigRegistry": {
+		"SaintapediaGraph": "GlobalVarConfig::newInstance"
+	}
+}

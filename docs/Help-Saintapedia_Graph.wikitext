@@ -1,0 +1,286 @@
+{{#seo:|title=Help:Saintapedia Graph}}
+{{DISPLAYTITLE:Help:Saintapedia Graph}}
+
+'''Saintapedia Graph''' turns [[mw:Extension:Cargo|Cargo]] query results into interactive [[mw:Extension:Mermaid|Mermaid]] flowcharts — especially '''organization charts''' and '''funder → fundee''' (or any source → target) networks.
+
+{{note|This help page documents the '''MVP''' of the extension as installed on this wiki. Advanced features (styles by field, subgraphs, special-page builder, Lua) are planned for later.}}
+
+== Requirements ==
+
+* [[mw:Extension:Cargo|Extension:Cargo]] (required)
+* Saintapedia Graph (this extension)
+* MediaWiki 1.39+ / PHP 8.1+
+
+'''You do ''not'' need Extension:Mermaid.''' Saintapedia Graph ships a bundled Mermaid library and renders diagrams itself.
+
+== Quick start ==
+
+=== 1. Declare Cargo tables ===
+
+'''Organizations''' (hierarchy / org chart):
+
+<pre>
+{{#cargo_declare:_table=Organizations
+|Name=String
+|ParentOrg=Page
+|Type=String
+|Country=String
+|Website=URL
+}}
+</pre>
+
+'''Grants''' (edges / funding network):
+
+<pre>
+{{#cargo_declare:_table=Grants
+|Funder=Page
+|Recipient=Page
+|Amount=Float
+|Year=Integer
+|Program=String
+}}
+</pre>
+
+Store rows with <code>#cargo_store</code> (usually from a template), then create the tables at [[Special:CargoTables]] if needed.
+
+=== 2. Draw an org chart ===
+
+<pre>
+{{#saintapedia_graph:
+tables=Organizations
+|fields=_pageName=Name,ParentOrg,Type
+|parent_field=ParentOrg
+|node_id=Name
+|node_label=Name
+|direction=TD
+|clickable=yes
+}}
+</pre>
+
+Edges are drawn '''parent → child''' (top-down reporting line).
+
+=== 3. Draw a funding network ===
+
+<pre>
+{{#saintapedia_graph:
+tables=Grants
+|fields=Funder,Recipient,Amount,Year
+|source_field=Funder
+|target_field=Recipient
+|edge_label=Amount
+|direction=LR
+|clickable=yes
+|theme=forest
+}}
+</pre>
+
+=== Live demo on this wiki ===
+
+See [[Saintapedia Graph demo]] for seeded Organizations + Grants data.
+
+== Relationship modes ==
+
+You must choose '''one''' mode per diagram (mixing them is an error).
+
+{| class="wikitable"
+! Mode
+! When to use
+! Required parameters
+! Edge direction
+|-
+| '''Hierarchy (parent)'''
+| Org charts, subsidiaries, “reports to”
+| <code>parent_field=…</code>
+| Parent → child
+|-
+| '''Edge (source / target)'''
+| Funding, partnerships, ownership links
+| <code>source_field=…</code> '''and''' <code>target_field=…</code>
+| Source → target
+|}
+
+Optional edge caption: <code>edge_label=Amount</code> (or any field).
+
+== Parameters ==
+
+=== Cargo query (same spirit as <code>#cargo_query</code>) ===
+
+{| class="wikitable"
+! Parameter
+! Description
+|-
+| <code>tables</code> / <code>table</code>
+| '''Required.''' One or more Cargo tables (comma-separated). Use table aliases if needed.
+|-
+| <code>fields</code>
+| Columns to select. The extension will add any fields it still needs for the diagram.
+|-
+| <code>where</code>
+| Filter (Cargo/SQL-style conditions).
+|-
+| <code>join on</code>
+| Join conditions when using multiple tables. '''Required if more than one table.'''
+|-
+| <code>group by</code> / <code>having</code>
+| Aggregation (same rules as Cargo).
+|-
+| <code>order by</code>
+| Sort order.
+|-
+| <code>limit</code>
+| Max rows (capped by site config, typically 1000).
+|-
+| <code>offset</code>
+| Skip initial rows.
+|}
+
+=== Diagram ===
+
+{| class="wikitable"
+! Parameter
+! Default
+! Description
+|-
+| <code>direction</code>
+| <code>TD</code>
+| Layout: <code>TD</code> (top-down), <code>LR</code> (left-right), <code>BT</code>, <code>RL</code>
+|-
+| <code>node_id</code>
+| <code>_pageName</code>
+| Field that uniquely identifies a node
+|-
+| <code>node_label</code>
+| same as <code>node_id</code>
+| Text shown on the node
+|-
+| <code>page_field</code>
+| hierarchy: <code>_pageName</code>; edge: ends themselves
+| Wiki page title used for click links
+|-
+| <code>parent_field</code>
+| —
+| Hierarchy mode only
+|-
+| <code>source_field</code> / <code>target_field</code>
+| —
+| Edge mode only (both required)
+|-
+| <code>edge_label</code>
+| —
+| Optional edge caption field
+|-
+| <code>link_style</code>
+| <code>--></code>
+| <code>--></code>, <code>-.-></code>, <code>==></code>, <code>---</code>, <code><--></code>
+|-
+| <code>clickable</code>
+| <code>yes</code>
+| <code>yes</code>/<code>no</code> — click node opens the wiki page
+|-
+| <code>theme</code>
+| <code>default</code>
+| Mermaid theme: <code>default</code>, <code>forest</code>, <code>dark</code>, <code>neutral</code>, …
+|-
+| <code>format</code>
+| <code>mermaid</code>
+| <code>mermaid</code> (render) or <code>raw</code> (source only, for debugging)
+|}
+
+'''Alias:''' <code>{{#cargo_mermaid:…}}</code> accepts the same parameters as <code>{{#saintapedia_graph:…}}</code>.
+
+== Multiple Cargo tables ==
+
+'''Yes — multi-table queries work''', using the same rules as <code>#cargo_query</code>:
+
+* List every table in <code>tables=</code>
+* Provide a full <code>join on=</code> chain so Cargo can connect them
+* Point diagram fields at the correct table columns (aliases or <code>Table.Field</code>)
+
+=== Example: style-ready join (edges + org type) ===
+
+<pre>
+{{#saintapedia_graph:
+tables=Grants,Organizations
+|join on=Grants.Funder=Organizations._pageName
+|fields=Grants.Funder,Grants.Recipient,Grants.Amount,Organizations.Type
+|source_field=Funder
+|target_field=Recipient
+|edge_label=Amount
+|direction=LR
+|limit=300
+}}
+</pre>
+
+'''What this does today'''
+
+* One Cargo result set → one set of nodes and edges
+* In '''edge mode''', each row is one edge; node names come from source/target values
+* Joins can enrich filters or edge labels (e.g. amount from Grants)
+
+'''What multi-table does ''not'' fully do yet (MVP limits)'''
+
+* No automatic “nodes from table A, edges from table B” dual-query mode
+* No per-end styling from a second table’s Type field (planned: <code>style_by</code>)
+* No recursive multi-hop expansion (“show everyone within 2 steps of X”)
+
+For complex multi-table graphs, common patterns:
+
+# Filter with a join, keep edge fields simple (example above)
+# Pre-materialize a Cargo view table that already holds Source/Target/Label
+# Use two diagrams on one page (org chart + funding network) rather than one giant graph
+
+== Tips for good graphs ==
+
+* Prefer '''Page'''-type fields for parent/funder/recipient so click links resolve
+* Keep <code>limit=</code> reasonable (hundreds, not tens of thousands)
+* Use <code>where=</code> to focus (year, type, program)
+* <code>direction=TD</code> for org charts; <code>LR</code> for networks
+* <code>format=raw</code> if a diagram fails — inspect Mermaid source
+* Hard-refresh the browser after extension updates (Ctrl+Shift+R)
+
+== Troubleshooting ==
+
+{| class="wikitable"
+! Symptom
+! What to try
+|-
+| “tables parameter is required”
+| Add <code>tables=YourTable</code>
+|-
+| Missing parent / edge fields
+| Set <code>parent_field</code> '''or''' both <code>source_field</code> and <code>target_field</code> (not both modes at once)
+|-
+| No results
+| Check Cargo data at [[Special:CargoTables]]; re-save pages that <code>#cargo_store</code>
+|-
+| “Diagram failed to render”
+| Hard-refresh; try <code>format=raw</code>; check browser console
+|-
+| Too many expensive parser functions
+| Fewer graphs per page, or raise <code>$wgExpensiveParserFunctionLimit</code>
+|-
+| Join error from Cargo
+| Ensure <code>join on=</code> mentions every table in <code>tables=</code>
+|}
+
+== Configuration (admins) ==
+
+Common <code>LocalSettings.php</code> / Canasta settings:
+
+<pre>
+$wgSaintapediaGraphDefaultDirection = 'TD';
+$wgSaintapediaGraphDefaultLimit = 500;
+$wgSaintapediaGraphMaxLimit = 1000;
+$wgSaintapediaGraphClickable = true;
+$wgSaintapediaGraphDefaultTheme = 'default';
+</pre>
+
+== Related pages ==
+
+* [[Saintapedia Graph demo]] — live org chart + funding network
+* [[Special:CargoTables]] — declare / recreate Cargo tables
+* [[mw:Extension:Cargo|Cargo documentation]]
+
+[[Category:Help]]
+[[Category:Cargo]]
+[[Category:Saintapedia Graph]]

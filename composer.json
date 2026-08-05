@@ -1,0 +1,25 @@
+{
+	"name": "saintapedia/graph",
+	"type": "mediawiki-extension",
+	"description": "Saintapedia Graph — Mermaid org charts and funding networks from Extension:Cargo.",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"php": ">=8.1"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^9.5 || ^10.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"MediaWiki\\Extension\\SaintapediaGraph\\": "includes/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"MediaWiki\\Extension\\SaintapediaGraph\\Tests\\": "tests/phpunit/"
+		}
+	},
+	"scripts": {
+		"test": "phpunit tests/phpunit"
+	}
+}

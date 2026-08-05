@@ -1,0 +1,37 @@
+<noinclude>
+'''Template:Org chart''' — wrapper for [[Help:Saintapedia Graph]] hierarchy diagrams.
+
+<code>style</code> / <code>subgraph</code> must be real Cargo columns (e.g. Type, Country).
+
+<pre>
+{{Org chart
+|table=Organizations
+|parent=ParentOrg
+|id=Name
+|label=Name
+|style=Type
+|subgraph=Country
+|where=
+|direction=TD
+|limit=200
+}}
+</pre>
+
+[[Category:Saintapedia Graph templates]]
+</noinclude><includeonly>{{#saintapedia_graph:
+tables={{{table|Organizations}}}
+|fields=_pageName={{{id|Name}}},{{{parent|ParentOrg}}}{{#if:{{{style|}}}|,{{{style}}}}}{{#if:{{{subgraph|}}}|,{{{subgraph}}}}}
+|where={{{where|}}}
+|order by={{{order|{{{id|Name}}}}}}
+|limit={{{limit|200}}}
+|direction={{{direction|TD}}}
+|node_id={{{id|Name}}}
+|node_label={{{label|{{{id|Name}}}}}}
+|parent_field={{{parent|ParentOrg}}}
+|style_by={{{style|}}}
+|subgraph_by={{{subgraph|}}}
+|clickable={{{clickable|yes}}}
+|theme={{{theme|default}}}
+|warn_cycles={{{warn_cycles|yes}}}
+|break_cycles={{{break_cycles|no}}}
+}}</includeonly>
