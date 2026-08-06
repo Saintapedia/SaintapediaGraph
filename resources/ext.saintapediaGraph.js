@@ -21,6 +21,10 @@
 		if ( ready ) {
 			return;
 		}
+		// Global defaults only. Per-diagram theme comes from %%{init}%% in
+		// the Mermaid source (data-mermaid). securityLevel must stay "loose"
+		// so click href lines (nodes → local wiki pages) work; the PHP builder
+		// only emits same-origin local paths for those clicks.
 		mermaid.initialize( {
 			startOnLoad: false,
 			theme: 'default',

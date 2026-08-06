@@ -85,7 +85,7 @@
 		},
 		"SaintapediaGraphDefaultTheme": {
 			"value": "default",
-			"description": "Default Mermaid theme"
+			"description": "Default Mermaid theme (default, base, dark, forest, neutral)"
 		},
 		"SaintapediaGraphBreakCycles": {
 			"value": false,

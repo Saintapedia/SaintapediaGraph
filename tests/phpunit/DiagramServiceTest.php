@@ -160,4 +160,47 @@ class DiagramServiceTest extends TestCase {
 		$this->assertSame( 'Name', $out['node_label'] );
 		$this->assertSame( '_pageName', $out['node_id'] );
 	}
+
+	public function testUnknownThemeWarnsAndFallsBack() {
+		$service = new DiagramService();
+		$rows = [
+			[ 'Name' => 'Root', 'ParentOrg' => '' ],
+			[ 'Name' => 'Child', 'ParentOrg' => 'Root' ],
+		];
+		$result = $service->buildFromRows( $rows, [
+			'node_id' => 'Name',
+			'node_label' => 'Name',
+			'parent_field' => 'ParentOrg',
+			'clickable' => 'no',
+			'theme' => 'rainbow-unicorn',
+			'warn_cycles' => 'no',
+		] );
+
+		$this->assertStringContainsString( '"theme":"default"', $result['source'] );
+		$this->assertStringNotContainsString( 'rainbow-unicorn', $result['source'] );
+		$this->assertNotEmpty( $result['warnings'] );
+		$joined = implode( "\n", $result['warnings'] );
+		$this->assertStringContainsString( 'saintapediagraph-warning-unknown-theme', $joined );
+		$this->assertStringContainsString( 'rainbow-unicorn', $joined );
+	}
+
+	public function testKnownThemeDoesNotWarn() {
+		$service = new DiagramService();
+		$rows = [
+			[ 'Name' => 'Root', 'ParentOrg' => '' ],
+		];
+		$result = $service->buildFromRows( $rows, [
+			'node_id' => 'Name',
+			'node_label' => 'Name',
+			'parent_field' => 'ParentOrg',
+			'clickable' => 'no',
+			'theme' => 'Forest',
+			'warn_cycles' => 'no',
+		] );
+
+		$this->assertStringContainsString( '"theme":"forest"', $result['source'] );
+		foreach ( $result['warnings'] as $w ) {
+			$this->assertStringNotContainsString( 'unknown-theme', $w );
+		}
+	}
 }

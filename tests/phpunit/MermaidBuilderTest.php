@@ -64,4 +64,104 @@ class MermaidBuilderTest extends TestCase {
 			$this->assertTrue( true );
 		}
 	}
+
+	public function testNormalizeThemeAllowlist() {
+		$this->assertSame( 'default', MermaidBuilder::normalizeTheme( '' ) );
+		$this->assertSame( 'default', MermaidBuilder::normalizeTheme( '  ' ) );
+		$this->assertSame( 'forest', MermaidBuilder::normalizeTheme( 'Forest' ) );
+		$this->assertSame( 'dark', MermaidBuilder::normalizeTheme( 'DARK' ) );
+		$this->assertSame( 'base', MermaidBuilder::normalizeTheme( 'base' ) );
+		$this->assertSame( 'neutral', MermaidBuilder::normalizeTheme( 'neutral' ) );
+		// Unknown / injection-style values fall back to default.
+		$this->assertSame( 'default', MermaidBuilder::normalizeTheme( 'not-a-theme' ) );
+		$this->assertSame( 'default', MermaidBuilder::normalizeTheme( 'default"; alert(1)//' ) );
+		$this->assertSame( 'default', MermaidBuilder::normalizeTheme( 'custom' ) );
+		$this->assertTrue( MermaidBuilder::isAllowedTheme( 'Forest' ) );
+		$this->assertFalse( MermaidBuilder::isAllowedTheme( 'custom' ) );
+		$this->assertFalse( MermaidBuilder::isAllowedTheme( '' ) );
+	}
+
+	public function testBuildUsesValidatedThemeInInit() {
+		$g = new GraphModel();
+		$id = MermaidEscaper::nodeId( 'A' );
+		$g->addNode( $id, 'A' );
+
+		$good = ( new MermaidBuilder( $g, [
+			'clickable' => false,
+			'theme' => 'forest',
+		] ) )->build();
+		$this->assertStringContainsString( '"theme":"forest"', $good );
+
+		$bad = ( new MermaidBuilder( $g, [
+			'clickable' => false,
+			'theme' => 'rainbow-unicorn',
+		] ) )->build();
+		$this->assertStringContainsString( '"theme":"default"', $bad );
+		$this->assertStringNotContainsString( 'rainbow-unicorn', $bad );
+	}
+
+	public function testClickLinesUseLocalUrlAndTooltip() {
+		$g = new GraphModel();
+		$id = MermaidEscaper::nodeId( 'Acme Org' );
+		$g->addNode( $id, 'Acme Org', 'Acme Org' );
+
+		$builder = new class( $g, [ 'clickable' => true, 'theme' => 'default' ] ) extends MermaidBuilder {
+			protected function pageUrl( string $pageTitle ): ?string {
+				return '/wiki/' . str_replace( ' ', '_', $pageTitle );
+			}
+		};
+
+		$src = $builder->build();
+		$expected = '  click ' . $id . ' "/wiki/Acme_Org" "Acme Org"';
+		$this->assertStringContainsString( $expected, $src );
+	}
+
+	public function testClickLinesEscapeSpecialCharsInUrlAndTooltip() {
+		$g = new GraphModel();
+		$id = MermaidEscaper::nodeId( 'Quote Page' );
+		$g->addNode( $id, 'Quote Page', 'Say "Hi"' );
+
+		$builder = new class( $g, [ 'clickable' => true ] ) extends MermaidBuilder {
+			protected function pageUrl( string $pageTitle ): ?string {
+				// Simulate a path that still needs quote safety.
+				return '/wiki/Say_"Hi"';
+			}
+		};
+
+		$src = $builder->build();
+		$this->assertStringContainsString(
+			'  click ' . $id . ' "/wiki/Say_%22Hi%22" "Say \\"Hi\\""',
+			$src
+		);
+	}
+
+	public function testClickLinesRejectNonLocalUrls() {
+		$g = new GraphModel();
+		$id = MermaidEscaper::nodeId( 'Page' );
+		$g->addNode( $id, 'Page', 'Page' );
+
+		$builder = new class( $g, [ 'clickable' => true ] ) extends MermaidBuilder {
+			protected function pageUrl( string $pageTitle ): ?string {
+				return 'https://evil.example/wiki/' . $pageTitle;
+			}
+		};
+
+		$src = $builder->build();
+		$this->assertStringNotContainsString( 'click ', $src );
+		$this->assertStringNotContainsString( 'evil.example', $src );
+	}
+
+	public function testClickLinesRejectProtocolRelativeUrls() {
+		$g = new GraphModel();
+		$id = MermaidEscaper::nodeId( 'Page' );
+		$g->addNode( $id, 'Page', 'Page' );
+
+		$builder = new class( $g, [ 'clickable' => true ] ) extends MermaidBuilder {
+			protected function pageUrl( string $pageTitle ): ?string {
+				return '//evil.example/' . $pageTitle;
+			}
+		};
+
+		$this->assertStringNotContainsString( 'click ', $builder->build() );
+	}
 }

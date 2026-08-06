@@ -75,14 +75,47 @@ class MermaidEscaper {
 	}
 
 	/**
-	 * Escape a click tooltip / title.
+	 * Escape a Mermaid click tooltip (the third token of
+	 * `click id "url" "tooltip"`).
+	 *
+	 * Strips control characters / newlines that would break the diagram line,
+	 * then escapes backslashes and double quotes for the quoted string.
 	 *
 	 * @param string $pageTitle
 	 * @return string
 	 */
-	public static function clickTarget( string $pageTitle ): string {
+	public static function clickTooltip( string $pageTitle ): string {
+		$pageTitle = trim( $pageTitle );
+		// Control chars / newlines would terminate or corrupt the click line.
+		$pageTitle = preg_replace( '/[\x00-\x1F\x7F]+/u', ' ', $pageTitle ) ?? $pageTitle;
+		$pageTitle = preg_replace( '/\s+/u', ' ', $pageTitle ) ?? $pageTitle;
 		$pageTitle = trim( $pageTitle );
 		return str_replace( [ '\\', '"' ], [ '\\\\', '\\"' ], $pageTitle );
+	}
+
+	/**
+	 * Escape a local wiki path for the URL token of a Mermaid click line.
+	 *
+	 * Strips control characters and percent-encodes characters that would
+	 * break or confuse the double-quoted Mermaid string (`"`, `\`).
+	 * Callers must still pass only same-origin local paths (see isLocalPath).
+	 *
+	 * @param string $url
+	 * @return string
+	 */
+	public static function clickUrl( string $url ): string {
+		$url = trim( $url );
+		$url = preg_replace( '/[\x00-\x1F\x7F]+/u', '', $url ) ?? $url;
+		return str_replace( [ '\\', '"' ], [ '%5C', '%22' ], $url );
+	}
+
+	/**
+	 * @deprecated Use clickTooltip()
+	 * @param string $pageTitle
+	 * @return string
+	 */
+	public static function clickTarget( string $pageTitle ): string {
+		return self::clickTooltip( $pageTitle );
 	}
 
 	/**

@@ -31,4 +31,45 @@ class MermaidEscaperTest extends TestCase {
 	public function testEdgeLabelStripsPipes() {
 		$this->assertStringNotContainsString( '|', MermaidEscaper::edgeLabel( 'a|b' ) );
 	}
+
+	public function testClickTooltipEscapesQuotesAndBackslashes() {
+		$this->assertSame(
+			'Foo \\"Bar\\" path\\\\x',
+			MermaidEscaper::clickTooltip( 'Foo "Bar" path\\x' )
+		);
+	}
+
+	public function testClickTooltipStripsControlCharactersAndNewlines() {
+		$tip = MermaidEscaper::clickTooltip( "Page\nTitle\twith\0junk" );
+		$this->assertSame( 'Page Title with junk', $tip );
+		$this->assertStringNotContainsString( "\n", $tip );
+		$this->assertStringNotContainsString( "\t", $tip );
+		$this->assertStringNotContainsString( "\0", $tip );
+	}
+
+	public function testClickTooltipTrimsWhitespace() {
+		$this->assertSame( 'Acme Org', MermaidEscaper::clickTooltip( "  Acme Org  \n" ) );
+	}
+
+	public function testClickUrlEncodesQuotesAndStripsControls() {
+		$this->assertSame(
+			'/wiki/Foo%22Bar',
+			MermaidEscaper::clickUrl( "/wiki/Foo\"Bar" )
+		);
+		$this->assertSame(
+			'/wiki/Path',
+			MermaidEscaper::clickUrl( "/wiki/Path\n" )
+		);
+		$this->assertSame(
+			'/wiki/a%5Cb',
+			MermaidEscaper::clickUrl( '/wiki/a\\b' )
+		);
+	}
+
+	public function testClickTargetAliasDelegatesToTooltip() {
+		$this->assertSame(
+			MermaidEscaper::clickTooltip( 'X "Y"' ),
+			MermaidEscaper::clickTarget( 'X "Y"' )
+		);
+	}
 }

@@ -19,5 +19,6 @@
 	"saintapediagraph-error-expensive": "Error when the expensive parser function limit is exceeded.",
 	"saintapediagraph-error-render": "Client-side render failure (used as element title).",
 	"saintapediagraph-warning-cycles": "Warning when cycles found. $1 = cycle count (may over-count overlapping cycles).",
-	"saintapediagraph-warning-cycles-broken": "Info when edges were removed. $1 = number of edges."
+	"saintapediagraph-warning-cycles-broken": "Info when edges were removed. $1 = number of edges.",
+	"saintapediagraph-warning-unknown-theme": "Warning when theme= (or the default config theme) is not a Mermaid built-in. $1 = requested value, $2 = fallback used."
 }
