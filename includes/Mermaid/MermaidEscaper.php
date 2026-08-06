@@ -75,12 +75,20 @@ class MermaidEscaper {
 	}
 
 	/**
-	 * Escape a click tooltip / title.
+	 * Escape a Mermaid click tooltip (the third token of
+	 * `click id "url" "tooltip"`).
+	 *
+	 * Strips control characters / newlines that would break the diagram line,
+	 * then escapes backslashes and double quotes for the quoted string.
 	 *
 	 * @param string $pageTitle
 	 * @return string
 	 */
 	public static function clickTarget( string $pageTitle ): string {
+		$pageTitle = trim( $pageTitle );
+		// Control chars / newlines would terminate or corrupt the click line.
+		$pageTitle = preg_replace( '/[\x00-\x1F\x7F]+/u', ' ', $pageTitle ) ?? $pageTitle;
+		$pageTitle = preg_replace( '/\s+/u', ' ', $pageTitle ) ?? $pageTitle;
 		$pageTitle = trim( $pageTitle );
 		return str_replace( [ '\\', '"' ], [ '\\\\', '\\"' ], $pageTitle );
 	}

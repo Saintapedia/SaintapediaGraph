@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\SaintapediaGraph;
 
+use MediaWiki\Extension\SaintapediaGraph\Mermaid\MermaidBuilder;
 use Parser;
 
 /**
@@ -30,6 +31,8 @@ class GraphRenderer {
 		if ( $theme === '' ) {
 			$theme = $wgSaintapediaGraphDefaultTheme ?? 'default';
 		}
+		// Keep data-theme in lockstep with the validated theme in %%{init}%%.
+		$theme = MermaidBuilder::normalizeTheme( (string)$theme );
 
 		$useStandalone = $wgSaintapediaGraphUseStandaloneRenderer ?? true;
 		if ( !$useStandalone ) {

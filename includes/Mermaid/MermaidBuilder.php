@@ -7,6 +7,14 @@ namespace MediaWiki\Extension\SaintapediaGraph\Mermaid;
  */
 class MermaidBuilder {
 
+	/**
+	 * Built-in Mermaid themes accepted by mermaid@10 (bundled).
+	 * Unknown values fall back to "default" so %%{init}%% never breaks render.
+	 *
+	 * @var list<string>
+	 */
+	public const ALLOWED_THEMES = [ 'default', 'base', 'dark', 'forest', 'neutral' ];
+
 	private GraphModel $graph;
 	/** @var array<string, mixed> */
 	private array $options;
@@ -33,12 +41,26 @@ class MermaidBuilder {
 	}
 
 	/**
+	 * Normalize a theme name to a Mermaid built-in, or "default".
+	 *
+	 * @param string $theme
+	 * @return string
+	 */
+	public static function normalizeTheme( string $theme ): string {
+		$theme = strtolower( trim( $theme ) );
+		if ( $theme === '' || !in_array( $theme, self::ALLOWED_THEMES, true ) ) {
+			return 'default';
+		}
+		return $theme;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function build(): string {
 		$lines = [];
 
-		$theme = (string)( $this->options['theme'] ?? 'default' );
+		$theme = self::normalizeTheme( (string)( $this->options['theme'] ?? 'default' ) );
 		$init = json_encode( [
 			'theme' => $theme,
 			'securityLevel' => 'loose',

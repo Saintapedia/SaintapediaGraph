@@ -31,4 +31,23 @@ class MermaidEscaperTest extends TestCase {
 	public function testEdgeLabelStripsPipes() {
 		$this->assertStringNotContainsString( '|', MermaidEscaper::edgeLabel( 'a|b' ) );
 	}
+
+	public function testClickTargetEscapesQuotesAndBackslashes() {
+		$this->assertSame(
+			'Foo \\"Bar\\" path\\\\x',
+			MermaidEscaper::clickTarget( 'Foo "Bar" path\\x' )
+		);
+	}
+
+	public function testClickTargetStripsControlCharactersAndNewlines() {
+		$tip = MermaidEscaper::clickTarget( "Page\nTitle\twith\0junk" );
+		$this->assertSame( 'Page Title with junk', $tip );
+		$this->assertStringNotContainsString( "\n", $tip );
+		$this->assertStringNotContainsString( "\t", $tip );
+		$this->assertStringNotContainsString( "\0", $tip );
+	}
+
+	public function testClickTargetTrimsWhitespace() {
+		$this->assertSame( 'Acme Org', MermaidEscaper::clickTarget( "  Acme Org  \n" ) );
+	}
 }

@@ -64,4 +64,36 @@ class MermaidBuilderTest extends TestCase {
 			$this->assertTrue( true );
 		}
 	}
+
+	public function testNormalizeThemeAllowlist() {
+		$this->assertSame( 'default', MermaidBuilder::normalizeTheme( '' ) );
+		$this->assertSame( 'default', MermaidBuilder::normalizeTheme( '  ' ) );
+		$this->assertSame( 'forest', MermaidBuilder::normalizeTheme( 'Forest' ) );
+		$this->assertSame( 'dark', MermaidBuilder::normalizeTheme( 'DARK' ) );
+		$this->assertSame( 'base', MermaidBuilder::normalizeTheme( 'base' ) );
+		$this->assertSame( 'neutral', MermaidBuilder::normalizeTheme( 'neutral' ) );
+		// Unknown / injection-style values fall back to default.
+		$this->assertSame( 'default', MermaidBuilder::normalizeTheme( 'not-a-theme' ) );
+		$this->assertSame( 'default', MermaidBuilder::normalizeTheme( 'default"; alert(1)//' ) );
+		$this->assertSame( 'default', MermaidBuilder::normalizeTheme( 'custom' ) );
+	}
+
+	public function testBuildUsesValidatedThemeInInit() {
+		$g = new GraphModel();
+		$id = MermaidEscaper::nodeId( 'A' );
+		$g->addNode( $id, 'A' );
+
+		$good = ( new MermaidBuilder( $g, [
+			'clickable' => false,
+			'theme' => 'forest',
+		] ) )->build();
+		$this->assertStringContainsString( '"theme":"forest"', $good );
+
+		$bad = ( new MermaidBuilder( $g, [
+			'clickable' => false,
+			'theme' => 'rainbow-unicorn',
+		] ) )->build();
+		$this->assertStringContainsString( '"theme":"default"', $bad );
+		$this->assertStringNotContainsString( 'rainbow-unicorn', $bad );
+	}
 }

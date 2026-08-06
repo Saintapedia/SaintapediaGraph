@@ -33,13 +33,13 @@ wfLoadExtension( 'SaintapediaGraph' );
 | `$wgSaintapediaGraphDefaultLimit` | `500` | Default `limit=` |
 | `$wgSaintapediaGraphMaxLimit` | `1000` | Hard cap on rows per query |
 | `$wgSaintapediaGraphClickable` | `true` | Nodes link to wiki pages |
-| `$wgSaintapediaGraphDefaultTheme` | `default` | Mermaid theme (also embedded in diagram source via `%%{init}%%`) |
+| `$wgSaintapediaGraphDefaultTheme` | `default` | Mermaid theme: `default`, `base`, `dark`, `forest`, `neutral` (invalid values fall back to `default`; also embedded in diagram source via `%%{init}%%`) |
 | `$wgSaintapediaGraphUseStandaloneRenderer` | `true` | Interactive render (false = raw source only) |
 | `$wgSaintapediaGraphWarnCycles` | `true` | Warn when directed cycles exist |
 | `$wgSaintapediaGraphBreakCycles` | `false` | Drop cycle-closing edges |
 | `$wgSaintapediaGraphStylePalette` | 10 colors | Fills for `style_by` |
 
-Theme is applied in the generated Mermaid source (`%%{init: {theme:…}}%%`). The HTML `data-theme` attribute mirrors that for debugging; rendering uses the source init block.
+Theme is applied in the generated Mermaid source (`%%{init: {theme:…}}%%`). Only built-in Mermaid themes are accepted (`default`, `base`, `dark`, `forest`, `neutral`); anything else falls back to `default`. The HTML `data-theme` attribute mirrors the validated theme for debugging; rendering uses the source init block.
 
 ## Modes
 
