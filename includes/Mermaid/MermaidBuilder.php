@@ -41,6 +41,16 @@ class MermaidBuilder {
 	}
 
 	/**
+	 * Whether $theme is a known Mermaid built-in (case-insensitive).
+	 *
+	 * @param string $theme
+	 * @return bool
+	 */
+	public static function isAllowedTheme( string $theme ): bool {
+		return in_array( strtolower( trim( $theme ) ), self::ALLOWED_THEMES, true );
+	}
+
+	/**
 	 * Normalize a theme name to a Mermaid built-in, or "default".
 	 *
 	 * @param string $theme
@@ -48,7 +58,7 @@ class MermaidBuilder {
 	 */
 	public static function normalizeTheme( string $theme ): string {
 		$theme = strtolower( trim( $theme ) );
-		if ( $theme === '' || !in_array( $theme, self::ALLOWED_THEMES, true ) ) {
+		if ( $theme === '' || !self::isAllowedTheme( $theme ) ) {
 			return 'default';
 		}
 		return $theme;
@@ -132,8 +142,8 @@ class MermaidBuilder {
 				if ( $url === null || $url === '' || !$this->isLocalPath( $url ) ) {
 					continue;
 				}
-				$tip = MermaidEscaper::clickTarget( $node['page'] );
-				$safeUrl = str_replace( '"', '%22', $url );
+				$tip = MermaidEscaper::clickTooltip( $node['page'] );
+				$safeUrl = MermaidEscaper::clickUrl( $url );
 				$lines[] = '  click ' . $node['id'] . ' "' . $safeUrl . '" "' . $tip . '"';
 			}
 		}
@@ -204,10 +214,13 @@ class MermaidBuilder {
 	}
 
 	/**
+	 * Resolve a page title to a same-origin local URL.
+	 * Protected so unit tests can inject a Title-free resolver.
+	 *
 	 * @param string $pageTitle
 	 * @return string|null
 	 */
-	private function pageUrl( string $pageTitle ): ?string {
+	protected function pageUrl( string $pageTitle ): ?string {
 		if ( class_exists( \MediaWiki\Title\Title::class ) ) {
 			$title = \MediaWiki\Title\Title::newFromText( $pageTitle );
 			if ( $title ) {
@@ -224,10 +237,13 @@ class MermaidBuilder {
 	}
 
 	/**
+	 * Accept only same-origin wiki paths (no protocol-relative or absolute URLs).
+	 * Required because Mermaid is initialized with securityLevel=loose for clicks.
+	 *
 	 * @param string $url
 	 * @return bool
 	 */
-	private function isLocalPath( string $url ): bool {
+	protected function isLocalPath( string $url ): bool {
 		if ( $url === '' ) {
 			return false;
 		}

@@ -19,5 +19,6 @@
 	"saintapediagraph-error-expensive": "Saintapedia Graph: too many expensive parser functions on this page; remove some graphs or raise $wgExpensiveParserFunctionLimit.",
 	"saintapediagraph-error-render": "Saintapedia Graph: failed to render diagram.",
 	"saintapediagraph-warning-cycles": "Saintapedia Graph: detected $1 directed cycle(s) in the graph. Use break_cycles=yes to remove cycle-closing edges.",
-	"saintapediagraph-warning-cycles-broken": "Saintapedia Graph: removed $1 edge(s) to break directed cycle(s)."
+	"saintapediagraph-warning-cycles-broken": "Saintapedia Graph: removed $1 edge(s) to break directed cycle(s).",
+	"saintapediagraph-warning-unknown-theme": "Saintapedia Graph: unknown theme \"$1\"; using \"$2\". Allowed: default, base, dark, forest, neutral."
 }

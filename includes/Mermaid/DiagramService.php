@@ -214,6 +214,19 @@ class DiagramService {
 			}
 		}
 
+		$requestedTheme = $params['theme'] !== ''
+			? $params['theme']
+			: (string)( $wgSaintapediaGraphDefaultTheme ?? 'default' );
+		$theme = MermaidBuilder::normalizeTheme( $requestedTheme );
+		// Soft signal when editors (or LocalSettings) pick an unknown theme.
+		if ( trim( $requestedTheme ) !== '' && !MermaidBuilder::isAllowedTheme( $requestedTheme ) ) {
+			$warnings[] = wfMessage(
+				'saintapediagraph-warning-unknown-theme',
+				trim( $requestedTheme ),
+				$theme
+			)->text();
+		}
+
 		$builder = new MermaidBuilder( $graph, [
 			'direction' => $params['direction'] !== ''
 				? $params['direction']
@@ -222,9 +235,7 @@ class DiagramService {
 				$params['clickable'] ?? '',
 				(bool)( $wgSaintapediaGraphClickable ?? true )
 			),
-			'theme' => $params['theme'] !== ''
-				? $params['theme']
-				: ( $wgSaintapediaGraphDefaultTheme ?? 'default' ),
+			'theme' => $theme,
 			'link_style' => $params['link_style'] !== '' ? $params['link_style'] : '-->',
 		] );
 

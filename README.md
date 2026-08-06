@@ -4,7 +4,7 @@ MediaWiki extension that turns [Extension:Cargo](https://www.mediawiki.org/wiki/
 
 | | |
 |---|---|
-| **Version** | 0.2.0 |
+| **Version** | 0.2.1 |
 | **Directory** | `extensions/SaintapediaGraph` |
 | **Parser functions** | `{{#saintapedia_graph:…}}`, alias `{{#cargo_mermaid:…}}` |
 | **Requires** | MediaWiki 1.39+, PHP 8.1+, **Cargo** |
@@ -39,7 +39,9 @@ wfLoadExtension( 'SaintapediaGraph' );
 | `$wgSaintapediaGraphBreakCycles` | `false` | Drop cycle-closing edges |
 | `$wgSaintapediaGraphStylePalette` | 10 colors | Fills for `style_by` |
 
-Theme is applied in the generated Mermaid source (`%%{init: {theme:…}}%%`). Only built-in Mermaid themes are accepted (`default`, `base`, `dark`, `forest`, `neutral`); anything else falls back to `default`. The HTML `data-theme` attribute mirrors the validated theme for debugging; rendering uses the source init block.
+Theme is applied in the generated Mermaid source (`%%{init: {theme:…}}%%`). Only built-in Mermaid themes are accepted (`default`, `base`, `dark`, `forest`, `neutral`); anything else falls back to `default` and surfaces a soft warning. The HTML `data-theme` attribute mirrors the validated theme for debugging; rendering uses the source init block (client JS keeps a global `theme: 'default'` only as a fallback).
+
+Node clicks require Mermaid `securityLevel: 'loose'`. The builder only emits **same-origin local paths** (`/wiki/…`, `index.php?…`) from `Title::getLocalURL()`, never absolute or protocol-relative URLs.
 
 ## Modes
 
