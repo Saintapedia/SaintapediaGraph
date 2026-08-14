@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- CI badge points at `.github/workflows/ci.yml` (the file that actually shipped).
+- `$wgSaintapediaGraphMaxLimit` described as a per-query cap; dual mode can fetch up to 2×.
+- mediawiki.org download links use the `v0.2.2` tarball, not a `master` branch archive.
+
 ## 0.2.2 — 2026-08-13
 
 Production-hygiene release. Deploy this tag (or `main` after it lands), not `v0.2.1`.
