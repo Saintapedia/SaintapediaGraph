@@ -34,13 +34,6 @@ class GraphRenderer {
 		// Keep data-theme in lockstep with the validated theme in %%{init}%%.
 		$theme = MermaidBuilder::normalizeTheme( (string)$theme );
 
-		$useStandalone = $wgSaintapediaGraphUseStandaloneRenderer ?? true;
-		if ( !$useStandalone ) {
-			return '<pre class="saintapedia-graph-source">'
-				. htmlspecialchars( $mermaidSource, ENT_QUOTES | ENT_HTML5, 'UTF-8' )
-				. '</pre>';
-		}
-
 		if ( $mermaidSource === '' ) {
 			return '<div class="error saintapedia-graph-error">'
 				. htmlspecialchars(
@@ -48,6 +41,13 @@ class GraphRenderer {
 					ENT_QUOTES | ENT_HTML5, 'UTF-8'
 				)
 				. '</div>';
+		}
+
+		$useStandalone = $wgSaintapediaGraphUseStandaloneRenderer ?? true;
+		if ( !$useStandalone ) {
+			return '<pre class="saintapedia-graph-source">'
+				. htmlspecialchars( $mermaidSource, ENT_QUOTES | ENT_HTML5, 'UTF-8' )
+				. '</pre>';
 		}
 
 		$output->addModules( [ 'ext.saintapediaGraph' ] );
