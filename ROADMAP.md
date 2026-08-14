@@ -18,7 +18,7 @@ Other candidates considered: Relations, OrgViz, Network, LinkMap, Flow, Connect,
 - [x] Config: direction, max nodes, clickable default
 - [x] README + examples + Cargo schemas
 
-## v0.2 — current
+## v0.2 — shipped
 
 - [x] **`style_by`** — node colors by field value
 - [x] **`subgraph_by`** — group nodes by field value
@@ -26,6 +26,23 @@ Other candidates considered: Relations, OrgViz, Network, LinkMap, Flow, Connect,
 - [x] **Cycle detection** — `warn_cycles` / `break_cycles`
 - [x] **Domain templates** — `Template:Org chart`, `Template:Funding network`
 - [x] Help page + demo page on dev wiki
+
+## v0.2.2 — production hygiene (current)
+
+- [x] Theme allowlist + unknown-theme warning
+- [x] Click tooltip/URL hardening (same-origin only)
+- [x] CI: standalone PHPUnit on PHP 8.1 / 8.2 / 8.3
+- [x] Vendor Mermaid license note (`THIRD-PARTY.md`)
+- [x] Production CSP notes in README
+- [x] Help page shipped as `docs/` (import on the wiki)
+- [x] mediawiki.org page draft (`docs/mediawiki.org-Extension-SaintapediaGraph.wikitext`)
+- [x] English-only UI documented as a known limit
+- [x] Tag **v0.2.2** (do not reuse `v0.2.1`)
+- [ ] Create https://www.mediawiki.org/wiki/Extension:SaintapediaGraph from the draft
+- [ ] Smoke on `dev.saintapedia.org` (checklist in README)
+- [ ] Enable on production Saintapedia after the dev smoke
+
+Standalone PHPUnit does **not** boot MediaWiki 1.39/1.43 or Cargo. A full MW matrix stays a later engineering item.
 
 ## Post-v0.2
 
@@ -39,18 +56,10 @@ Other candidates considered: Relations, OrgViz, Network, LinkMap, Flow, Connect,
 6. **Focus / filter** (N degrees from a node, year sliders)
 7. **Cycle path labels** using human node names (not only IDs)
 
-### Engineering / release hygiene
-
-- [ ] CI: PHPUnit on MW 1.39 / 1.43
-- [ ] Git repo + tag releases (v0.1.x)
-- [ ] Vendor Mermaid license note (MIT) in COPYING / third-party
-- [ ] i18n beyond English
-- [ ] Production CSP docs (bundled JS is same-origin — good)
-- [ ] Smoke test script against Canasta sandbox + dev
-- [ ] Help page shipped as `docs/` + optional maintenance import
-
 ### Later
 
+- i18n beyond English (translatewiki or extra `i18n/*.json` files)
+- Full MediaWiki + Cargo CI (MW 1.39 / 1.43)
 - Sankey for funding flows, mindmap, multi-hop expand
 - Hover tooltips with extra Cargo fields
 - Permission-aware hiding of sensitive amounts
