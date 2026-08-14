@@ -25,41 +25,46 @@ class DiagramService {
 		$params = $this->normalizeParams( $params );
 		$mode = $this->detectMode( $params );
 
-		$limit = $params['limit'] !== ''
+		$requestedLimit = $params['limit'] !== ''
 			? (int)$params['limit']
 			: (int)( $wgSaintapediaGraphDefaultLimit ?? 500 );
 		$maxLimit = (int)( $wgSaintapediaGraphMaxLimit ?? 1000 );
-		if ( $limit > $maxLimit ) {
-			$limit = $maxLimit;
-		}
-		if ( $limit < 1 ) {
-			$limit = 1;
-		}
+		$limitClamped = $requestedLimit > $maxLimit;
+		$limit = max( 1, min( $requestedLimit, $maxLimit ) );
 
 		if ( $mode === 'dual' ) {
-			return $this->buildDualMode( $params, (string)$limit );
+			$result = $this->buildDualMode( $params, (string)$limit );
+		} else {
+			if ( ( $params['tables'] ?? '' ) === '' && ( $params['table'] ?? '' ) === '' ) {
+				throw new Exception( wfMessage( 'saintapediagraph-error-missing-tables' )->text() );
+			}
+
+			$tables = $params['tables'] !== '' ? $params['tables'] : $params['table'];
+			$fields = $this->ensureFields( $params['fields'], $params, $mode );
+
+			$rows = $this->runCargoQuery(
+				$tables,
+				$fields,
+				$params['where'],
+				$params['join_on'],
+				$params['group_by'],
+				$params['having'],
+				$params['order_by'],
+				(string)$limit,
+				$params['offset']
+			);
+
+			$result = $this->buildFromRows( $rows, $params );
 		}
 
-		if ( ( $params['tables'] ?? '' ) === '' && ( $params['table'] ?? '' ) === '' ) {
-			throw new Exception( wfMessage( 'saintapediagraph-error-missing-tables' )->text() );
+		if ( $limitClamped ) {
+			array_unshift(
+				$result['warnings'],
+				wfMessage( 'saintapediagraph-warning-limit-clamped', $requestedLimit, $maxLimit )->text()
+			);
 		}
 
-		$tables = $params['tables'] !== '' ? $params['tables'] : $params['table'];
-		$fields = $this->ensureFields( $params['fields'], $params, $mode );
-
-		$rows = $this->runCargoQuery(
-			$tables,
-			$fields,
-			$params['where'],
-			$params['join_on'],
-			$params['group_by'],
-			$params['having'],
-			$params['order_by'],
-			(string)$limit,
-			$params['offset']
-		);
-
-		return $this->buildFromRows( $rows, $params );
+		return $result;
 	}
 
 	/**

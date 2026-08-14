@@ -49,6 +49,14 @@ class GraphRenderer {
 
 		// Base64 keeps the source free of newlines / quotes that HTML tidy mangles.
 		$b64 = base64_encode( $mermaidSource );
+		if ( $b64 === false || $b64 === '' ) {
+			return '<div class="error saintapedia-graph-error">'
+				. htmlspecialchars(
+					wfMessage( 'saintapediagraph-error-render' )->text(),
+					ENT_QUOTES | ENT_HTML5, 'UTF-8'
+				)
+				. '</div>';
+		}
 
 		// data-theme mirrors the theme embedded in the Mermaid source (%%{init}%%)
 		// for debugging; client rendering uses the source init block.

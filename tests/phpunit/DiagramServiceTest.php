@@ -203,4 +203,25 @@ class DiagramServiceTest extends TestCase {
 			$this->assertStringNotContainsString( 'unknown-theme', $w );
 		}
 	}
+
+	public function testWarningsArrayIsWritable() {
+		// Regression guard: buildFromRows must return a mutable warnings array so
+		// buildFromParams can array_unshift() a truncation warning into it.
+		$service = new DiagramService();
+		$rows = [
+			[ 'Name' => 'A', 'ParentOrg' => '' ],
+			[ 'Name' => 'B', 'ParentOrg' => 'A' ],
+		];
+		$result = $service->buildFromRows( $rows, [
+			'node_id' => 'Name',
+			'node_label' => 'Name',
+			'parent_field' => 'ParentOrg',
+			'clickable' => 'no',
+			'warn_cycles' => 'no',
+		] );
+
+		$this->assertIsArray( $result['warnings'] );
+		array_unshift( $result['warnings'], 'injected' );
+		$this->assertSame( 'injected', $result['warnings'][0] );
+	}
 }
