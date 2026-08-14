@@ -47,9 +47,9 @@ class GraphRenderer {
 		$unique = self::$instanceCounter . '-' . substr( md5( $mermaidSource . self::$instanceCounter ), 0, 10 );
 		$id = 'saintapedia-graph-' . $unique;
 
-		// Base64 keeps the source free of newlines / quotes that HTML tidy mangles.
-		$b64 = base64_encode( $mermaidSource );
-		if ( $b64 === false || $b64 === '' ) {
+		// PHP 8+ base64_encode() always returns a string; empty input is the
+		// only case that would leave data-mermaid blank.
+		if ( $mermaidSource === '' ) {
 			return '<div class="error saintapedia-graph-error">'
 				. htmlspecialchars(
 					wfMessage( 'saintapediagraph-error-render' )->text(),
@@ -57,6 +57,7 @@ class GraphRenderer {
 				)
 				. '</div>';
 		}
+		$b64 = base64_encode( $mermaidSource );
 
 		// data-theme mirrors the theme embedded in the Mermaid source (%%{init}%%)
 		// for debugging; client rendering uses the source init block.
