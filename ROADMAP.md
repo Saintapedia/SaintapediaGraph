@@ -27,7 +27,7 @@ Other candidates considered: Relations, OrgViz, Network, LinkMap, Flow, Connect,
 - [x] **Domain templates** — `Template:Org chart`, `Template:Funding network`
 - [x] Help page + demo page on dev wiki
 
-## v0.2.2 — production hygiene (current)
+## v0.2.3 — current release
 
 - [x] Theme allowlist + unknown-theme warning
 - [x] Click tooltip/URL hardening (same-origin only)
@@ -39,9 +39,10 @@ Other candidates considered: Relations, OrgViz, Network, LinkMap, Flow, Connect,
 - [x] mediawiki.org page draft (`docs/mediawiki.org-Extension-SaintapediaGraph.wikitext`)
 - [x] English-only UI documented as a known limit
 - [x] Tag **v0.2.2** (do not reuse `v0.2.1`)
+- [x] Tag **v0.2.3** on current `main` (docs, clamp wording, importPages)
+- [x] Local Canasta (`localhost:8080`) smoke
 - [ ] Create https://www.mediawiki.org/wiki/Extension:SaintapediaGraph from the draft
-- [ ] Smoke on `dev.saintapedia.org` (checklist in README)
-- [ ] Enable on production Saintapedia after the dev smoke
+- [ ] Enable on production Saintapedia (or `dev.saintapedia.org` first if you want a remote-dev pass)
 
 Standalone PHPUnit does **not** boot MediaWiki 1.39/1.43 or Cargo. A full MW matrix stays a later engineering item.
 
