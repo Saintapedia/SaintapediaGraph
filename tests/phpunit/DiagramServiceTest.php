@@ -203,4 +203,39 @@ class DiagramServiceTest extends TestCase {
 			$this->assertStringNotContainsString( 'unknown-theme', $w );
 		}
 	}
+
+	public function testClampLimitCapsOverMax() {
+		$cap = DiagramService::clampLimit( 2000, 1000 );
+		$this->assertSame( 1000, $cap['limit'] );
+		$this->assertSame( 1000, $cap['max'] );
+		$this->assertTrue( $cap['clamped'] );
+	}
+
+	public function testClampLimitLeavesInRange() {
+		$cap = DiagramService::clampLimit( 500, 1000 );
+		$this->assertSame( 500, $cap['limit'] );
+		$this->assertFalse( $cap['clamped'] );
+	}
+
+	public function testClampLimitFloorsToOne() {
+		$cap = DiagramService::clampLimit( 0, 1000 );
+		$this->assertSame( 1, $cap['limit'] );
+		$this->assertFalse( $cap['clamped'] );
+	}
+
+	public function testLimitClampWarningsSingleQuery() {
+		$warnings = DiagramService::limitClampWarnings( 2000, 1000, false );
+		$this->assertCount( 1, $warnings );
+		$this->assertStringContainsString( 'saintapediagraph-warning-limit-clamped', $warnings[0] );
+		$this->assertStringContainsString( '2000', $warnings[0] );
+		$this->assertStringContainsString( '1000', $warnings[0] );
+	}
+
+	public function testLimitClampWarningsDualAddsSecondLine() {
+		$warnings = DiagramService::limitClampWarnings( 2000, 1000, true );
+		$this->assertCount( 2, $warnings );
+		$this->assertStringContainsString( 'saintapediagraph-warning-limit-clamped', $warnings[0] );
+		$this->assertStringContainsString( 'saintapediagraph-warning-limit-clamped-dual', $warnings[1] );
+		$this->assertStringContainsString( '1000', $warnings[1] );
+	}
 }

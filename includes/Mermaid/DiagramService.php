@@ -25,41 +25,80 @@ class DiagramService {
 		$params = $this->normalizeParams( $params );
 		$mode = $this->detectMode( $params );
 
-		$limit = $params['limit'] !== ''
+		$requestedLimit = $params['limit'] !== ''
 			? (int)$params['limit']
 			: (int)( $wgSaintapediaGraphDefaultLimit ?? 500 );
 		$maxLimit = (int)( $wgSaintapediaGraphMaxLimit ?? 1000 );
-		if ( $limit > $maxLimit ) {
-			$limit = $maxLimit;
-		}
-		if ( $limit < 1 ) {
-			$limit = 1;
-		}
+		$cap = self::clampLimit( $requestedLimit, $maxLimit );
 
 		if ( $mode === 'dual' ) {
-			return $this->buildDualMode( $params, (string)$limit );
+			$result = $this->buildDualMode( $params, (string)$cap['limit'] );
+		} else {
+			if ( ( $params['tables'] ?? '' ) === '' && ( $params['table'] ?? '' ) === '' ) {
+				throw new Exception( wfMessage( 'saintapediagraph-error-missing-tables' )->text() );
+			}
+
+			$tables = $params['tables'] !== '' ? $params['tables'] : $params['table'];
+			$fields = $this->ensureFields( $params['fields'], $params, $mode );
+
+			$rows = $this->runCargoQuery(
+				$tables,
+				$fields,
+				$params['where'],
+				$params['join_on'],
+				$params['group_by'],
+				$params['having'],
+				$params['order_by'],
+				(string)$cap['limit'],
+				$params['offset']
+			);
+
+			$result = $this->buildFromRows( $rows, $params );
 		}
 
-		if ( ( $params['tables'] ?? '' ) === '' && ( $params['table'] ?? '' ) === '' ) {
-			throw new Exception( wfMessage( 'saintapediagraph-error-missing-tables' )->text() );
+		if ( $cap['clamped'] ) {
+			array_unshift(
+				$result['warnings'],
+				...self::limitClampWarnings( $requestedLimit, $cap['max'], $mode === 'dual' )
+			);
 		}
 
-		$tables = $params['tables'] !== '' ? $params['tables'] : $params['table'];
-		$fields = $this->ensureFields( $params['fields'], $params, $mode );
+		return $result;
+	}
 
-		$rows = $this->runCargoQuery(
-			$tables,
-			$fields,
-			$params['where'],
-			$params['join_on'],
-			$params['group_by'],
-			$params['having'],
-			$params['order_by'],
-			(string)$limit,
-			$params['offset']
-		);
+	/**
+	 * Cap a requested row limit. Dual mode applies the same cap to each query.
+	 *
+	 * @param int $requested
+	 * @param int $max
+	 * @return array{limit:int,max:int,clamped:bool}
+	 */
+	public static function clampLimit( int $requested, int $max ): array {
+		$max = max( 1, $max );
+		return [
+			'limit' => max( 1, min( $requested, $max ) ),
+			'max' => $max,
+			'clamped' => $requested > $max,
+		];
+	}
 
-		return $this->buildFromRows( $rows, $params );
+	/**
+	 * Editor-facing warnings when limit= was reduced to the site cap.
+	 * Dual mode runs two Cargo queries; the cap applies to each.
+	 *
+	 * @param int $requested
+	 * @param int $max
+	 * @param bool $dual
+	 * @return list<string>
+	 */
+	public static function limitClampWarnings( int $requested, int $max, bool $dual ): array {
+		$warnings = [
+			wfMessage( 'saintapediagraph-warning-limit-clamped', $requested, $max )->text(),
+		];
+		if ( $dual ) {
+			$warnings[] = wfMessage( 'saintapediagraph-warning-limit-clamped-dual', $max )->text();
+		}
+		return $warnings;
 	}
 
 	/**
