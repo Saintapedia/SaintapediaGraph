@@ -10,9 +10,14 @@ Production-hygiene release. Deploy this tag (or `main` after it lands), not `v0.
 - Harden Mermaid `click` tooltips and URLs (control-character strip, quote/backslash encoding).
 - Reject non-local click URLs. Node clicks still require Mermaid `securityLevel: 'loose'`; the builder only emits same-origin wiki paths.
 
+### Editor feedback
+
+- Warn when `limit=` exceeds `$wgSaintapediaGraphMaxLimit` (was a silent clamp). Dual mode states that the cap applies to each of the two Cargo queries.
+- Empty Mermaid source no longer emits a blank `data-mermaid` mount.
+
 ### Release / docs
 
-- GitHub Actions PHPUnit on PHP 8.1, 8.2, and 8.3.
+- GitHub Actions PHPUnit on PHP 8.1, 8.2, and 8.3 (workflow lands via PR #3).
 - mediawiki.org extension page draft: `docs/mediawiki.org-Extension-SaintapediaGraph.wikitext`.
 - Help page documents dual-table mode, `style_by`, `subgraph_by`, and cycle handling (no longer described as MVP-only).
 - UI messages are English-only; documented as a known limit.

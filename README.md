@@ -177,7 +177,8 @@ After `wfLoadExtension( 'SaintapediaGraph' )` on the Canasta/dev wiki:
 5. Render a dual-table funding graph (`{{Funding network}}` or `nodes_table` + `edges_table`).
 6. Click a node — it must stay on-wiki (same origin).
 7. `theme=forset` (typo) should still render and show the unknown-theme warning.
-8. Hard-refresh (Ctrl+Shift+R) so the new ResourceLoader module is not a cached 0.2.1 payload.
+8. `limit=2000` on a large table should still render and show the per-query cap warning (dual mode: two lines).
+9. Hard-refresh (Ctrl+Shift+R) so the new ResourceLoader module is not a cached 0.2.1 payload.
 
 Local smoke (already done) does not replace this wiki pass.
 

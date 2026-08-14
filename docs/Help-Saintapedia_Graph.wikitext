@@ -172,7 +172,7 @@ so edges match organization pages. If you use <code>node_id=Name</code>, '''Name
 | Sort order.
 |-
 | <code>limit</code>
-| Max rows (capped by site config, typically 1000).
+| Max rows per Cargo query (capped by site config, typically 1000). Over the cap, the graph still renders and a warning is shown. Dual mode applies the cap to **both** the nodes query and the edges query.
 |-
 | <code>offset</code>
 | Skip initial rows.
@@ -341,6 +341,9 @@ Not in this version: recursive multi-hop expansion (“everyone within 2 steps o
 |-
 | Cycle warning
 | Expected if the directed graph loops. Use <code>break_cycles=yes</code> to drop back-edges
+|-
+| Limit / incomplete graph warning
+| <code>limit=</code> was reduced to <code>$wgSaintapediaGraphMaxLimit</code> (per Cargo query). Dual mode runs two queries at that cap.
 |-
 | “Diagram failed to render”
 | Hard-refresh; try <code>format=raw</code>; check browser console
