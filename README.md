@@ -30,7 +30,17 @@ wfLoadExtension( 'SaintapediaGraph' );
 ```
 
 3. Check `Special:Version` for **Saintapedia Graph 0.2.2**.
-4. Optional: import help + templates from `docs/` and `templates/`.
+4. Optional: import help + templates:
+
+```sh
+# MediaWiki 1.40+
+php maintenance/run.php SaintapediaGraph:importPages
+# MediaWiki 1.39
+php extensions/SaintapediaGraph/maintenance/importPages.php
+
+# Preview first: add --dry-run
+# Replace existing pages: add --overwrite
+```
 
 No `update.php` run is required (no database tables).
 
@@ -171,8 +181,8 @@ CI runs that suite on PHP 8.1, 8.2, and 8.3.
 After `wfLoadExtension( 'SaintapediaGraph' )` on the Canasta/dev wiki:
 
 1. `Special:Version` lists **Saintapedia Graph 0.2.2** and the `ext.saintapediaGraph` module.
-2. Import `docs/Help-Saintapedia_Graph.wikitext` → `Help:Saintapedia Graph`.
-3. Import `templates/Org_chart.wikitext` → `Template:Org chart` and `templates/Funding_network.wikitext` → `Template:Funding network`.
+2. Import help + templates: `php maintenance/run.php SaintapediaGraph:importPages` (or the 1.39 path above). Use `--overwrite` if the pages already exist.
+3. Confirm `Help:Saintapedia Graph`, `Template:Org chart`, and `Template:Funding network` exist.
 4. Render an org chart (`parent_field` or `{{Org chart}}`) with real Cargo rows.
 5. Render a dual-table funding graph (`{{Funding network}}` or `nodes_table` + `edges_table`).
 6. Click a node — it must stay on-wiki (same origin).
