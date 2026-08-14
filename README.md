@@ -1,6 +1,6 @@
 # Saintapedia Graph
 
-[![PHPUnit](https://github.com/Saintapedia/SaintapediaGraph/actions/workflows/phpunit.yml/badge.svg)](https://github.com/Saintapedia/SaintapediaGraph/actions/workflows/phpunit.yml)
+[![PHPUnit](https://github.com/Saintapedia/SaintapediaGraph/actions/workflows/ci.yml/badge.svg)](https://github.com/Saintapedia/SaintapediaGraph/actions/workflows/ci.yml)
 
 MediaWiki extension that turns [Extension:Cargo](https://www.mediawiki.org/wiki/Extension:Cargo) data into interactive Mermaid flowcharts — org charts, funder→fundee networks, styled/grouped graphs, and dual-table diagrams.
 
@@ -39,8 +39,8 @@ No `update.php` run is required (no database tables).
 | Variable | Default | Meaning |
 |----------|---------|---------|
 | `$wgSaintapediaGraphDefaultDirection` | `TD` | `TD` / `LR` / `BT` / `RL` |
-| `$wgSaintapediaGraphDefaultLimit` | `500` | Default `limit=` |
-| `$wgSaintapediaGraphMaxLimit` | `1000` | Hard cap on rows per query |
+| `$wgSaintapediaGraphDefaultLimit` | `500` | Default `limit=` (per Cargo query) |
+| `$wgSaintapediaGraphMaxLimit` | `1000` | Hard cap on rows **per Cargo query**. Dual-table mode runs two queries, so the total fetched can reach 2× this value. |
 | `$wgSaintapediaGraphClickable` | `true` | Nodes link to wiki pages |
 | `$wgSaintapediaGraphDefaultTheme` | `default` | Mermaid theme: `default`, `base`, `dark`, `forest`, `neutral` (invalid values fall back to `default`; also embedded in diagram source via `%%{init}%%`) |
 | `$wgSaintapediaGraphUseStandaloneRenderer` | `true` | Interactive render (false = raw source only) |

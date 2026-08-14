@@ -65,11 +65,11 @@
 	"config": {
 		"SaintapediaGraphDefaultLimit": {
 			"value": 500,
-			"description": "Default maximum rows fetched for a diagram"
+			"description": "Default limit= rows per Cargo query"
 		},
 		"SaintapediaGraphMaxLimit": {
 			"value": 1000,
-			"description": "Hard maximum nodes/edges for a diagram"
+			"description": "Hard maximum rows per Cargo query. Dual-table mode runs two queries, so the total fetched can reach 2x this value."
 		},
 		"SaintapediaGraphDefaultDirection": {
 			"value": "TD",
