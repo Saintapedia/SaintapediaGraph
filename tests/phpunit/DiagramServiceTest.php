@@ -220,7 +220,13 @@ class DiagramServiceTest extends TestCase {
 	public function testClampLimitFloorsToOne() {
 		$cap = DiagramService::clampLimit( 0, 1000 );
 		$this->assertSame( 1, $cap['limit'] );
-		$this->assertFalse( $cap['clamped'] );
+		$this->assertTrue( $cap['clamped'] );
+	}
+
+	public function testClampLimitFloorsNegativeToOne() {
+		$cap = DiagramService::clampLimit( -5, 1000 );
+		$this->assertSame( 1, $cap['limit'] );
+		$this->assertTrue( $cap['clamped'] );
 	}
 
 	public function testLimitClampWarningsSingleQuery() {

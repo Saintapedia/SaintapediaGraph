@@ -56,7 +56,11 @@ It does '''not''' require [[Extension:Mermaid]]. Mermaid 10.9.1 is bundled and l
 |registration=required
 |localsettingsearly=wfLoadExtension( 'Cargo' );
 |custom-steps=
-* Optional: import <code>docs/Help-Saintapedia_Graph.wikitext</code> as <code>Help:Saintapedia Graph</code>, and the files in <code>templates/</code> as <code>Template:Org chart</code> / <code>Template:Funding network</code>.
+* Optional: import the bundled help page and templates:
+<syntaxhighlight lang="bash">
+php maintenance/run.php SaintapediaGraph:importPages
+</syntaxhighlight>
+On MediaWiki 1.39 run <code>php extensions/SaintapediaGraph/maintenance/importPages.php</code> instead. Add <code>--dry-run</code> or <code>--overwrite</code> as needed.
 }}
 
 The directory name must be <code>SaintapediaGraph</code> (the ResourceLoader remote path is hardcoded to that name). No <code>update.php</code> run is required.

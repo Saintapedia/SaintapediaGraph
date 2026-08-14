@@ -35,6 +35,7 @@ Other candidates considered: Relations, OrgViz, Network, LinkMap, Flow, Connect,
 - [x] Vendor Mermaid license note (`THIRD-PARTY.md`)
 - [x] Production CSP notes in README
 - [x] Help page shipped as `docs/` (import on the wiki)
+- [x] Maintenance script `SaintapediaGraph:importPages`
 - [x] mediawiki.org page draft (`docs/mediawiki.org-Extension-SaintapediaGraph.wikitext`)
 - [x] English-only UI documented as a known limit
 - [x] Tag **v0.2.2** (do not reuse `v0.2.1`)
