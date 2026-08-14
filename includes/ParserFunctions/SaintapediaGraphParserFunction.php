@@ -37,7 +37,7 @@ class SaintapediaGraphParserFunction {
 		try {
 			$service = new DiagramService();
 			$result = $service->buildFromParams( $params );
-		} catch ( Exception $e ) {
+		} catch ( \Throwable $e ) {
 			return self::errorBox( $e->getMessage() );
 		}
 

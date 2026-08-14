@@ -66,10 +66,4 @@ class MermaidEscaperTest extends TestCase {
 		);
 	}
 
-	public function testClickTargetAliasDelegatesToTooltip() {
-		$this->assertSame(
-			MermaidEscaper::clickTooltip( 'X "Y"' ),
-			MermaidEscaper::clickTarget( 'X "Y"' )
-		);
-	}
 }

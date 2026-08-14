@@ -22,13 +22,11 @@
 			return;
 		}
 		// Global defaults only. Per-diagram theme comes from %%{init}%% in
-		// the Mermaid source (data-mermaid). securityLevel must stay "loose"
-		// so click href lines (nodes → local wiki pages) work; the PHP builder
-		// only emits same-origin local paths for those clicks.
+		// the Mermaid source (data-mermaid).
 		mermaid.initialize( {
 			startOnLoad: false,
 			theme: 'default',
-			securityLevel: 'loose',
+			securityLevel: 'antiscript',
 			flowchart: {
 				htmlLabels: false,
 				useMaxWidth: true
@@ -46,17 +44,13 @@
 			return '';
 		}
 		try {
-			// atob → binary string → UTF-8
+			// atob → binary string → UTF-8 via TextDecoder (available in all MW-supported browsers)
 			var bin = atob( b64 );
-			if ( typeof TextDecoder !== 'undefined' ) {
-				var bytes = new Uint8Array( bin.length );
-				for ( var i = 0; i < bin.length; i++ ) {
-					bytes[ i ] = bin.charCodeAt( i );
-				}
-				return new TextDecoder( 'utf-8' ).decode( bytes ).trim();
+			var bytes = new Uint8Array( bin.length );
+			for ( var i = 0; i < bin.length; i++ ) {
+				bytes[ i ] = bin.charCodeAt( i );
 			}
-			// Fallback for older browsers
-			return decodeURIComponent( escape( bin ) ).trim();
+			return new TextDecoder( 'utf-8' ).decode( bytes ).trim();
 		} catch ( e ) {
 			mw.log.warn( '[SaintapediaGraph] base64 decode failed', e );
 			return '';
@@ -72,12 +66,12 @@
 		if ( b64 ) {
 			return decodeSource( b64 );
 		}
-		// Legacy fallbacks
+		// Legacy fallback for pre-0.2 markup only.
 		var dataNode = el.querySelector( 'script.saintapedia-graph-data' );
 		if ( dataNode ) {
 			return ( dataNode.textContent || '' ).trim();
 		}
-		return ( el.textContent || '' ).trim();
+		return '';
 	}
 
 	/**

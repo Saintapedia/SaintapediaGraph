@@ -204,6 +204,19 @@ class DiagramServiceTest extends TestCase {
 		}
 	}
 
+	public function testEmptyRowsThrowsNoResults() {
+		$service = new DiagramService();
+		$this->expectException( \Exception::class );
+		$this->expectExceptionMessageMatches( '/saintapediagraph-error-no-results/' );
+		$service->buildFromRows( [], [
+			'node_id' => 'Name',
+			'node_label' => 'Name',
+			'parent_field' => 'ParentOrg',
+			'clickable' => 'no',
+			'warn_cycles' => 'no',
+		] );
+	}
+
 	public function testClampLimitCapsOverMax() {
 		$cap = DiagramService::clampLimit( 2000, 1000 );
 		$this->assertSame( 1000, $cap['limit'] );

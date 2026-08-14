@@ -110,15 +110,6 @@ class MermaidEscaper {
 	}
 
 	/**
-	 * @deprecated Use clickTooltip()
-	 * @param string $pageTitle
-	 * @return string
-	 */
-	public static function clickTarget( string $pageTitle ): string {
-		return self::clickTooltip( $pageTitle );
-	}
-
-	/**
 	 * Sanitize a classDef / class name token (style_by).
 	 *
 	 * @param string $raw

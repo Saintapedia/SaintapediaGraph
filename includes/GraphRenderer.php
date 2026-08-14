@@ -41,14 +41,6 @@ class GraphRenderer {
 				. '</pre>';
 		}
 
-		$output->addModules( [ 'ext.saintapediaGraph' ] );
-
-		self::$instanceCounter++;
-		$unique = self::$instanceCounter . '-' . substr( md5( $mermaidSource . self::$instanceCounter ), 0, 10 );
-		$id = 'saintapedia-graph-' . $unique;
-
-		// PHP 8+ base64_encode() always returns a string; empty input is the
-		// only case that would leave data-mermaid blank.
 		if ( $mermaidSource === '' ) {
 			return '<div class="error saintapedia-graph-error">'
 				. htmlspecialchars(
@@ -57,6 +49,12 @@ class GraphRenderer {
 				)
 				. '</div>';
 		}
+
+		$output->addModules( [ 'ext.saintapediaGraph' ] );
+
+		self::$instanceCounter++;
+		$unique = self::$instanceCounter . '-' . substr( md5( $mermaidSource . self::$instanceCounter ), 0, 10 );
+		$id = 'saintapedia-graph-' . $unique;
 		$b64 = base64_encode( $mermaidSource );
 
 		// data-theme mirrors the theme embedded in the Mermaid source (%%{init}%%)
