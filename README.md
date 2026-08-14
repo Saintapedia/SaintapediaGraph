@@ -8,7 +8,7 @@ The **editor-facing** reference is the bundled help page (`docs/Help-Saintapedia
 
 | | |
 |---|---|
-| **Version** | 0.2.3 |
+| **Version** | 0.2.4 |
 | **Directory** | `extensions/SaintapediaGraph` (name must match the ResourceLoader path) |
 | **Parser functions** | `{{#saintapedia_graph:…}}`, alias `{{#cargo_mermaid:…}}` |
 | **Requires** | MediaWiki 1.39+, PHP 8.1+, **Cargo** |
@@ -19,7 +19,7 @@ The **editor-facing** reference is the bundled help page (`docs/Help-Saintapedia
 | **mediawiki.org** | Draft: [docs/mediawiki.org-Extension-SaintapediaGraph.wikitext](docs/mediawiki.org-Extension-SaintapediaGraph.wikitext) → [Extension:SaintapediaGraph](https://www.mediawiki.org/wiki/Extension:SaintapediaGraph) |
 | **Changelog** | [CHANGELOG.md](CHANGELOG.md) |
 
-Deploy **`v0.2.3` or `main`**. Do not deploy `v0.2.2` or `v0.2.1`.
+Deploy **`v0.2.4` or `main`**. Do not deploy `v0.2.3` / `v0.2.2` / `v0.2.1` if you want the detailed help page in the tagged tree.
 
 ## Contents
 
@@ -45,7 +45,7 @@ wfLoadExtension( 'Cargo' );
 wfLoadExtension( 'SaintapediaGraph' );
 ```
 
-3. Check `Special:Version` for **Saintapedia Graph 0.2.3**.
+3. Check `Special:Version` for **Saintapedia Graph 0.2.4**.
 4. Import help + templates:
 
 ```sh
@@ -166,7 +166,7 @@ Names are case-insensitive; spaces and hyphens become underscores (`join on` = `
 
 **One query vs dual.** `tables=A,B` + `join on=` is one result set. `nodes_table` + `edges_table` is two queries — use it when Type/Country live on the organization row.
 
-Not in 0.2.3: N-hop expand, Sankey, hover field tooltips, SVG/PNG export.
+Not in 0.2.4: N-hop expand, Sankey, hover field tooltips, SVG/PNG export.
 
 ## Examples
 
@@ -259,7 +259,7 @@ CI runs that suite on PHP 8.1, 8.2, and 8.3.
 
 After `wfLoadExtension( 'SaintapediaGraph' )` on a wiki:
 
-1. `Special:Version` shows **0.2.3** and `ext.saintapediaGraph`.
+1. `Special:Version` shows **0.2.4** and `ext.saintapediaGraph`.
 2. `php maintenance/run.php SaintapediaGraph:importPages` (add `--overwrite` if pages exist).
 3. Confirm Help + both templates.
 4. Render an org chart and a dual-table funding graph.
@@ -268,7 +268,7 @@ After `wfLoadExtension( 'SaintapediaGraph' )` on a wiki:
 7. `limit=2000` and `limit=-5` warn (`reduced to` the cap or `1`).
 8. Hard-refresh (Ctrl+Shift+R) after updates.
 
-Local Canasta (`localhost:8080`) was used for the 0.2.3 smoke (`Saintapedia Graph demo`, `Saintapedia Graph smoke`).
+Local Canasta (`localhost:8080`) was used for the 0.2.3/0.2.4 smoke (`Saintapedia Graph demo`, `Saintapedia Graph smoke`).
 
 ## License
 

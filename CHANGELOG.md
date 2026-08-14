@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.2.4 — 2026-08-14
+
+Docs-only. Same code as 0.2.3 plus the detailed help/README so the tag matches `main`.
 
 - Detailed editor help page (`docs/Help-Saintapedia_Graph.wikitext`) and matching GitHub README (full parameter, template, limit, and install reference).
 

@@ -27,7 +27,7 @@ Other candidates considered: Relations, OrgViz, Network, LinkMap, Flow, Connect,
 - [x] **Domain templates** — `Template:Org chart`, `Template:Funding network`
 - [x] Help page + demo page on dev wiki
 
-## v0.2.3 — current release
+## v0.2.4 — current release
 
 - [x] Theme allowlist + unknown-theme warning
 - [x] Click tooltip/URL hardening (same-origin only)
@@ -40,6 +40,7 @@ Other candidates considered: Relations, OrgViz, Network, LinkMap, Flow, Connect,
 - [x] English-only UI documented as a known limit
 - [x] Tag **v0.2.2** (do not reuse `v0.2.1`)
 - [x] Tag **v0.2.3** on current `main` (docs, clamp wording, importPages)
+- [ ] Tag **v0.2.4** after this release PR (detailed help + README)
 - [x] Local Canasta (`localhost:8080`) smoke
 - [ ] Create https://www.mediawiki.org/wiki/Extension:SaintapediaGraph from the draft
 - [ ] Enable on production Saintapedia (or `dev.saintapedia.org` first if you want a remote-dev pass)

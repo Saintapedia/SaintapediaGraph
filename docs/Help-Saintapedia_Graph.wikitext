@@ -3,7 +3,7 @@
 
 '''Saintapedia Graph''' turns [[mw:Extension:Cargo|Cargo]] tables into interactive [https://mermaid.js.org/ Mermaid] flowcharts. Typical uses on this wiki are '''organization charts''' (who reports to whom) and '''funding networks''' (who funded whom). Any parent/child or source/target relationship stored in Cargo can be drawn the same way.
 
-{{note|This page documents '''Saintapedia Graph 0.2.3'''. Parser-function errors and warnings are '''English only'''; other interface languages still show English for those messages.}}
+{{note|This page documents '''Saintapedia Graph 0.2.4'''. Parser-function errors and warnings are '''English only'''; other interface languages still show English for those messages.}}
 
 __TOC__
 
