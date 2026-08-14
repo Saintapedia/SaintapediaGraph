@@ -1,12 +1,14 @@
 # Changelog
 
-## Unreleased
+## 0.2.3 — 2026-08-14
 
-- CI badge points at `.github/workflows/ci.yml` (the file that actually shipped).
+Matches `main` after the 0.2.2 tag. Deploy this tag, not `v0.2.2`.
+
+- CI badge points at `.github/workflows/ci.yml`.
 - `$wgSaintapediaGraphMaxLimit` described as a per-query cap; dual mode can fetch up to 2×.
-- mediawiki.org download links use the `v0.2.2` tarball, not a `master` branch archive.
+- mediawiki.org download links use the versioned tarball, not a `master` branch archive.
 - `limit=` below 1 (including negative) is treated as a clamp and warned, same as over the max.
-- Editor clamp warning no longer says “per Cargo query”.
+- Editor clamp warning is `limit $1 reduced to $2` (no “per Cargo query”).
 - Maintenance script `SaintapediaGraph:importPages` imports the bundled help page and templates.
 
 ## 0.2.2 — 2026-08-13

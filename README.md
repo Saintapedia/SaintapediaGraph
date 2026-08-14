@@ -6,7 +6,7 @@ MediaWiki extension that turns [Extension:Cargo](https://www.mediawiki.org/wiki/
 
 | | |
 |---|---|
-| **Version** | 0.2.2 |
+| **Version** | 0.2.3 |
 | **Directory** | `extensions/SaintapediaGraph` |
 | **Parser functions** | `{{#saintapedia_graph:…}}`, alias `{{#cargo_mermaid:…}}` |
 | **Requires** | MediaWiki 1.39+, PHP 8.1+, **Cargo** |
@@ -17,7 +17,7 @@ MediaWiki extension that turns [Extension:Cargo](https://www.mediawiki.org/wiki/
 | **mediawiki.org** | Draft: `docs/mediawiki.org-Extension-SaintapediaGraph.wikitext` → [Extension:SaintapediaGraph](https://www.mediawiki.org/wiki/Extension:SaintapediaGraph) |
 | **Changelog** | [CHANGELOG.md](CHANGELOG.md) |
 
-Deploy **0.2.2** (or `main` after this release). The older `v0.2.1` tag is the initial commit and is missing theme/click hardening.
+Deploy **0.2.3** (or `main`). The `v0.2.2` tag is missing later docs, clamp wording, and `importPages`. Do not use `v0.2.1`.
 
 ## Install
 
@@ -29,7 +29,7 @@ wfLoadExtension( 'Cargo' );
 wfLoadExtension( 'SaintapediaGraph' );
 ```
 
-3. Check `Special:Version` for **Saintapedia Graph 0.2.2**.
+3. Check `Special:Version` for **Saintapedia Graph 0.2.3**.
 4. Optional: import help + templates:
 
 ```sh
@@ -78,7 +78,7 @@ If a strict CSP blocks inline SVG styles, diagrams may render unstyled. That is 
 
 User-visible strings (errors, cycle/theme warnings, `Special:Version` description, client render-failure title) ship in **English only** (`i18n/en.json`). Message documentation is in `i18n/qqq.json`.
 
-MediaWiki will show English if `$wgLanguageCode` is not `en`. That is an accepted limit for 0.2.2. Additional languages can be added later as `i18n/<code>.json` files; there is no translatewiki.net project yet.
+MediaWiki will show English if `$wgLanguageCode` is not `en`. That is an accepted limit for 0.2.3. Additional languages can be added later as `i18n/<code>.json` files; there is no translatewiki.net project yet.
 
 ## Modes
 
@@ -180,7 +180,7 @@ CI runs that suite on PHP 8.1, 8.2, and 8.3.
 
 After `wfLoadExtension( 'SaintapediaGraph' )` on the Canasta/dev wiki:
 
-1. `Special:Version` lists **Saintapedia Graph 0.2.2** and the `ext.saintapediaGraph` module.
+1. `Special:Version` lists **Saintapedia Graph 0.2.3** and the `ext.saintapediaGraph` module.
 2. Import help + templates: `php maintenance/run.php SaintapediaGraph:importPages` (or the 1.39 path above). Use `--overwrite` if the pages already exist.
 3. Confirm `Help:Saintapedia Graph`, `Template:Org chart`, and `Template:Funding network` exist.
 4. Render an org chart (`parent_field` or `{{Org chart}}`) with real Cargo rows.

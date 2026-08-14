@@ -3,7 +3,7 @@
 
 '''Saintapedia Graph''' turns [[mw:Extension:Cargo|Cargo]] query results into interactive [https://mermaid.js.org/ Mermaid] flowcharts — especially '''organization charts''' and '''funder → fundee''' (or any source → target) networks.
 
-{{note|This page documents '''Saintapedia Graph 0.2.2''': hierarchy, edge, and dual-table modes, plus <code>style_by</code>, <code>subgraph_by</code>, and cycle warnings. Editor-facing messages are '''English only'''; other interface languages fall back to English.}}
+{{note|This page documents '''Saintapedia Graph 0.2.3''': hierarchy, edge, and dual-table modes, plus <code>style_by</code>, <code>subgraph_by</code>, and cycle warnings. Editor-facing messages are '''English only'''; other interface languages fall back to English.}}
 
 == Requirements ==
 
