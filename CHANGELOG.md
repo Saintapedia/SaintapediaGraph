@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Detailed editor help page (`docs/Help-Saintapedia_Graph.wikitext`) and matching GitHub README (full parameter, template, limit, and install reference).
+
 ## 0.2.3 — 2026-08-14
 
 Matches `main` after the 0.2.2 tag. Deploy this tag, not `v0.2.2`.

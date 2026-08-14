@@ -130,7 +130,7 @@ In dual mode, edge endpoints are usually page titles. Prefer <code>node_id=_page
 * <code>theme=</code> — one of <code>default</code>, <code>base</code>, <code>dark</code>, <code>forest</code>, <code>neutral</code> (anything else falls back to <code>default</code> and warns)
 * <code>warn_cycles=yes</code> / <code>break_cycles=yes</code> — report or drop directed back-edges
 
-Full parameter list: [https://github.com/Saintapedia/SaintapediaGraph/blob/main/docs/Help-Saintapedia_Graph.wikitext help page source] and the [https://github.com/Saintapedia/SaintapediaGraph/blob/main/README.md README].
+Full parameter list, template arguments, limits, and troubleshooting: [https://github.com/Saintapedia/SaintapediaGraph/blob/main/docs/Help-Saintapedia_Graph.wikitext Help:Saintapedia Graph (source)] and the [https://github.com/Saintapedia/SaintapediaGraph/blob/main/README.md README].
 
 == Configuration ==
 
