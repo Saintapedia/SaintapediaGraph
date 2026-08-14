@@ -21,6 +21,6 @@
 	"saintapediagraph-warning-cycles": "Warning when cycles found. $1 = cycle count (may over-count overlapping cycles).",
 	"saintapediagraph-warning-cycles-broken": "Info when edges were removed. $1 = number of edges.",
 	"saintapediagraph-warning-unknown-theme": "Warning when theme= (or the default config theme) is not a Mermaid built-in. $1 = requested value, $2 = fallback used.",
-	"saintapediagraph-warning-limit-clamped": "Warning when limit= exceeds $wgSaintapediaGraphMaxLimit. $1 = requested value, $2 = cap applied to each Cargo query.",
-	"saintapediagraph-warning-limit-clamped-dual": "Extra line in dual mode. $1 = the same per-query cap."
+	"saintapediagraph-warning-limit-clamped": "Editor warning when limit= was adjusted (above $wgSaintapediaGraphMaxLimit, or below 1). $1 = requested value, $2 = effective per-query cap used.",
+	"saintapediagraph-warning-limit-clamped-dual": "Extra editor line in dual mode. $1 = the same per-query cap. Technical 'Cargo query' wording stays here, not in en.json."
 }

@@ -21,6 +21,6 @@
 	"saintapediagraph-warning-cycles": "Saintapedia Graph: detected $1 directed cycle(s) in the graph. Use break_cycles=yes to remove cycle-closing edges.",
 	"saintapediagraph-warning-cycles-broken": "Saintapedia Graph: removed $1 edge(s) to break directed cycle(s).",
 	"saintapediagraph-warning-unknown-theme": "Saintapedia Graph: unknown theme \"$1\"; using \"$2\". Allowed: default, base, dark, forest, neutral.",
-	"saintapediagraph-warning-limit-clamped": "Saintapedia Graph: requested limit $1 exceeds the maximum of $2 per Cargo query; results may be incomplete.",
+	"saintapediagraph-warning-limit-clamped": "Saintapedia Graph: limit $1 reduced to $2; the graph may be missing rows.",
 	"saintapediagraph-warning-limit-clamped-dual": "Saintapedia Graph: dual mode runs two queries (nodes and edges); each is capped at $1."
 }

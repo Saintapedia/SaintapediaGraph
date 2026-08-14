@@ -59,7 +59,7 @@ class DiagramService {
 		if ( $cap['clamped'] ) {
 			array_unshift(
 				$result['warnings'],
-				...self::limitClampWarnings( $requestedLimit, $cap['max'], $mode === 'dual' )
+				...self::limitClampWarnings( $requestedLimit, $cap['limit'], $mode === 'dual' )
 			);
 		}
 
@@ -75,10 +75,11 @@ class DiagramService {
 	 */
 	public static function clampLimit( int $requested, int $max ): array {
 		$max = max( 1, $max );
+		$limit = max( 1, min( $requested, $max ) );
 		return [
-			'limit' => max( 1, min( $requested, $max ) ),
+			'limit' => $limit,
 			'max' => $max,
-			'clamped' => $requested > $max,
+			'clamped' => $requested !== $limit,
 		];
 	}
 
