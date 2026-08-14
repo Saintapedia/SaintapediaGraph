@@ -10,7 +10,7 @@
 }}
 </pre>
 
-== Org chart (MVP) ==
+== Org chart ==
 
 <pre>
 {{#saintapedia_graph:

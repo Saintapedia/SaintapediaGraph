@@ -10,7 +10,7 @@
 }}
 </pre>
 
-== Funder → fundee graph (MVP) ==
+== Funder → fundee graph ==
 
 <pre>
 {{#saintapedia_graph:

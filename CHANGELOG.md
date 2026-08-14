@@ -1,0 +1,30 @@
+# Changelog
+
+## 0.2.2 — 2026-08-13
+
+Production-hygiene release. Deploy this tag (or `main` after it lands), not `v0.2.1`.
+
+### Security (landed after the v0.2.1 tag)
+
+- Allowlist Mermaid themes (`default`, `base`, `dark`, `forest`, `neutral`); unknown values fall back to `default` with a soft warning.
+- Harden Mermaid `click` tooltips and URLs (control-character strip, quote/backslash encoding).
+- Reject non-local click URLs. Node clicks still require Mermaid `securityLevel: 'loose'`; the builder only emits same-origin wiki paths.
+
+### Editor feedback
+
+- Warn when `limit=` exceeds `$wgSaintapediaGraphMaxLimit` (was a silent clamp). Dual mode states that the cap applies to each of the two Cargo queries.
+- Empty Mermaid source no longer emits a blank `data-mermaid` mount.
+
+### Release / docs
+
+- GitHub Actions PHPUnit on PHP 8.1, 8.2, and 8.3 (workflow lands via PR #3).
+- mediawiki.org extension page draft: `docs/mediawiki.org-Extension-SaintapediaGraph.wikitext`.
+- Help page documents dual-table mode, `style_by`, `subgraph_by`, and cycle handling (no longer described as MVP-only).
+- UI messages are English-only; documented as a known limit.
+- CSP and deploy notes in the README, including a smoke checklist for `dev.saintapedia.org`.
+
+## 0.2.1 — 2026-08-04
+
+Initial public tree: hierarchy / edge / dual-table modes, `style_by`, `subgraph_by`, cycle warn/break, bundled Mermaid 10.9.1, templates, and unit tests.
+
+The git tag `v0.2.1` points at this commit and **does not** include the theme/click hardening above.

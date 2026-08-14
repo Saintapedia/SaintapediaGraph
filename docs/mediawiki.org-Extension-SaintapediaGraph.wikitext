@@ -1,0 +1,197 @@
+<!--
+  Create https://www.mediawiki.org/wiki/Extension:SaintapediaGraph
+  and paste this page (omit this comment if you prefer).
+
+  Status is "beta": used toward production on Saintapedia, English UI only,
+  first public listing. Bump to "stable" after it has run on production.
+-->
+{{Extension
+|name                   = SaintapediaGraph
+|status                 = beta
+|type1                  = parser function
+|hook1                  = ParserFirstCallInit
+|author                 = Saintapedia contributors
+|description            = Turns [[Extension:Cargo|Cargo]] query results into interactive [https://mermaid.js.org/ Mermaid] flowcharts (org charts, funding networks, styled/grouped graphs)
+|version                = 0.2.2
+|update                 = 2026-08-13
+|compatibility policy   = master
+|mediawiki              = 1.39+
+|php                    = 8.1+
+|needs-updatephp        = No
+|license                = GPL-2.0-or-later
+|download               = {{GithubDownload|Saintapedia|SaintapediaGraph|mastertarball=1}}
+|readme                 = [https://github.com/Saintapedia/SaintapediaGraph/blob/main/README.md README]
+|changelog              = [https://github.com/Saintapedia/SaintapediaGraph/blob/main/CHANGELOG.md CHANGELOG]
+|help                   = [https://github.com/Saintapedia/SaintapediaGraph/blob/main/docs/Help-Saintapedia_Graph.wikitext Help:Saintapedia Graph (source)]
+|example                = [https://dev.saintapedia.org/ dev.saintapedia.org]
+|parameters             = <nowiki/>
+* <code>$wgSaintapediaGraphDefaultDirection</code>
+* <code>$wgSaintapediaGraphDefaultLimit</code>
+* <code>$wgSaintapediaGraphMaxLimit</code>
+* <code>$wgSaintapediaGraphClickable</code>
+* <code>$wgSaintapediaGraphDefaultTheme</code>
+* <code>$wgSaintapediaGraphUseStandaloneRenderer</code>
+* <code>$wgSaintapediaGraphWarnCycles</code>
+* <code>$wgSaintapediaGraphBreakCycles</code>
+* <code>$wgSaintapediaGraphStylePalette</code>
+}}
+
+'''SaintapediaGraph''' is a MediaWiki extension that turns [[Extension:Cargo|Cargo]] tables into interactive [https://mermaid.js.org/ Mermaid] flowcharts. It is maintained for [https://saintapedia.org/ Saintapedia] (org charts and funder → fundee networks) and is usable on any wiki that already runs Cargo.
+
+It does '''not''' require [[Extension:Mermaid]]. Mermaid 10.9.1 is bundled and loaded via ResourceLoader from the wiki origin.
+
+{{note|type=reminder|User-visible messages are '''English only''' (<code>i18n/en.json</code>). Other interface languages fall back to English. There is no translatewiki.net project yet.}}
+
+== Requirements ==
+
+* MediaWiki 1.39 or later
+* PHP 8.1 or later
+* [[Extension:Cargo]]
+
+== Installation ==
+
+{{ExtensionInstall
+|SaintapediaGraph
+|download-link=[https://github.com/Saintapedia/SaintapediaGraph/archive/refs/heads/main.tar.gz Download]
+|registration=required
+|localsettingsearly=wfLoadExtension( 'Cargo' );
+|custom-steps=
+* Optional: import <code>docs/Help-Saintapedia_Graph.wikitext</code> as <code>Help:Saintapedia Graph</code>, and the files in <code>templates/</code> as <code>Template:Org chart</code> / <code>Template:Funding network</code>.
+}}
+
+The directory name must be <code>SaintapediaGraph</code> (the ResourceLoader remote path is hardcoded to that name). No <code>update.php</code> run is required.
+
+== Usage ==
+
+Parser functions: <code><nowiki>{{#saintapedia_graph: … }}</nowiki></code> and alias <code><nowiki>{{#cargo_mermaid: … }}</nowiki></code>.
+
+Pick '''one''' mode per diagram:
+
+{| class="wikitable"
+! Mode
+! Required parameters
+|-
+| Hierarchy (org chart)
+| <code>tables=</code> + <code>parent_field=</code>
+|-
+| Edge (network)
+| <code>tables=</code> + <code>source_field=</code> + <code>target_field=</code>
+|-
+| Dual-table
+| <code>nodes_table=</code> + <code>edges_table=</code> + source/target fields
+|}
+
+Dual mode runs two Cargo queries and counts as two expensive parser functions.
+
+=== Org chart ===
+
+<pre>
+{{#saintapedia_graph:
+tables=Organizations
+|fields=_pageName=Name,ParentOrg,Type,Country
+|parent_field=ParentOrg
+|node_id=Name
+|style_by=Type
+|subgraph_by=Country
+|direction=TD
+}}
+</pre>
+
+=== Dual-table funding network ===
+
+<pre>
+{{#saintapedia_graph:
+nodes_table=Organizations
+|nodes_fields=_pageName=Name,Type,Country
+|edges_table=Grants
+|edges_fields=Funder,Recipient,Amount
+|edges_where=Year>=2023
+|node_id=_pageName
+|node_label=Name
+|source_field=Funder
+|target_field=Recipient
+|edge_label=Amount
+|style_by=Type
+|subgraph_by=Country
+|direction=LR
+|theme=forest
+}}
+</pre>
+
+In dual mode, edge endpoints are usually page titles. Prefer <code>node_id=_pageName</code> so they match organization pages.
+
+=== Debug ===
+
+* <code>format=raw</code> — print Mermaid source instead of rendering
+* <code>theme=</code> — one of <code>default</code>, <code>base</code>, <code>dark</code>, <code>forest</code>, <code>neutral</code> (anything else falls back to <code>default</code> and warns)
+* <code>warn_cycles=yes</code> / <code>break_cycles=yes</code> — report or drop directed back-edges
+
+Full parameter list: [https://github.com/Saintapedia/SaintapediaGraph/blob/main/docs/Help-Saintapedia_Graph.wikitext help page source] and the [https://github.com/Saintapedia/SaintapediaGraph/blob/main/README.md README].
+
+== Configuration ==
+
+{| class="wikitable"
+! Variable
+! Default
+! Meaning
+|-
+| <code>$wgSaintapediaGraphDefaultDirection</code>
+| <code>TD</code>
+| <code>TD</code> / <code>LR</code> / <code>BT</code> / <code>RL</code>
+|-
+| <code>$wgSaintapediaGraphDefaultLimit</code>
+| <code>500</code>
+| Default <code>limit=</code>
+|-
+| <code>$wgSaintapediaGraphMaxLimit</code>
+| <code>1000</code>
+| Hard cap on rows per query
+|-
+| <code>$wgSaintapediaGraphClickable</code>
+| <code>true</code>
+| Nodes link to wiki pages
+|-
+| <code>$wgSaintapediaGraphDefaultTheme</code>
+| <code>default</code>
+| Built-in Mermaid theme
+|-
+| <code>$wgSaintapediaGraphUseStandaloneRenderer</code>
+| <code>true</code>
+| Interactive render (<code>false</code> = source only)
+|-
+| <code>$wgSaintapediaGraphWarnCycles</code>
+| <code>true</code>
+| Warn when directed cycles exist
+|-
+| <code>$wgSaintapediaGraphBreakCycles</code>
+| <code>false</code>
+| Drop cycle-closing edges
+|-
+| <code>$wgSaintapediaGraphStylePalette</code>
+| 10 colors
+| Fills for <code>style_by</code>
+|}
+
+== Security and CSP ==
+
+* Diagram source is stored base64-encoded in a <code>data-mermaid</code> attribute so MediaWiki HTML tidy cannot wrap Mermaid lines in <code>&lt;p&gt;</code>/<code>&lt;pre&gt;</code>.
+* Themes and <code>link_style</code> are allowlisted.
+* Node clicks need Mermaid <code>securityLevel: 'loose'</code>. The PHP builder only emits '''same-origin local paths''' from <code>Title::getLocalURL()</code> (no absolute or protocol-relative URLs).
+* Scripts are same-origin ResourceLoader only — no CDN. A wiki CSP should allow the wiki origin for <code>script-src</code>. Mermaid 10 also writes some inline SVG styles; a CSP that forbids inline style may leave diagrams unstyled.
+
+== Languages ==
+
+UI strings (errors, warnings, <code>Special:Version</code> description, client render-failure title) are '''English only'''. Additional languages can be added as <code>i18n/&lt;code&gt;.json</code>; there is no translatewiki.net project yet.
+
+== See also ==
+
+* [[Extension:Cargo]]
+* [[Extension:Mermaid]] (not required)
+* {{ll|Diagram extensions}}
+* [https://github.com/Saintapedia/SaintapediaGraph SaintapediaGraph on GitHub]
+
+{{Clear}}
+
+[[Category:Cargo extensions]]
+[[Category:Graph extensions]]
+[[Category:Parser function extensions]]

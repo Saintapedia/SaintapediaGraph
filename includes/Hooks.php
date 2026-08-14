@@ -7,7 +7,7 @@ use MediaWiki\Hook\ParserFirstCallInitHook;
 use Parser;
 
 /**
- * Hook handlers for SaintapediaGraph (MVP).
+ * Hook handlers for SaintapediaGraph.
  */
 class Hooks implements ParserFirstCallInitHook {
 

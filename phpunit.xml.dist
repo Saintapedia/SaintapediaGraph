@@ -7,7 +7,7 @@
 	cacheResult="false"
 >
 	<testsuites>
-		<testsuite name="CargoMermaid unit">
+		<testsuite name="SaintapediaGraph unit">
 			<directory>tests/phpunit</directory>
 		</testsuite>
 	</testsuites>
