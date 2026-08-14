@@ -192,7 +192,8 @@ class MermaidBuilder {
 			$color = $palette[$i % count( $palette )];
 			$i++;
 			// Validate $color to prevent classDef injection from misconfigured palette values.
-			if ( !preg_match( '/^(?:#[0-9a-fA-F]{3,8}|[a-zA-Z]{2,30}|rgba?\([^()]+\)|hsla?\([^()]+\))$/', $color ) ) {
+			// rgb()/hsl() arms explicitly exclude ; and newlines so they cannot break out of the line.
+			if ( !preg_match( '/^(?:#[0-9a-fA-F]{3,8}|[a-zA-Z]{2,30}|rgba?\([\d\s,%.\/]+\)|hsla?\([\d\s,%.\/]+\))$/', $color ) ) {
 				continue;
 			}
 			$lines[] = "classDef $class fill:$color,stroke:#333,color:#fff,stroke-width:1px;";
