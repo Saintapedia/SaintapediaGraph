@@ -2,26 +2,42 @@
 
 [![PHPUnit](https://github.com/Saintapedia/SaintapediaGraph/actions/workflows/ci.yml/badge.svg)](https://github.com/Saintapedia/SaintapediaGraph/actions/workflows/ci.yml)
 
-MediaWiki extension that turns [Extension:Cargo](https://www.mediawiki.org/wiki/Extension:Cargo) data into interactive Mermaid flowcharts — org charts, funder→fundee networks, styled/grouped graphs, and dual-table diagrams.
+MediaWiki extension that turns [Extension:Cargo](https://www.mediawiki.org/wiki/Extension:Cargo) tables into interactive [Mermaid](https://mermaid.js.org/) flowcharts — org charts, funder→fundee networks, styled/grouped graphs, and dual-table diagrams.
+
+The **editor-facing** reference is the bundled help page (`docs/Help-Saintapedia_Graph.wikitext` → `Help:Saintapedia Graph` after import). This README is the GitHub / admin copy of the same contract.
 
 | | |
 |---|---|
 | **Version** | 0.2.3 |
-| **Directory** | `extensions/SaintapediaGraph` |
+| **Directory** | `extensions/SaintapediaGraph` (name must match the ResourceLoader path) |
 | **Parser functions** | `{{#saintapedia_graph:…}}`, alias `{{#cargo_mermaid:…}}` |
 | **Requires** | MediaWiki 1.39+, PHP 8.1+, **Cargo** |
-| **Mermaid** | **Bundled** (`resources/lib/mermaid.min.js` 10.9.1) — Extension:Mermaid is **not** required |
-| **Languages** | **English only** — UI / error / warning messages are `en` + `qqq`. Other languages fall back to English. |
-| **Help** | `docs/Help-Saintapedia_Graph.wikitext` → `Help:Saintapedia Graph` |
-| **Templates** | `templates/Org_chart.wikitext`, `templates/Funding_network.wikitext` |
-| **mediawiki.org** | Draft: `docs/mediawiki.org-Extension-SaintapediaGraph.wikitext` → [Extension:SaintapediaGraph](https://www.mediawiki.org/wiki/Extension:SaintapediaGraph) |
+| **Mermaid** | Bundled 10.9.1 (`resources/lib/mermaid.min.js`) — Extension:Mermaid is **not** required |
+| **Languages** | **English only** for errors / warnings (`i18n/en.json` + `qqq.json`) |
+| **Help** | [docs/Help-Saintapedia_Graph.wikitext](docs/Help-Saintapedia_Graph.wikitext) |
+| **Templates** | [templates/Org_chart.wikitext](templates/Org_chart.wikitext), [templates/Funding_network.wikitext](templates/Funding_network.wikitext) |
+| **mediawiki.org** | Draft: [docs/mediawiki.org-Extension-SaintapediaGraph.wikitext](docs/mediawiki.org-Extension-SaintapediaGraph.wikitext) → [Extension:SaintapediaGraph](https://www.mediawiki.org/wiki/Extension:SaintapediaGraph) |
 | **Changelog** | [CHANGELOG.md](CHANGELOG.md) |
 
-Deploy **0.2.3** (or `main`). The `v0.2.2` tag is missing later docs, clamp wording, and `importPages`. Do not use `v0.2.1`.
+Deploy **`v0.2.3` or `main`**. Do not deploy `v0.2.2` or `v0.2.1`.
+
+## Contents
+
+- [Install](#install)
+- [Configuration](#configuration)
+- [Modes](#modes)
+- [Parameters](#parameters)
+- [Templates](#templates)
+- [Limits, clicks, cycles, themes](#limits-clicks-cycles-themes)
+- [Examples](#examples)
+- [Maintenance](#maintenance)
+- [CSP and languages](#csp-and-languages)
+- [Tests and smoke](#tests-and-smoke)
+- [License](#license)
 
 ## Install
 
-1. Place this folder at `extensions/SaintapediaGraph` (name must match the ResourceLoader path).
+1. Place this folder at `extensions/SaintapediaGraph`.
 2. After Cargo in `LocalSettings.php` / Canasta `settings.yaml`:
 
 ```php
@@ -30,7 +46,7 @@ wfLoadExtension( 'SaintapediaGraph' );
 ```
 
 3. Check `Special:Version` for **Saintapedia Graph 0.2.3**.
-4. Optional: import help + templates:
+4. Import help + templates:
 
 ```sh
 # MediaWiki 1.40+
@@ -38,9 +54,11 @@ php maintenance/run.php SaintapediaGraph:importPages
 # MediaWiki 1.39
 php extensions/SaintapediaGraph/maintenance/importPages.php
 
-# Preview first: add --dry-run
-# Replace existing pages: add --overwrite
+# Preview:  --dry-run
+# Replace:  --overwrite
 ```
+
+That writes `Help:Saintapedia Graph`, `Template:Org chart`, and `Template:Funding network`.
 
 No `update.php` run is required (no database tables).
 
@@ -48,64 +66,111 @@ No `update.php` run is required (no database tables).
 
 | Variable | Default | Meaning |
 |----------|---------|---------|
-| `$wgSaintapediaGraphDefaultDirection` | `TD` | `TD` / `LR` / `BT` / `RL` |
-| `$wgSaintapediaGraphDefaultLimit` | `500` | Default `limit=` (per Cargo query) |
-| `$wgSaintapediaGraphMaxLimit` | `1000` | Hard cap on rows **per Cargo query**. Dual-table mode runs two queries, so the total fetched can reach 2× this value. |
+| `$wgSaintapediaGraphDefaultDirection` | `TD` | `TD` / `LR` / `BT` / `RL` (`TB` is treated as `TD`) |
+| `$wgSaintapediaGraphDefaultLimit` | `500` | Default `limit=` **per Cargo query** |
+| `$wgSaintapediaGraphMaxLimit` | `1000` | Hard cap **per Cargo query**. Dual mode runs two queries, so a page can fetch up to 2× this many rows. |
 | `$wgSaintapediaGraphClickable` | `true` | Nodes link to wiki pages |
-| `$wgSaintapediaGraphDefaultTheme` | `default` | Mermaid theme: `default`, `base`, `dark`, `forest`, `neutral` (invalid values fall back to `default`; also embedded in diagram source via `%%{init}%%`) |
-| `$wgSaintapediaGraphUseStandaloneRenderer` | `true` | Interactive render (false = raw source only) |
+| `$wgSaintapediaGraphDefaultTheme` | `default` | `default`, `base`, `dark`, `forest`, `neutral` |
+| `$wgSaintapediaGraphUseStandaloneRenderer` | `true` | Interactive SVG (`false` = Mermaid source only) |
 | `$wgSaintapediaGraphWarnCycles` | `true` | Warn when directed cycles exist |
 | `$wgSaintapediaGraphBreakCycles` | `false` | Drop cycle-closing edges |
-| `$wgSaintapediaGraphStylePalette` | 10 colors | Fills for `style_by` |
+| `$wgSaintapediaGraphStylePalette` | 10 hex colors | Fills for `style_by` |
 
-Theme is applied in the generated Mermaid source (`%%{init: {theme:…}}%%`). Only built-in Mermaid themes are accepted (`default`, `base`, `dark`, `forest`, `neutral`); anything else falls back to `default` and surfaces a soft warning. The HTML `data-theme` attribute mirrors the validated theme for debugging; rendering uses the source init block (client JS keeps a global `theme: 'default'` only as a fallback).
-
-Node clicks require Mermaid `securityLevel: 'loose'`. The builder only emits **same-origin local paths** (`/wiki/…`, `index.php?…`) from `Title::getLocalURL()`, never absolute or protocol-relative URLs.
-
-## Content Security Policy
-
-The renderer loads **only** the bundled, same-origin ResourceLoader module `ext.saintapediaGraph` (PHP + `resources/lib/mermaid.min.js`). It does not fetch Mermaid from a CDN.
-
-If the wiki sets a CSP:
-
-- `script-src` must allow the wiki origin (ResourceLoader).
-- `style-src` should allow `'unsafe-inline'` **or** the wiki origin — Mermaid 10 writes some SVG presentation attributes/styles while drawing.
-- Do not add `cdn.jsdelivr.net` / `unpkg.com` for this extension.
-
-If a strict CSP blocks inline SVG styles, diagrams may render unstyled. That is a wiki CSP choice, not a missing remote script.
-
-## Languages
-
-User-visible strings (errors, cycle/theme warnings, `Special:Version` description, client render-failure title) ship in **English only** (`i18n/en.json`). Message documentation is in `i18n/qqq.json`.
-
-MediaWiki will show English if `$wgLanguageCode` is not `en`. That is an accepted limit for 0.2.3. Additional languages can be added later as `i18n/<code>.json` files; there is no translatewiki.net project yet.
+Theme is written into the generated source (`%%{init: {theme:…}}%%`). Unknown themes fall back to `default` and emit `saintapediagraph-warning-unknown-theme`. The HTML `data-theme` attribute mirrors that validated theme; client JS keeps a global `theme: 'default'` only as a fallback.
 
 ## Modes
 
-| Mode | Parameters |
-|------|------------|
-| **Hierarchy** | `tables=` + `parent_field=` |
-| **Edge** | `tables=` + `source_field=` + `target_field=` |
-| **Dual** | `nodes_table=` + `edges_table=` + source/target fields |
+Pick **one** per diagram. Mixing `parent_field` with `source_field`/`target_field` is an error. Dual mode is selected when both `nodes_table` and `edges_table` are set.
 
-Do not mix hierarchy and edge parameters. Dual mode runs **two** Cargo queries (counts as two expensive parser functions).
+| Mode | Required | Edges | Cargo queries |
+|------|----------|-------|----------------|
+| **Hierarchy** | `tables=` + `parent_field=` | parent → child | 1 |
+| **Edge** | `tables=` + `source_field=` + `target_field=` | source → target | 1 |
+| **Dual** | `nodes_table=` + `edges_table=` + source/target | source → target | **2** (two expensive parser functions) |
 
-### Dual-mode identity tip
+**Hierarchy:** each row is a child. Empty `parent_field` = root. Missing parents are still drawn. A synthetic parent can inherit a subgraph from its first child.
 
-Edge endpoints (`Funder`, `Recipient`) are usually **page titles**. Prefer:
+**Edge:** each row is one arrow. `style_by` / `subgraph_by` come from that same row and apply to the **source** node.
 
-```wikitext
-|node_id=_pageName
-|node_label=Name
-```
+**Dual:** first query = nodes (label, click, color, group); second = edges. Endpoints missing from the node query are still drawn, unstyled. Edge rows never overwrite node styles.
 
-so edges match organization pages. If you use `node_id=Name`, **Name must equal the page title**.
+Dual-mode identity: grant endpoints are usually **page titles**. Use `node_id=_pageName` and `node_label=Name`. If you use `node_id=Name`, Name must equal the page title.
 
-`style_by=` / `subgraph_by=` values must be real Cargo column names.
+`style_by=` / `subgraph_by=` must be real Cargo column names.
+
+## Parameters
+
+Names are case-insensitive; spaces and hyphens become underscores (`join on` = `join_on`).
+
+### Cargo (hierarchy / edge)
+
+| Parameter | Role |
+|-----------|------|
+| `tables` / `table` | Required. Comma-separated Cargo tables. |
+| `fields` | Columns to select. Needed diagram fields are appended if missing. |
+| `where` | Filter. |
+| `join on` | Required when more than one table is listed. |
+| `group by` / `having` | Aggregation (Cargo rules). |
+| `order by` | Sort. |
+| `limit` | Max rows **per query** (see [Limits](#limits-clicks-cycles-themes)). |
+| `offset` | Skip rows (single-query modes). Dual edge query always uses offset 0. |
+
+### Dual query
+
+| Parameter | Role |
+|-----------|------|
+| `nodes_table` / `edges_table` | Required together. |
+| `nodes_fields` / `edges_fields` | Per-query columns. Empty `edges_fields` defaults to source, target, optional label. |
+| `nodes_where` / `edges_where` | Per-query filters. |
+| `nodes_join_on` / `edges_join_on` | Per-query joins. |
+| `nodes_order_by` / `edges_order_by` | Per-query sort. |
+
+### Diagram
+
+| Parameter | Default | Role |
+|-----------|---------|------|
+| `direction` | site `TD` | `TD`/`TB`, `LR`, `BT`, `RL` |
+| `node_id` | `_pageName` | Stable node identity |
+| `node_label` | `node_id` (dual may pick `Name`) | Visible text |
+| `page_field` | `_pageName` (hierarchy/dual); endpoint itself (edge) | Click target title |
+| `parent_field` | — | Hierarchy only |
+| `source_field` / `target_field` | — | Edge and dual |
+| `edge_label` | — | Arrow caption (~64 chars) |
+| `style_by` | — | Color by column |
+| `subgraph_by` | — | Group by column |
+| `link_style` | `-->` | `-->`, `-.->`, `==>`, `---`, `<-->` |
+| `clickable` | site `yes` | `yes`/`no` (`true`/`false`, `1`/`0`, `on`/`off`) |
+| `theme` | site `default` | Mermaid built-ins only |
+| `warn_cycles` | site `yes` | Warn on directed cycles |
+| `break_cycles` | site `no` | Drop back-edges |
+| `format` | `mermaid` | `mermaid` or `raw` / `source` / `text` |
+
+## Templates
+
+| Template | Mode | Useful arguments |
+|----------|------|------------------|
+| `{{Org chart}}` | Hierarchy over `Organizations` | `table`, `parent`, `id`, `label`, `style`, `subgraph`, `where`, `order`, `direction`, `limit` (default 200), `theme`, `clickable`, `warn_cycles`, `break_cycles` |
+| `{{Funding network}}` | Dual `Organizations` + `Grants` | `nodes`, `edges`, `source`, `target`, `id` (default `_pageName`), `label` (default `Name`), `edge_label` (default `Amount`), `style`, `subgraph`, `edges_where` / `where`, `nodes_where`, `direction` (default `LR`), `theme` (default `forest`), `limit` (default 300) |
+
+`style` / `subgraph` must be real columns. See the help page for the full argument → parser-function map.
+
+## Limits, clicks, cycles, themes
+
+**Limits.** Omitted `limit=` uses `$wgSaintapediaGraphDefaultLimit`. The value is then clamped to `[1, $wgSaintapediaGraphMaxLimit]`. Over the max or below 1 (including negatives) still draws the graph and warns: `limit $1 reduced to $2; the graph may be missing rows.` Dual mode applies that cap to **each** query and adds a second line. Dual also counts as two expensive parser functions (`$wgExpensiveParserFunctionLimit`).
+
+**Clicks.** `clickable=yes` emits Mermaid `click` lines. Only same-origin paths from `Title::getLocalURL()` (`/wiki/…`, `index.php?…`) are kept. Absolute and protocol-relative URLs are dropped. This is why Mermaid is initialized with `securityLevel: 'loose'`. Interactive SVG needs JavaScript; noscript shows the source.
+
+**Cycles.** After the graph is built, directed cycles can be warned (`warn_cycles`) and/or broken (`break_cycles`). Counts may overlap on dense graphs. Path labels still use internal ids.
+
+**Themes.** Allowlist only. Invalid `theme=` → `default` + warning.
+
+**One query vs dual.** `tables=A,B` + `join on=` is one result set. `nodes_table` + `edges_table` is two queries — use it when Type/Country live on the organization row.
+
+Not in 0.2.3: N-hop expand, Sankey, hover field tooltips, SVG/PNG export.
 
 ## Examples
 
-### Org chart with colors and groups
+### Org chart
 
 ```wikitext
 {{#saintapedia_graph:
@@ -144,7 +209,7 @@ nodes_table=Organizations
 
 Or: `{{Funding network|style=Type|subgraph=Country|edges_where=Year>=2023}}`
 
-### Multi-table join (single query)
+### Single-query join
 
 ```wikitext
 {{#saintapedia_graph:
@@ -157,13 +222,29 @@ tables=Grants,Organizations
 }}
 ```
 
-## Debug
+## Maintenance
 
-- `format=raw` — print Mermaid source
-- Hard-refresh after extension updates (Ctrl+Shift+R)
-- Cycles: `warn_cycles=yes` (default), `break_cycles=yes` to drop back-edges
+```sh
+php maintenance/run.php SaintapediaGraph:importPages [--dry-run] [--overwrite]
+```
 
-## Tests
+Catalog of imported pages: `includes/Maintenance/PageCatalog.php` (unit-tested without MediaWiki).
+
+## CSP and languages
+
+The renderer loads **only** the same-origin ResourceLoader module `ext.saintapediaGraph` (PHP + bundled `mermaid.min.js`). No CDN.
+
+If the wiki sets a CSP:
+
+- `script-src` must allow the wiki origin (ResourceLoader).
+- `style-src` should allow `'unsafe-inline'` **or** the wiki origin — Mermaid 10 writes some SVG presentation styles.
+- Do not add `cdn.jsdelivr.net` / `unpkg.com` for this extension.
+
+A CSP that forbids inline style may leave diagrams unstyled. That is a wiki policy choice.
+
+UI strings are English-only. Other `$wgLanguageCode` values still show English errors and warnings. Extra languages can be added as `i18n/<code>.json`; there is no translatewiki.net project yet.
+
+## Tests and smoke
 
 Standalone PHPUnit (no MediaWiki core / Cargo):
 
@@ -176,21 +257,18 @@ Or: `docker run --rm -v "$PWD":/app -w /app php:8.2-cli php vendor/bin/phpunit`
 
 CI runs that suite on PHP 8.1, 8.2, and 8.3.
 
-## Smoke on dev.saintapedia.org
+After `wfLoadExtension( 'SaintapediaGraph' )` on a wiki:
 
-After `wfLoadExtension( 'SaintapediaGraph' )` on the Canasta/dev wiki:
+1. `Special:Version` shows **0.2.3** and `ext.saintapediaGraph`.
+2. `php maintenance/run.php SaintapediaGraph:importPages` (add `--overwrite` if pages exist).
+3. Confirm Help + both templates.
+4. Render an org chart and a dual-table funding graph.
+5. Click a node — stay on-wiki.
+6. `theme=forset` still renders and warns.
+7. `limit=2000` and `limit=-5` warn (`reduced to` the cap or `1`).
+8. Hard-refresh (Ctrl+Shift+R) after updates.
 
-1. `Special:Version` lists **Saintapedia Graph 0.2.3** and the `ext.saintapediaGraph` module.
-2. Import help + templates: `php maintenance/run.php SaintapediaGraph:importPages` (or the 1.39 path above). Use `--overwrite` if the pages already exist.
-3. Confirm `Help:Saintapedia Graph`, `Template:Org chart`, and `Template:Funding network` exist.
-4. Render an org chart (`parent_field` or `{{Org chart}}`) with real Cargo rows.
-5. Render a dual-table funding graph (`{{Funding network}}` or `nodes_table` + `edges_table`).
-6. Click a node — it must stay on-wiki (same origin).
-7. `theme=forset` (typo) should still render and show the unknown-theme warning.
-8. `limit=2000` on a large table should still render and show the per-query cap warning (dual mode: two lines).
-9. Hard-refresh (Ctrl+Shift+R) so the new ResourceLoader module is not a cached 0.2.1 payload.
-
-Local smoke (already done) does not replace this wiki pass.
+Local Canasta (`localhost:8080`) was used for the 0.2.3 smoke (`Saintapedia Graph demo`, `Saintapedia Graph smoke`).
 
 ## License
 
