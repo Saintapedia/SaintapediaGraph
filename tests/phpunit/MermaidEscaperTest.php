@@ -23,6 +23,12 @@ class MermaidEscaperTest extends TestCase {
 		$this->assertStringNotContainsString( '"', $label );
 	}
 
+	public function testLabelEscapesBackslash() {
+		$label = MermaidEscaper::label( 'path\\to\\file' );
+		$this->assertStringContainsString( '\\\\', $label );
+		$this->assertSame( 'path\\\\to\\\\file', $label );
+	}
+
 	public function testClassAndSubgraph() {
 		$this->assertStringStartsWith( 'sg_', MermaidEscaper::className( 'Nonprofit' ) );
 		$this->assertStringStartsWith( 'sg_', MermaidEscaper::subgraphId( 'United States' ) );
@@ -66,10 +72,4 @@ class MermaidEscaperTest extends TestCase {
 		);
 	}
 
-	public function testClickTargetAliasDelegatesToTooltip() {
-		$this->assertSame(
-			MermaidEscaper::clickTooltip( 'X "Y"' ),
-			MermaidEscaper::clickTarget( 'X "Y"' )
-		);
-	}
 }

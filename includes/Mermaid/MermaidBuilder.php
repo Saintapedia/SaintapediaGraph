@@ -73,7 +73,7 @@ class MermaidBuilder {
 		$theme = self::normalizeTheme( (string)( $this->options['theme'] ?? 'default' ) );
 		$init = json_encode( [
 			'theme' => $theme,
-			'securityLevel' => 'loose',
+			'securityLevel' => 'antiscript',
 			'flowchart' => [ 'htmlLabels' => false, 'useMaxWidth' => true ],
 		], JSON_UNESCAPED_SLASHES );
 		if ( $init !== false ) {
@@ -191,6 +191,11 @@ class MermaidBuilder {
 			$class = MermaidEscaper::className( $value );
 			$color = $palette[$i % count( $palette )];
 			$i++;
+			// Validate $color to prevent classDef injection from misconfigured palette values.
+			// rgb()/hsl() arms explicitly exclude ; and newlines so they cannot break out of the line.
+			if ( !preg_match( '/^(?:#[0-9a-fA-F]{3,8}|[a-zA-Z]{2,30}|rgba?\([\d\s,%.\/]+\)|hsla?\([\d\s,%.\/]+\))$/', $color ) ) {
+				continue;
+			}
 			$lines[] = "classDef $class fill:$color,stroke:#333,color:#fff,stroke-width:1px;";
 			$classMembers[$class] = [];
 		}
@@ -238,7 +243,6 @@ class MermaidBuilder {
 
 	/**
 	 * Accept only same-origin wiki paths (no protocol-relative or absolute URLs).
-	 * Required because Mermaid is initialized with securityLevel=loose for clicks.
 	 *
 	 * @param string $url
 	 * @return bool

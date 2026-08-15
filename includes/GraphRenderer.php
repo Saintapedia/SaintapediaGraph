@@ -34,6 +34,15 @@ class GraphRenderer {
 		// Keep data-theme in lockstep with the validated theme in %%{init}%%.
 		$theme = MermaidBuilder::normalizeTheme( (string)$theme );
 
+		if ( $mermaidSource === '' ) {
+			return '<div class="error saintapedia-graph-error">'
+				. htmlspecialchars(
+					wfMessage( 'saintapediagraph-error-render' )->text(),
+					ENT_QUOTES | ENT_HTML5, 'UTF-8'
+				)
+				. '</div>';
+		}
+
 		$useStandalone = $wgSaintapediaGraphUseStandaloneRenderer ?? true;
 		if ( !$useStandalone ) {
 			return '<pre class="saintapedia-graph-source">'
@@ -46,17 +55,6 @@ class GraphRenderer {
 		self::$instanceCounter++;
 		$unique = self::$instanceCounter . '-' . substr( md5( $mermaidSource . self::$instanceCounter ), 0, 10 );
 		$id = 'saintapedia-graph-' . $unique;
-
-		// PHP 8+ base64_encode() always returns a string; empty input is the
-		// only case that would leave data-mermaid blank.
-		if ( $mermaidSource === '' ) {
-			return '<div class="error saintapedia-graph-error">'
-				. htmlspecialchars(
-					wfMessage( 'saintapediagraph-error-render' )->text(),
-					ENT_QUOTES | ENT_HTML5, 'UTF-8'
-				)
-				. '</div>';
-		}
 		$b64 = base64_encode( $mermaidSource );
 
 		// data-theme mirrors the theme embedded in the Mermaid source (%%{init}%%)

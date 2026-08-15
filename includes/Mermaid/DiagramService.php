@@ -50,7 +50,7 @@ class DiagramService {
 				$params['having'],
 				$params['order_by'],
 				(string)$cap['limit'],
-				$params['offset']
+				(string)max( 0, (int)$params['offset'] )
 			);
 
 			$result = $this->buildFromRows( $rows, $params );
@@ -145,7 +145,7 @@ class DiagramService {
 			'',
 			$nodeParams['order_by'],
 			$limit,
-			$params['offset']
+			(string)max( 0, (int)$params['offset'] )
 		);
 
 		// Edge query
@@ -398,10 +398,7 @@ class DiagramService {
 			// Prefer a human Name column when dual nodes_fields mention it.
 			if ( $isDual ) {
 				$nf = $out['nodes_fields'] !== '' ? $out['nodes_fields'] : $out['fields'];
-				if ( preg_match( '/(^|[=,])\s*Name\s*($|[,])/', $nf )
-					|| preg_match( '/=Name\b/', $nf )
-					|| preg_match( '/\bName\b/', $nf )
-				) {
+				if ( preg_match( '/\bName\b/', $nf ) ) {
 					$out['node_label'] = 'Name';
 				}
 			}
@@ -582,9 +579,11 @@ class DiagramService {
 				$tables, $fields, $where, $joinOn, $groupBy, $having, $orderBy, $limit, $offset
 			);
 			return $query->run();
-		} catch ( Exception $e ) {
+		} catch ( \Throwable $e ) {
 			throw new Exception(
-				wfMessage( 'saintapediagraph-error-query', $e->getMessage() )->text()
+				wfMessage( 'saintapediagraph-error-query', $e->getMessage() )->text(),
+				0,
+				$e
 			);
 		}
 	}

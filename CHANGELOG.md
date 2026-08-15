@@ -25,7 +25,7 @@ Production-hygiene release. Deploy this tag (or `main` after it lands), not `v0.
 
 - Allowlist Mermaid themes (`default`, `base`, `dark`, `forest`, `neutral`); unknown values fall back to `default` with a soft warning.
 - Harden Mermaid `click` tooltips and URLs (control-character strip, quote/backslash encoding).
-- Reject non-local click URLs. Node clicks still require Mermaid `securityLevel: 'loose'`; the builder only emits same-origin wiki paths.
+- Reject non-local click URLs. The builder only emits same-origin wiki paths.
 
 ### Editor feedback
 

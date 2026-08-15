@@ -158,7 +158,7 @@ Names are case-insensitive; spaces and hyphens become underscores (`join on` = `
 
 **Limits.** Omitted `limit=` uses `$wgSaintapediaGraphDefaultLimit`. The value is then clamped to `[1, $wgSaintapediaGraphMaxLimit]`. Over the max or below 1 (including negatives) still draws the graph and warns: `limit $1 reduced to $2; the graph may be missing rows.` Dual mode applies that cap to **each** query and adds a second line. Dual also counts as two expensive parser functions (`$wgExpensiveParserFunctionLimit`).
 
-**Clicks.** `clickable=yes` emits Mermaid `click` lines. Only same-origin paths from `Title::getLocalURL()` (`/wiki/…`, `index.php?…`) are kept. Absolute and protocol-relative URLs are dropped. This is why Mermaid is initialized with `securityLevel: 'loose'`. Interactive SVG needs JavaScript; noscript shows the source.
+**Clicks.** `clickable=yes` emits Mermaid `click` lines. Only same-origin paths from `Title::getLocalURL()` (`/wiki/…`, `index.php?…`) are kept. Absolute and protocol-relative URLs are dropped. Mermaid is initialized with `securityLevel: 'antiscript'`; click lines still work under that level and scripts inside SVG are blocked. Interactive SVG needs JavaScript; noscript shows the source.
 
 **Cycles.** After the graph is built, directed cycles can be warned (`warn_cycles`) and/or broken (`break_cycles`). Counts may overlap on dense graphs. Path labels still use internal ids.
 

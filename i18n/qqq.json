@@ -18,8 +18,8 @@
 	"saintapediagraph-error-generic": "Generic error. $1 is the message.",
 	"saintapediagraph-error-expensive": "Error when the expensive parser function limit is exceeded.",
 	"saintapediagraph-error-render": "Client-side render failure (used as element title).",
-	"saintapediagraph-warning-cycles": "Warning when cycles found. $1 = cycle count (may over-count overlapping cycles).",
-	"saintapediagraph-warning-cycles-broken": "Info when edges were removed. $1 = number of edges.",
+	"saintapediagraph-warning-cycles": "Warning when cycles are found. $1 is an integer cycle count (may over-count overlapping cycles); used with {{PLURAL:$1}} for singular/plural.",
+	"saintapediagraph-warning-cycles-broken": "Info when edges were removed to break cycles. $1 is an integer edge count; used with {{PLURAL:$1}} for singular/plural.",
 	"saintapediagraph-warning-unknown-theme": "Warning when theme= (or the default config theme) is not a Mermaid built-in. $1 = requested value, $2 = fallback used.",
 	"saintapediagraph-warning-limit-clamped": "Editor warning when limit= was adjusted (above $wgSaintapediaGraphMaxLimit, or below 1). $1 = requested value, $2 = effective per-query cap used.",
 	"saintapediagraph-warning-limit-clamped-dual": "Extra editor line in dual mode. $1 = the same per-query cap. Technical 'Cargo query' wording stays here, not in en.json."

@@ -53,7 +53,7 @@ class MermaidEscaper {
 		$raw = preg_replace( '/\s+/u', ' ', $raw ) ?? $raw;
 		$raw = str_replace(
 			[ '\\', '"', "'", "\n", "\r", "\t", '[', ']', '{', '}', ';', '`' ],
-			[ '', '', '', ' ', ' ', ' ', '(', ')', '(', ')', ',', '' ],
+			[ '\\\\', '', '', ' ', ' ', ' ', '(', ')', '(', ')', ',', '' ],
 			$raw
 		);
 		return trim( $raw );
@@ -107,15 +107,6 @@ class MermaidEscaper {
 		$url = trim( $url );
 		$url = preg_replace( '/[\x00-\x1F\x7F]+/u', '', $url ) ?? $url;
 		return str_replace( [ '\\', '"' ], [ '%5C', '%22' ], $url );
-	}
-
-	/**
-	 * @deprecated Use clickTooltip()
-	 * @param string $pageTitle
-	 * @return string
-	 */
-	public static function clickTarget( string $pageTitle ): string {
-		return self::clickTooltip( $pageTitle );
 	}
 
 	/**
