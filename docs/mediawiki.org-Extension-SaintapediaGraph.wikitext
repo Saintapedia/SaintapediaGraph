@@ -180,7 +180,7 @@ Full parameter list, template arguments, limits, and troubleshooting: [https://g
 
 * Diagram source is stored base64-encoded in a <code>data-mermaid</code> attribute so MediaWiki HTML tidy cannot wrap Mermaid lines in <code>&lt;p&gt;</code>/<code>&lt;pre&gt;</code>.
 * Themes and <code>link_style</code> are allowlisted.
-* Node clicks need Mermaid <code>securityLevel: 'loose'</code>. The PHP builder only emits '''same-origin local paths''' from <code>Title::getLocalURL()</code> (no absolute or protocol-relative URLs).
+* Mermaid is initialized with <code>securityLevel: 'antiscript'</code>. Click lines still work under that level; scripts inside SVG are blocked. The PHP builder only emits '''same-origin local paths''' from <code>Title::getLocalURL()</code> (no absolute or protocol-relative URLs).
 * Scripts are same-origin ResourceLoader only — no CDN. A wiki CSP should allow the wiki origin for <code>script-src</code>. Mermaid 10 also writes some inline SVG styles; a CSP that forbids inline style may leave diagrams unstyled.
 
 == Languages ==
