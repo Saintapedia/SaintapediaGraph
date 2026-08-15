@@ -27,10 +27,12 @@ Other candidates considered: Relations, OrgViz, Network, LinkMap, Flow, Connect,
 - [x] **Domain templates** — `Template:Org chart`, `Template:Funding network`
 - [x] Help page + demo page on dev wiki
 
-## v0.2.4 — current release
+## v0.2.5 — current release
 
 - [x] Theme allowlist + unknown-theme warning
 - [x] Click tooltip/URL hardening (same-origin only)
+- [x] Mermaid `securityLevel: 'antiscript'` (not `loose`)
+- [x] Palette `classDef` allowlist
 - [x] CI: standalone PHPUnit on PHP 8.1 / 8.2 / 8.3
 - [x] Vendor Mermaid license note (`THIRD-PARTY.md`)
 - [x] Production CSP notes in README
@@ -38,12 +40,11 @@ Other candidates considered: Relations, OrgViz, Network, LinkMap, Flow, Connect,
 - [x] Maintenance script `SaintapediaGraph:importPages`
 - [x] mediawiki.org page draft (`docs/mediawiki.org-Extension-SaintapediaGraph.wikitext`)
 - [x] English-only UI documented as a known limit
-- [x] Tag **v0.2.2** (do not reuse `v0.2.1`)
-- [x] Tag **v0.2.3** on current `main` (docs, clamp wording, importPages)
-- [ ] Tag **v0.2.4** after this release PR (detailed help + README)
-- [x] Local Canasta (`localhost:8080`) smoke
+- [x] Tag **v0.2.2** / **v0.2.3** / **v0.2.4** (0.2.4 is docs-only — do not deploy it)
+- [ ] Tag **v0.2.5** after this release PR (`antiscript` + pre-prod fixes)
+- [x] Local Canasta smoke including `antiscript` clicks
 - [ ] Create https://www.mediawiki.org/wiki/Extension:SaintapediaGraph from the draft
-- [ ] Enable on production Saintapedia (or `dev.saintapedia.org` first if you want a remote-dev pass)
+- [ ] Enable on production Saintapedia (deploy **v0.2.5**, not v0.2.4)
 
 Standalone PHPUnit does **not** boot MediaWiki 1.39/1.43 or Cargo. A full MW matrix stays a later engineering item.
 

@@ -1,8 +1,32 @@
 # Changelog
 
+## 0.2.5 — 2026-08-15
+
+Deploy this tag (or `main` after it), not `v0.2.4`. The `v0.2.4` tag is docs-only and still initializes Mermaid with `securityLevel: 'loose'`.
+
+### Security
+
+- Mermaid `securityLevel: 'loose'` → `'antiscript'` in both `%%{init}%%` and `mermaid.initialize()`. Click lines still work; scripts inside SVG are blocked.
+- Validate `$wgSaintapediaGraphStylePalette` values before interpolating them into `classDef` (hex, named color, or a tight `rgb()`/`hsl()` form). Invalid slots are skipped.
+
+### Correctness
+
+- Empty Mermaid source returns an error box before `addModules()`, the instance counter, and the standalone-off path.
+- Catch `\Throwable` (not only `Exception`) around Cargo work; chain the previous exception on query failure.
+- Coerce `offset` to a non-negative integer before passing it to Cargo.
+- Escape backslashes in node labels (`\` → `\\`) instead of dropping them.
+- Drop the deprecated `escape()` decode fallback and the post-render `el.textContent` source fallback.
+- MediaWiki refuses to load the extension on PHP &lt; 8.1 (`requires.platform.php`).
+- Cycle / broken-edge warnings use `{{PLURAL}}`.
+
+### Cleanup
+
+- Remove unused `MermaidEscaper::clickTarget()`.
+- `ExtensionMessagesFiles` stays registered (`{{#saintapedia_graph:}}` / `{{#cargo_mermaid:}}`).
+
 ## 0.2.4 — 2026-08-14
 
-Docs-only. Same code as 0.2.3 plus the detailed help/README so the tag matches `main`.
+Docs-only. Same code as 0.2.3 plus the detailed help/README so the tag matches `main`. **Do not deploy this tag if you want the 0.2.5 security fixes.**
 
 - Detailed editor help page (`docs/Help-Saintapedia_Graph.wikitext`) and matching GitHub README (full parameter, template, limit, and install reference).
 

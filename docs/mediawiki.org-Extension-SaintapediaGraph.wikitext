@@ -12,14 +12,14 @@
 |hook1                  = ParserFirstCallInit
 |author                 = Saintapedia contributors
 |description            = Turns [[Extension:Cargo|Cargo]] query results into interactive [https://mermaid.js.org/ Mermaid] flowcharts (org charts, funding networks, styled/grouped graphs)
-|version                = 0.2.4
-|update                 = 2026-08-14
+|version                = 0.2.5
+|update                 = 2026-08-15
 |compatibility policy   = master
 |mediawiki              = 1.39+
 |php                    = 8.1+
 |needs-updatephp        = No
 |license                = GPL-2.0-or-later
-|download               = {{GithubDownload|Saintapedia|SaintapediaGraph}} [https://github.com/Saintapedia/SaintapediaGraph/archive/refs/tags/v0.2.4.tar.gz v0.2.4 tarball]
+|download               = {{GithubDownload|Saintapedia|SaintapediaGraph}} [https://github.com/Saintapedia/SaintapediaGraph/archive/refs/tags/v0.2.5.tar.gz v0.2.5 tarball]
 |readme                 = [https://github.com/Saintapedia/SaintapediaGraph/blob/main/README.md README]
 |changelog              = [https://github.com/Saintapedia/SaintapediaGraph/blob/main/CHANGELOG.md CHANGELOG]
 |help                   = [https://github.com/Saintapedia/SaintapediaGraph/blob/main/docs/Help-Saintapedia_Graph.wikitext Help:Saintapedia Graph (source)]
@@ -52,7 +52,7 @@ It does '''not''' require [[Extension:Mermaid]]. Mermaid 10.9.1 is bundled and l
 
 {{ExtensionInstall
 |SaintapediaGraph
-|download-link=[https://github.com/Saintapedia/SaintapediaGraph/archive/refs/tags/v0.2.4.tar.gz Download v0.2.4]
+|download-link=[https://github.com/Saintapedia/SaintapediaGraph/archive/refs/tags/v0.2.5.tar.gz Download v0.2.5]
 |registration=required
 |localsettingsearly=wfLoadExtension( 'Cargo' );
 |custom-steps=
