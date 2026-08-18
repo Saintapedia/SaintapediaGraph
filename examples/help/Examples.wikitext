@@ -1,0 +1,71 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/Examples}}
+{{Saintapedia Graph examples}}
+
+Each page below has the '''wikitext''' and, when the bundled OrgDemo / GrantDemo tables are present, a '''live graph''' on the same page. Import with <code>importPages --examples</code>.
+
+{| class="wikitable"
+! Page
+! Mode
+! Live sample?
+|-
+| [[Help:Saintapedia Graph/Province|Province]]
+| Hierarchy — archdiocese → diocese → parish
+| Yes (OrgDemo)
+|-
+| [[Help:Saintapedia Graph/One diocese|One diocese]]
+| Hierarchy + <code>where=</code>
+| Yes (Eastfield)
+|-
+| [[Help:Saintapedia Graph/By country|By country]]
+| Hierarchy + <code>subgraph_by</code>
+| Yes
+|-
+| [[Help:Saintapedia Graph/Funding|Funding]]
+| Dual-table grants
+| Yes (GrantDemo)
+|-
+| [[Help:Saintapedia Graph/One funder|One funder]]
+| Edge + <code>where=</code>
+| Yes
+|-
+| [[Help:Saintapedia Graph/Templates|Templates]]
+| <code><nowiki>{{Org chart}}</nowiki></code> / <code><nowiki>{{Funding network}}</nowiki></code>
+| Yes
+|-
+| [[Help:Saintapedia Graph/Raw source|Raw source]]
+| <code>format=raw</code>
+| Yes
+|-
+| [[Help:Saintapedia Graph/Deaneries|Deaneries]]
+| Hierarchy
+| Code only — needs your Places table
+|-
+| [[Help:Saintapedia Graph/Religious houses|Religious houses]]
+| Hierarchy
+| Code only
+|-
+| [[Help:Saintapedia Graph/Schools|Schools]]
+| Hierarchy
+| Code only
+|-
+| [[Help:Saintapedia Graph/Episcopal lineage|Episcopal lineage]]
+| Hierarchy
+| Code only
+|-
+| [[Help:Saintapedia Graph/Twin parishes|Twin parishes]]
+| Edge
+| Code only
+|-
+| [[Help:Saintapedia Graph/Patron saints|Patron saints]]
+| Edge
+| Code only
+|-
+| [[Help:Saintapedia Graph/Successors|Successors]]
+| Edge
+| Code only
+|}
+
+Sample tables are '''OrgDemo''' / '''GrantDemo''' so they do not replace Organization or Grant. On a real diocese wiki, change the table and field names (for example <code>table=Parishes</code>, <code>parent=Diocese</code>).
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

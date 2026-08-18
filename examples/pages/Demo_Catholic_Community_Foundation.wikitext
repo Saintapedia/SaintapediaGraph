@@ -1,0 +1,7 @@
+{{OrgDemo
+|Name=Demo Catholic Community Foundation
+|ParentOrg=
+|Type=Foundation
+|Country=United States
+|Website=
+}}

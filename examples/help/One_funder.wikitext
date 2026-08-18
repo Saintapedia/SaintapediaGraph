@@ -1,0 +1,37 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/One funder}}
+{{Saintapedia Graph examples}}
+
+One foundation's grants only. Edge mode: one Cargo table, no separate node query.
+
+== Wikitext ==
+
+<pre>
+{{#saintapedia_graph:
+tables=GrantDemo
+|fields=Funder,Recipient,Amount,Program
+|where=Funder="Demo Catholic Community Foundation"
+|source_field=Funder
+|target_field=Recipient
+|edge_label=Program
+|direction=LR
+|theme=forest
+|clickable=yes
+}}
+</pre>
+
+== Live ==
+
+{{#saintapedia_graph:
+tables=GrantDemo
+|fields=Funder,Recipient,Amount,Program
+|where=Funder="Demo Catholic Community Foundation"
+|source_field=Funder
+|target_field=Recipient
+|edge_label=Program
+|direction=LR
+|theme=forest
+|clickable=yes
+}}
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

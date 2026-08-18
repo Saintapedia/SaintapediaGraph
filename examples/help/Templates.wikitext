@@ -1,0 +1,25 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/Templates}}
+{{Saintapedia Graph examples}}
+
+The imported wrappers [[Template:Org chart]] and [[Template:Funding network]]. Pass <code>table=</code> / <code>nodes=</code> / <code>edges=</code> so they do not assume an Organization table.
+
+== Wikitext ==
+
+<pre>
+{{Org chart|table=OrgDemo|style=Type|subgraph=Country}}
+
+{{Funding network|nodes=OrgDemo|edges=GrantDemo|style=Type|subgraph=Country|edges_where=Year>=2023}}
+</pre>
+
+== Live ==
+
+=== Org chart ===
+
+{{Org chart|table=OrgDemo|style=Type|subgraph=Country}}
+
+=== Funding network ===
+
+{{Funding network|nodes=OrgDemo|edges=GrantDemo|style=Type|subgraph=Country|edges_where=Year>=2023}}
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

@@ -1,0 +1,7 @@
+{{OrgDemo
+|Name=Demo Parish of St. Columba
+|ParentOrg=Demo Diocese of Westmere
+|Type=Parish
+|Country=United States
+|Website=
+}}

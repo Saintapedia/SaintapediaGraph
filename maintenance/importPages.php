@@ -32,10 +32,14 @@ class ImportPages extends Maintenance {
 	public function __construct() {
 		parent::__construct();
 		$this->addDescription(
-			'Import Saintapedia Graph help page and templates from the extension tree.'
+			'Import Saintapedia Graph help, templates, and optional OrgDemo/GrantDemo pages.'
 		);
 		$this->addOption( 'dry-run', 'List pages that would be created or updated' );
 		$this->addOption( 'overwrite', 'Replace existing pages' );
+		$this->addOption(
+			'examples',
+			'Also import OrgDemo/GrantDemo Cargo templates, sample diocese/parish pages, and the demo page'
+		);
 		$this->requireExtension( 'SaintapediaGraph' );
 	}
 
@@ -43,8 +47,9 @@ class ImportPages extends Maintenance {
 		$root = dirname( __DIR__ );
 		$dry = $this->hasOption( 'dry-run' );
 		$overwrite = $this->hasOption( 'overwrite' );
+		$examples = $this->hasOption( 'examples' );
 
-		foreach ( PageCatalog::pages() as $entry ) {
+		foreach ( PageCatalog::catalog( $examples ) as $entry ) {
 			$path = PageCatalog::resolve( $root, $entry['file'] );
 			if ( !is_readable( $path ) ) {
 				$this->fatalError( "Missing source file: {$entry['file']}" );
@@ -77,6 +82,14 @@ class ImportPages extends Maintenance {
 				: 'Import Saintapedia Graph bundled page'
 			);
 			$this->output( "{$action}\t{$entry['title']}\n" );
+		}
+
+		if ( $examples && !$dry ) {
+			$this->output(
+				"Recreate Cargo tables if Special:CargoTables has no OrgDemo/GrantDemo rows:\n"
+				. "  php extensions/Cargo/maintenance/cargoRecreateData.php --table OrgDemo\n"
+				. "  php extensions/Cargo/maintenance/cargoRecreateData.php --table GrantDemo\n"
+			);
 		}
 	}
 

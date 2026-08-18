@@ -1,0 +1,7 @@
+{{GrantDemo
+|Funder=Demo Catholic Community Foundation
+|Recipient=Demo Cathedral of St. Anne
+|Amount=150000
+|Year=2024
+|Program=Cathedral restoration
+}}

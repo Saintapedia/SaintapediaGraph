@@ -1,0 +1,7 @@
+{{GrantDemo
+|Funder=Demo Sisters of Mercy Outreach
+|Recipient=Demo Parish of Our Lady of the Harbor
+|Amount=18000
+|Year=2023
+|Program=Mercy fund
+}}

@@ -1,0 +1,7 @@
+{{OrgDemo
+|Name=Demo Sisters of Mercy Outreach
+|ParentOrg=Demo Archdiocese of Northbridge
+|Type=Religious order
+|Country=United States
+|Website=
+}}

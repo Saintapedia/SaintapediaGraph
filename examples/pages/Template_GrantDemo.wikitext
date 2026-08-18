@@ -1,0 +1,23 @@
+<noinclude>
+'''Template:GrantDemo''' — sample funding-edge table for [[Help:Saintapedia Graph]].
+
+Table name is '''GrantDemo''' (not Grant) so it will not collide with a wiki's own grant template.
+
+<code>Funder</code> / <code>Recipient</code> are '''Page''' fields. They can be a foundation, archdiocese, diocese, parish, or order — the same pattern as a real Grants table.
+
+{{#cargo_declare:_table=GrantDemo
+|Funder=Page
+|Recipient=Page
+|Amount=Float
+|Year=Integer
+|Program=String
+}}
+</noinclude><includeonly>{{#cargo_store:_table=GrantDemo
+|Funder={{{Funder|}}}
+|Recipient={{{Recipient|}}}
+|Amount={{{Amount|}}}
+|Year={{{Year|}}}
+|Program={{{Program|}}}
+}}
+Grant: [[{{{Funder}}}]] → [[{{{Recipient}}}]] — {{{Amount|?}}} ({{{Year|}}}){{#if:{{{Program|}}}| — {{{Program}}}}}
+</includeonly>

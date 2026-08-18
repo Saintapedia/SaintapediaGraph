@@ -1,0 +1,22 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/Patron saints}}
+{{Saintapedia Graph examples}}
+
+Patron saint → parish or place. Edge mode. No Patronage table in the bundled sample.
+
+== Wikitext ==
+
+<pre>
+{{#saintapedia_graph:
+tables=Patronage
+|fields=Saint,Place,Feast
+|source_field=Saint
+|target_field=Place
+|edge_label=Feast
+|direction=LR
+|theme=neutral
+|clickable=yes
+}}
+</pre>
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

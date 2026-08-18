@@ -1,0 +1,856 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <page>
+    <title>Help:Saintapedia Graph</title>
+    <ns>12</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="21689" xml:space="preserve">{{#seo:|title=Help:Saintapedia Graph}}
+{{DISPLAYTITLE:Help:Saintapedia Graph}}
+{{Saintapedia Graph examples}}
+
+&apos;&apos;&apos;Saintapedia Graph&apos;&apos;&apos; turns [[mw:Extension:Cargo|Cargo]] tables into interactive [https://mermaid.js.org/ Mermaid] flowcharts. Typical uses on this wiki are &apos;&apos;&apos;organization charts&apos;&apos;&apos; (who reports to whom) and &apos;&apos;&apos;funding networks&apos;&apos;&apos; (who funded whom). Any parent/child or source/target relationship stored in Cargo can be drawn the same way.
+
+{{note|This page documents &apos;&apos;&apos;Saintapedia Graph 0.2.5&apos;&apos;&apos;. Parser-function errors and warnings are &apos;&apos;&apos;English only&apos;&apos;&apos;; other interface languages still show English for those messages.}}
+
+__TOC__
+
+== What you need ==
+
+* This extension (Saintapedia Graph)
+* [[mw:Extension:Cargo|Extension:Cargo]] — data comes from Cargo tables, not from wikitext lists
+* MediaWiki 1.39+ / PHP 8.1+
+
+&apos;&apos;&apos;You do &apos;&apos;not&apos;&apos; need Extension:Mermaid.&apos;&apos;&apos; Saintapedia Graph ships Mermaid 10.9.1 and renders diagrams itself.
+
+Editors write a parser function (or a wrapper template). The extension runs one or two Cargo queries, builds a flowchart, and the browser draws it.
+
+== Quick start ==
+
+=== 1. Have Cargo tables ===
+
+Any parent/child or source/target Cargo table works — dioceses, parishes, religious orders, foundations, not only a table named Organizations.
+
+The bundled sample (import with &lt;code&gt;--examples&lt;/code&gt;) uses &apos;&apos;&apos;OrgDemo&apos;&apos;&apos; / &apos;&apos;&apos;GrantDemo&apos;&apos;&apos; so it will not overwrite a wiki&apos;s Organization or Grant templates:
+
+&lt;pre&gt;
+{{#cargo_declare:_table=OrgDemo
+|Name=String
+|ParentOrg=Page
+|Type=String
+|Country=String
+|Website=URL
+}}
+&lt;/pre&gt;
+
+&lt;pre&gt;
+{{#cargo_declare:_table=GrantDemo
+|Funder=Page
+|Recipient=Page
+|Amount=Float
+|Year=Integer
+|Program=String
+}}
+&lt;/pre&gt;
+
+On a live diocese wiki, declare your own tables (for example &lt;code&gt;Parishes&lt;/code&gt; with a Page-type &lt;code&gt;Diocese&lt;/code&gt; column) and pass &lt;code&gt;table=Parishes&lt;/code&gt; / &lt;code&gt;parent=Diocese&lt;/code&gt; to [[Template:Org chart]].
+
+Store rows with &lt;code&gt;#cargo_store&lt;/code&gt; (usually from an infobox template). Create or recreate tables at [[Special:CargoTables]] if they are missing.
+
+Use &apos;&apos;&apos;Page&apos;&apos;&apos;-type fields for parents, funders, and recipients so node clicks open the right wiki page.
+
+=== 2. Org chart ===
+
+&lt;pre&gt;
+{{#saintapedia_graph:
+tables=OrgDemo
+|fields=_pageName=Name,ParentOrg,Type,Country
+|parent_field=ParentOrg
+|node_id=Name
+|style_by=Type
+|subgraph_by=Country
+|direction=TD
+|clickable=yes
+}}
+&lt;/pre&gt;
+
+Edges are &apos;&apos;&apos;parent → child&apos;&apos;&apos; (archdiocese → diocese → parish, or any reporting line).
+
+Shorter: &lt;code&gt;&lt;nowiki&gt;{{Org chart|table=OrgDemo|style=Type|subgraph=Country}}&lt;/nowiki&gt;&lt;/code&gt;
+
+Real parishes: &lt;code&gt;&lt;nowiki&gt;{{Org chart|table=Parishes|parent=Diocese|id=_pageName}}&lt;/nowiki&gt;&lt;/code&gt;
+
+=== 3. Funding network ===
+
+Prefer &apos;&apos;&apos;dual-table&apos;&apos;&apos; mode when organizations live in one table and grants in another (colors and groups then come from the organization row, not the grant row):
+
+&lt;pre&gt;
+{{#saintapedia_graph:
+nodes_table=OrgDemo
+|nodes_fields=_pageName=Name,Type,Country
+|edges_table=GrantDemo
+|edges_fields=Funder,Recipient,Amount
+|edges_where=Year&gt;=2023
+|node_id=_pageName
+|node_label=Name
+|source_field=Funder
+|target_field=Recipient
+|edge_label=Amount
+|style_by=Type
+|subgraph_by=Country
+|direction=LR
+|theme=forest
+}}
+&lt;/pre&gt;
+
+Shorter: &lt;code&gt;&lt;nowiki&gt;{{Funding network|nodes=OrgDemo|edges=GrantDemo|style=Type|subgraph=Country|edges_where=Year&gt;=2023}}&lt;/nowiki&gt;&lt;/code&gt;
+
+If you only have one table of links, use &apos;&apos;&apos;edge&apos;&apos;&apos; mode (one query):
+
+&lt;pre&gt;
+{{#saintapedia_graph:
+tables=Grants
+|fields=Funder,Recipient,Amount,Year
+|source_field=Funder
+|target_field=Recipient
+|edge_label=Amount
+|direction=LR
+|theme=forest
+}}
+&lt;/pre&gt;
+
+=== Live examples ===
+
+Each example is a &apos;&apos;&apos;Help:&apos;&apos;&apos; subpage with the wikitext and (when OrgDemo / GrantDemo are imported) the live graph on the same page. Start at [[Help:Saintapedia Graph/Examples]].
+
+== How to pick a mode ==
+
+Each diagram is exactly &apos;&apos;&apos;one&apos;&apos;&apos; mode. Mixing &lt;code&gt;parent_field&lt;/code&gt; with &lt;code&gt;source_field&lt;/code&gt;/&lt;code&gt;target_field&lt;/code&gt; is an error. Dual mode is chosen when you set &lt;code&gt;nodes_table&lt;/code&gt; and &lt;code&gt;edges_table&lt;/code&gt;.
+
+{| class=&quot;wikitable&quot;
+! Mode
+! When to use
+! Required
+! Edge direction
+! Cargo queries
+|-
+| &apos;&apos;&apos;Hierarchy&apos;&apos;&apos;
+| Org charts, subsidiaries, “reports to”
+| &lt;code&gt;tables=&lt;/code&gt; + &lt;code&gt;parent_field=&lt;/code&gt;
+| Parent → child
+| 1
+|-
+| &apos;&apos;&apos;Edge&apos;&apos;&apos;
+| Links stored in one table (grant rows, ownership rows)
+| &lt;code&gt;tables=&lt;/code&gt; + &lt;code&gt;source_field=&lt;/code&gt; + &lt;code&gt;target_field=&lt;/code&gt;
+| Source → target
+| 1
+|-
+| &apos;&apos;&apos;Dual-table&apos;&apos;&apos;
+| Nodes in one table, edges in another (typical funding network)
+| &lt;code&gt;nodes_table=&lt;/code&gt; + &lt;code&gt;edges_table=&lt;/code&gt; + source/target fields
+| Source → target
+| &apos;&apos;&apos;2&apos;&apos;&apos; (counts as two expensive parser functions)
+|}
+
+=== Hierarchy details ===
+
+* Each Cargo row is one child node.
+* &lt;code&gt;parent_field&lt;/code&gt; names the parent. Empty parent = a root.
+* If the parent is not itself a row, the extension still draws it (label = the parent value).
+* A synthetic parent can inherit a subgraph box from its first child.
+
+=== Edge details ===
+
+* Each row is one arrow from &lt;code&gt;source_field&lt;/code&gt; to &lt;code&gt;target_field&lt;/code&gt;.
+* Missing source or target cells are skipped.
+* If you set &lt;code&gt;style_by&lt;/code&gt; / &lt;code&gt;subgraph_by&lt;/code&gt; in this mode, those values come from the &apos;&apos;&apos;same row as the edge&apos;&apos;&apos; and are applied to the source node (the target only inherits the subgraph).
+
+=== Dual-table details ===
+
+* First query loads nodes (labels, click targets, colors, groups).
+* Second query loads edges. Endpoints that are not in the node query are still drawn (plain label, no style).
+* Styles are &apos;&apos;&apos;not&apos;&apos;&apos; overwritten by the edge query.
+* Both queries use the same &lt;code&gt;limit=&lt;/code&gt; (see [[#Limits|Limits]]).
+
+==== Matching nodes to edges ====
+
+Grant &lt;code&gt;Funder&lt;/code&gt; / &lt;code&gt;Recipient&lt;/code&gt; fields are usually &apos;&apos;&apos;page titles&apos;&apos;&apos;. Set:
+
+&lt;pre&gt;
+|node_id=_pageName
+|node_label=Name
+&lt;/pre&gt;
+
+so “Ford Foundation” on a grant matches the organization page. If you set &lt;code&gt;node_id=Name&lt;/code&gt;, the Name cell must be identical to the page title.
+
+== Parser functions ==
+
+Primary: &lt;code&gt;&lt;nowiki&gt;{{#saintapedia_graph: … }}&lt;/nowiki&gt;&lt;/code&gt;
+
+Alias: &lt;code&gt;&lt;nowiki&gt;{{#cargo_mermaid: … }}&lt;/nowiki&gt;&lt;/code&gt; (same parameters)
+
+Parameter names are case-insensitive. Spaces and hyphens become underscores (&lt;code&gt;join on&lt;/code&gt; = &lt;code&gt;join_on&lt;/code&gt;, &lt;code&gt;nodes-table&lt;/code&gt; = &lt;code&gt;nodes_table&lt;/code&gt;).
+
+=== Cargo query (hierarchy and edge) ===
+
+Same idea as &lt;code&gt;#cargo_query&lt;/code&gt;.
+
+{| class=&quot;wikitable&quot;
+! Parameter
+! Description
+|-
+| &lt;code&gt;tables&lt;/code&gt; / &lt;code&gt;table&lt;/code&gt;
+| Required. One or more Cargo tables, comma-separated.
+|-
+| &lt;code&gt;fields&lt;/code&gt;
+| Columns to select. The extension adds any extra columns it still needs (&lt;code&gt;parent_field&lt;/code&gt;, &lt;code&gt;style_by&lt;/code&gt;, …).
+|-
+| &lt;code&gt;where&lt;/code&gt;
+| Filter (Cargo/SQL-style).
+|-
+| &lt;code&gt;join on&lt;/code&gt;
+| Join conditions. Required when &lt;code&gt;tables=&lt;/code&gt; lists more than one table.
+|-
+| &lt;code&gt;group by&lt;/code&gt; / &lt;code&gt;having&lt;/code&gt;
+| Aggregation (Cargo rules).
+|-
+| &lt;code&gt;order by&lt;/code&gt;
+| Sort.
+|-
+| &lt;code&gt;limit&lt;/code&gt;
+| Max rows &apos;&apos;&apos;per Cargo query&apos;&apos;&apos;. See [[#Limits|Limits]].
+|-
+| &lt;code&gt;offset&lt;/code&gt;
+| Skip initial rows (single-query modes). Dual-mode edge query always starts at offset 0.
+|}
+
+=== Dual-table query ===
+
+{| class=&quot;wikitable&quot;
+! Parameter
+! Description
+|-
+| &lt;code&gt;nodes_table&lt;/code&gt; / &lt;code&gt;edges_table&lt;/code&gt;
+| Required together.
+|-
+| &lt;code&gt;nodes_fields&lt;/code&gt; / &lt;code&gt;edges_fields&lt;/code&gt;
+| Columns for each query. Empty &lt;code&gt;edges_fields&lt;/code&gt; defaults to source, target, and optional edge label.
+|-
+| &lt;code&gt;nodes_where&lt;/code&gt; / &lt;code&gt;edges_where&lt;/code&gt;
+| Per-query filters.
+|-
+| &lt;code&gt;nodes_join_on&lt;/code&gt; / &lt;code&gt;edges_join_on&lt;/code&gt;
+| Per-query joins.
+|-
+| &lt;code&gt;nodes_order_by&lt;/code&gt; / &lt;code&gt;edges_order_by&lt;/code&gt;
+| Per-query sort.
+|}
+
+=== Diagram ===
+
+{| class=&quot;wikitable&quot;
+! Parameter
+! Default
+! Description
+|-
+| &lt;code&gt;direction&lt;/code&gt;
+| site default, usually &lt;code&gt;TD&lt;/code&gt;
+| &lt;code&gt;TD&lt;/code&gt; (top-down; &lt;code&gt;TB&lt;/code&gt; is accepted as the same), &lt;code&gt;LR&lt;/code&gt;, &lt;code&gt;BT&lt;/code&gt;, &lt;code&gt;RL&lt;/code&gt;
+|-
+| &lt;code&gt;node_id&lt;/code&gt;
+| &lt;code&gt;_pageName&lt;/code&gt;
+| Field that uniquely identifies a node
+|-
+| &lt;code&gt;node_label&lt;/code&gt;
+| same as &lt;code&gt;node_id&lt;/code&gt; (dual mode may pick &lt;code&gt;Name&lt;/code&gt; if that column is in &lt;code&gt;nodes_fields&lt;/code&gt;)
+| Text on the node
+|-
+| &lt;code&gt;page_field&lt;/code&gt;
+| hierarchy/dual: &lt;code&gt;_pageName&lt;/code&gt;; edge: the endpoint value itself
+| Wiki title used for the click link
+|-
+| &lt;code&gt;parent_field&lt;/code&gt;
+| —
+| Hierarchy only
+|-
+| &lt;code&gt;source_field&lt;/code&gt; / &lt;code&gt;target_field&lt;/code&gt;
+| —
+| Edge and dual (both required)
+|-
+| &lt;code&gt;edge_label&lt;/code&gt;
+| —
+| Optional caption on the arrow (truncated around 64 characters)
+|-
+| &lt;code&gt;style_by&lt;/code&gt;
+| —
+| Color nodes by this column (must exist)
+|-
+| &lt;code&gt;subgraph_by&lt;/code&gt;
+| —
+| Group nodes in a box by this column (must exist)
+|-
+| &lt;code&gt;link_style&lt;/code&gt;
+| &lt;code&gt;--&gt;&lt;/code&gt;
+| &lt;code&gt;--&gt;&lt;/code&gt;, &lt;code&gt;-.-&gt;&lt;/code&gt;, &lt;code&gt;==&gt;&lt;/code&gt;, &lt;code&gt;---&lt;/code&gt;, &lt;code&gt;&lt;--&gt;&lt;/code&gt; (anything else becomes &lt;code&gt;--&gt;&lt;/code&gt;)
+|-
+| &lt;code&gt;clickable&lt;/code&gt;
+| site default, usually &lt;code&gt;yes&lt;/code&gt;
+| &lt;code&gt;yes&lt;/code&gt;/&lt;code&gt;no&lt;/code&gt; (also &lt;code&gt;true&lt;/code&gt;/&lt;code&gt;false&lt;/code&gt;, &lt;code&gt;1&lt;/code&gt;/&lt;code&gt;0&lt;/code&gt;, &lt;code&gt;on&lt;/code&gt;/&lt;code&gt;off&lt;/code&gt;)
+|-
+| &lt;code&gt;theme&lt;/code&gt;
+| site default, usually &lt;code&gt;default&lt;/code&gt;
+| &lt;code&gt;default&lt;/code&gt;, &lt;code&gt;base&lt;/code&gt;, &lt;code&gt;dark&lt;/code&gt;, &lt;code&gt;forest&lt;/code&gt;, &lt;code&gt;neutral&lt;/code&gt;. Unknown values fall back to &lt;code&gt;default&lt;/code&gt; and warn.
+|-
+| &lt;code&gt;warn_cycles&lt;/code&gt;
+| site default, usually &lt;code&gt;yes&lt;/code&gt;
+| Warn when the directed graph contains a cycle
+|-
+| &lt;code&gt;break_cycles&lt;/code&gt;
+| site default, usually &lt;code&gt;no&lt;/code&gt;
+| Drop edges that close cycles (keeps a DAG-like picture)
+|-
+| &lt;code&gt;format&lt;/code&gt;
+| &lt;code&gt;mermaid&lt;/code&gt;
+| &lt;code&gt;mermaid&lt;/code&gt; = draw; &lt;code&gt;raw&lt;/code&gt; / &lt;code&gt;source&lt;/code&gt; / &lt;code&gt;text&lt;/code&gt; = print Mermaid source
+|}
+
+== Templates ==
+
+Imported by the [[#Installing the help page|maintenance script]] (or by hand from &lt;code&gt;templates/&lt;/code&gt;).
+
+=== &lt;code&gt;&lt;nowiki&gt;{{Org chart}}&lt;/nowiki&gt;&lt;/code&gt; ===
+
+Hierarchy. Default table is Organizations; pass &lt;code&gt;table=OrgDemo&lt;/code&gt; for the sample or &lt;code&gt;table=Parishes&lt;/code&gt; for a real diocese wiki.
+
+{| class=&quot;wikitable&quot;
+! Argument
+! Default
+! Maps to
+|-
+| &lt;code&gt;table&lt;/code&gt;
+| Organizations
+| &lt;code&gt;tables=&lt;/code&gt;
+|-
+| &lt;code&gt;parent&lt;/code&gt;
+| ParentOrg
+| &lt;code&gt;parent_field=&lt;/code&gt;
+|-
+| &lt;code&gt;id&lt;/code&gt;
+| Name
+| &lt;code&gt;node_id=&lt;/code&gt;
+|-
+| &lt;code&gt;label&lt;/code&gt;
+| same as &lt;code&gt;id&lt;/code&gt;
+| &lt;code&gt;node_label=&lt;/code&gt;
+|-
+| &lt;code&gt;style&lt;/code&gt;
+| —
+| &lt;code&gt;style_by=&lt;/code&gt; (real column)
+|-
+| &lt;code&gt;subgraph&lt;/code&gt;
+| —
+| &lt;code&gt;subgraph_by=&lt;/code&gt; (real column)
+|-
+| &lt;code&gt;where&lt;/code&gt;
+| —
+| &lt;code&gt;where=&lt;/code&gt;
+|-
+| &lt;code&gt;order&lt;/code&gt;
+| the id field
+| &lt;code&gt;order by=&lt;/code&gt;
+|-
+| &lt;code&gt;direction&lt;/code&gt;
+| TD
+| &lt;code&gt;direction=&lt;/code&gt;
+|-
+| &lt;code&gt;limit&lt;/code&gt;
+| 200
+| &lt;code&gt;limit=&lt;/code&gt;
+|-
+| &lt;code&gt;clickable&lt;/code&gt;
+| yes
+| &lt;code&gt;clickable=&lt;/code&gt;
+|-
+| &lt;code&gt;theme&lt;/code&gt;
+| default
+| &lt;code&gt;theme=&lt;/code&gt;
+|-
+| &lt;code&gt;warn_cycles&lt;/code&gt; / &lt;code&gt;break_cycles&lt;/code&gt;
+| yes / no
+| same
+|}
+
+=== &lt;code&gt;&lt;nowiki&gt;{{Funding network}}&lt;/nowiki&gt;&lt;/code&gt; ===
+
+Dual-table nodes + edges. Defaults are Organizations / Grants; pass &lt;code&gt;nodes=OrgDemo&lt;/code&gt; and &lt;code&gt;edges=GrantDemo&lt;/code&gt; for the sample.
+
+{| class=&quot;wikitable&quot;
+! Argument
+! Default
+! Maps to
+|-
+| &lt;code&gt;nodes&lt;/code&gt; / &lt;code&gt;edges&lt;/code&gt;
+| Organizations / Grants
+| &lt;code&gt;nodes_table=&lt;/code&gt; / &lt;code&gt;edges_table=&lt;/code&gt;
+|-
+| &lt;code&gt;source&lt;/code&gt; / &lt;code&gt;target&lt;/code&gt;
+| Funder / Recipient
+| &lt;code&gt;source_field=&lt;/code&gt; / &lt;code&gt;target_field=&lt;/code&gt;
+|-
+| &lt;code&gt;id&lt;/code&gt;
+| &lt;code&gt;_pageName&lt;/code&gt;
+| &lt;code&gt;node_id=&lt;/code&gt;
+|-
+| &lt;code&gt;label&lt;/code&gt;
+| Name
+| &lt;code&gt;node_label=&lt;/code&gt;
+|-
+| &lt;code&gt;page&lt;/code&gt;
+| &lt;code&gt;_pageName&lt;/code&gt;
+| &lt;code&gt;page_field=&lt;/code&gt;
+|-
+| &lt;code&gt;edge_label&lt;/code&gt;
+| Amount
+| &lt;code&gt;edge_label=&lt;/code&gt;
+|-
+| &lt;code&gt;style&lt;/code&gt; / &lt;code&gt;subgraph&lt;/code&gt;
+| —
+| node-table columns
+|-
+| &lt;code&gt;edges_where&lt;/code&gt; or &lt;code&gt;where&lt;/code&gt;
+| —
+| &lt;code&gt;edges_where=&lt;/code&gt;
+|-
+| &lt;code&gt;nodes_where&lt;/code&gt;
+| —
+| &lt;code&gt;nodes_where=&lt;/code&gt;
+|-
+| &lt;code&gt;direction&lt;/code&gt;
+| LR
+| &lt;code&gt;direction=&lt;/code&gt;
+|-
+| &lt;code&gt;theme&lt;/code&gt;
+| forest
+| &lt;code&gt;theme=&lt;/code&gt;
+|-
+| &lt;code&gt;limit&lt;/code&gt;
+| 300
+| &lt;code&gt;limit=&lt;/code&gt; (both queries)
+|-
+| &lt;code&gt;clickable&lt;/code&gt;, &lt;code&gt;warn_cycles&lt;/code&gt;, &lt;code&gt;break_cycles&lt;/code&gt;
+| yes / yes / no
+| same
+|}
+
+== Colors, groups, and themes ==
+
+* &lt;code&gt;style_by&lt;/code&gt; assigns a fill from the site palette (ten colors by default) to each distinct value.
+* &lt;code&gt;subgraph_by&lt;/code&gt; draws a labeled box around nodes that share a value (country, program, …).
+* &lt;code&gt;theme=&lt;/code&gt; is a Mermaid built-in: &lt;code&gt;default&lt;/code&gt;, &lt;code&gt;base&lt;/code&gt;, &lt;code&gt;dark&lt;/code&gt;, &lt;code&gt;forest&lt;/code&gt;, &lt;code&gt;neutral&lt;/code&gt;. Typos such as &lt;code&gt;forset&lt;/code&gt; still render (theme &lt;code&gt;default&lt;/code&gt;) and show a warning.
+
+== Clicks ==
+
+With &lt;code&gt;clickable=yes&lt;/code&gt;, a node opens the wiki page from &lt;code&gt;page_field&lt;/code&gt; (or the node id). Links are &apos;&apos;&apos;same-origin paths only&apos;&apos;&apos; (&lt;code&gt;/wiki/…&lt;/code&gt; or &lt;code&gt;index.php?…&lt;/code&gt;). Absolute and protocol-relative URLs are dropped.
+
+JavaScript is required for the interactive SVG. Without JS you get a &lt;code&gt;&amp;lt;noscript&amp;gt;&lt;/code&gt; copy of the Mermaid source.
+
+== Limits ==
+
+&lt;code&gt;limit=&lt;/code&gt; is &apos;&apos;&apos;per Cargo query&apos;&apos;&apos;:
+
+* Default when omitted: &lt;code&gt;$wgSaintapediaGraphDefaultLimit&lt;/code&gt; (usually 500).
+* Hard cap: &lt;code&gt;$wgSaintapediaGraphMaxLimit&lt;/code&gt; (usually 1000).
+* Values below 1 (including negatives) become 1.
+* If the requested number is rewritten, a warning appears: &lt;code&gt;limit $1 reduced to $2; the graph may be missing rows.&lt;/code&gt;
+* Dual mode runs &apos;&apos;&apos;two&apos;&apos;&apos; queries at that same cap, so a page can fetch up to 2× the max (nodes + edges). Dual mode also prints a second warning line that each query is capped.
+
+Each diagram counts as one &apos;&apos;&apos;expensive&apos;&apos;&apos; parser function; dual mode counts as two. Too many on one page hits &lt;code&gt;$wgExpensiveParserFunctionLimit&lt;/code&gt;.
+
+== Cycles ==
+
+Directed loops (A→B→A, or longer) are detected after the graph is built.
+
+* &lt;code&gt;warn_cycles=yes&lt;/code&gt; (default) prints how many cycles were found.
+* &lt;code&gt;break_cycles=yes&lt;/code&gt; drops the back-edges that close those cycles, then optionally reports how many edges were removed.
+
+The cycle count can overlap on dense graphs; treat it as a signal, not a precise census. Path labels still use internal node ids, not display names.
+
+== One query with several tables vs dual mode ==
+
+These are different:
+
+# &lt;code&gt;tables=Grants,Organizations&lt;/code&gt; + &lt;code&gt;join on=…&lt;/code&gt; — &apos;&apos;&apos;one&apos;&apos;&apos; result set. In edge mode each row is an edge; node names come from source/target. A join can enrich filters or labels but does not give each node its own Type/Country unless those columns are on the row.
+# &lt;code&gt;nodes_table&lt;/code&gt; + &lt;code&gt;edges_table&lt;/code&gt; — &apos;&apos;&apos;two&apos;&apos;&apos; queries. Use this when styles/groups live on the organization table.
+
+Single-query join example:
+
+&lt;pre&gt;
+{{#saintapedia_graph:
+tables=Grants,Organizations
+|join on=Grants.Funder=Organizations._pageName
+|fields=Grants.Funder,Grants.Recipient,Grants.Amount,Organizations.Type
+|source_field=Funder
+|target_field=Recipient
+|edge_label=Amount
+|direction=LR
+|limit=300
+}}
+&lt;/pre&gt;
+
+Not in this version: expand “everyone within N steps of X”, Sankey, hover field tooltips, or SVG/PNG export.
+
+== Debugging ==
+
+* &lt;code&gt;format=raw&lt;/code&gt; — print the generated Mermaid instead of drawing.
+* After an extension update, hard-refresh (Ctrl+Shift+R) so the browser is not holding an old ResourceLoader module.
+* Warnings render in a yellow box above the diagram; errors in a red box. Both are English.
+
+== Troubleshooting ==
+
+{| class=&quot;wikitable&quot;
+! Symptom
+! What to try
+|-
+| “tables parameter is required”
+| Set &lt;code&gt;tables=&lt;/code&gt;, or both &lt;code&gt;nodes_table&lt;/code&gt; and &lt;code&gt;edges_table&lt;/code&gt;
+|-
+| Missing mode / mixed modes
+| Hierarchy &apos;&apos;&apos;or&apos;&apos;&apos; edge &apos;&apos;&apos;or&apos;&apos;&apos; dual — not parent plus source/target
+|-
+| Dual mode missing a table
+| Both node and edge tables are required
+|-
+| No results
+| [[Special:CargoTables]]; re-save pages that &lt;code&gt;#cargo_store&lt;/code&gt;
+|-
+| Nodes and edges do not match
+| Dual mode: &lt;code&gt;node_id=_pageName&lt;/code&gt; so endpoints equal page titles
+|-
+| Unknown theme warning
+| Use &lt;code&gt;default&lt;/code&gt;, &lt;code&gt;base&lt;/code&gt;, &lt;code&gt;dark&lt;/code&gt;, &lt;code&gt;forest&lt;/code&gt;, or &lt;code&gt;neutral&lt;/code&gt;
+|-
+| Limit reduced warning
+| Requested &lt;code&gt;limit=&lt;/code&gt; was rewritten (over the site max, or below 1)
+|-
+| Cycle warning
+| The directed graph loops. &lt;code&gt;break_cycles=yes&lt;/code&gt; drops back-edges
+|-
+| “Diagram failed to render”
+| Hard-refresh; &lt;code&gt;format=raw&lt;/code&gt;; browser console
+|-
+| Too many expensive parser functions
+| Fewer graphs per page (dual = two), or raise &lt;code&gt;$wgExpensiveParserFunctionLimit&lt;/code&gt;
+|-
+| Cargo join error
+| Every table in &lt;code&gt;tables=&lt;/code&gt; must appear in &lt;code&gt;join on=&lt;/code&gt;
+|-
+| Clicks do nothing
+| Need JS; &lt;code&gt;clickable=yes&lt;/code&gt;; page title must exist; only local paths are emitted
+|-
+| Diagram unstyled
+| Site CSP may block Mermaid’s inline SVG styles — ask an admin (see README)
+|}
+
+== Installing the help page ==
+
+=== Special:Import (no shell) ===
+
+Download an XML dump from GitHub and import it at [[Special:Import]] (sysop / import right):
+
+* [https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-help.xml SaintapediaGraph-help.xml] — this Help page, [[Template:Org chart]], [[Template:Funding network]], [[Template:Saintapedia Graph examples]]
+* [https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-examples.xml SaintapediaGraph-examples.xml] — help &apos;&apos;&apos;plus&apos;&apos;&apos; OrgDemo / GrantDemo, the Demo … pages, and the [[Help:Saintapedia Graph/Examples|example series]]
+
+Save the file, then Special:Import → upload. Assign the edits to your account. After the examples dump, recreate Cargo:
+
+&lt;pre&gt;
+php extensions/Cargo/maintenance/cargoRecreateData.php --table OrgDemo
+php extensions/Cargo/maintenance/cargoRecreateData.php --table GrantDemo
+&lt;/pre&gt;
+
+=== Maintenance script ===
+
+Admins (from the wiki root):
+
+&lt;pre&gt;
+php maintenance/run.php SaintapediaGraph:importPages
+&lt;/pre&gt;
+
+MediaWiki 1.39:
+
+&lt;pre&gt;
+php extensions/SaintapediaGraph/maintenance/importPages.php
+&lt;/pre&gt;
+
+&lt;code&gt;--dry-run&lt;/code&gt; lists create/update/skip. &lt;code&gt;--overwrite&lt;/code&gt; replaces existing Help and templates. &lt;code&gt;--examples&lt;/code&gt; also imports OrgDemo / GrantDemo and the [[Help:Saintapedia Graph/Examples|Help: example series]] (does &apos;&apos;&apos;not&apos;&apos;&apos; create Organization or Grant templates).
+
+That writes:
+
+* [[Help:Saintapedia Graph]] (this page)
+* [[Template:Org chart]]
+* [[Template:Funding network]]
+* [[Template:Saintapedia Graph examples]] (right-hand series table)
+
+With &lt;code&gt;--examples&lt;/code&gt;, also [[Template:OrgDemo]], [[Template:GrantDemo]], the Demo … diocese/parish pages, &lt;code&gt;GrantDemo:&lt;/code&gt; rows, and the demo page. Then recreate Cargo if needed:
+
+&lt;pre&gt;
+php extensions/Cargo/maintenance/cargoRecreateData.php --table OrgDemo
+php extensions/Cargo/maintenance/cargoRecreateData.php --table GrantDemo
+&lt;/pre&gt;
+
+The public mediawiki.org listing is a separate paste file in the repo (&lt;code&gt;docs/mediawiki.org-Extension-SaintapediaGraph.wikitext&lt;/code&gt;); it is not imported here.
+
+== Configuration (admins) ==
+
+&lt;code&gt;LocalSettings.php&lt;/code&gt; / Canasta (after Cargo):
+
+&lt;pre&gt;
+wfLoadExtension( &apos;Cargo&apos; );
+wfLoadExtension( &apos;SaintapediaGraph&apos; );
+
+$wgSaintapediaGraphDefaultDirection = &apos;TD&apos;;
+$wgSaintapediaGraphDefaultLimit = 500;
+$wgSaintapediaGraphMaxLimit = 1000;
+$wgSaintapediaGraphClickable = true;
+$wgSaintapediaGraphDefaultTheme = &apos;default&apos;;
+$wgSaintapediaGraphUseStandaloneRenderer = true;
+$wgSaintapediaGraphWarnCycles = true;
+$wgSaintapediaGraphBreakCycles = false;
+&lt;/pre&gt;
+
+{| class=&quot;wikitable&quot;
+! Variable
+! Default
+! Meaning
+|-
+| &lt;code&gt;$wgSaintapediaGraphDefaultDirection&lt;/code&gt;
+| &lt;code&gt;TD&lt;/code&gt;
+| Layout when &lt;code&gt;direction=&lt;/code&gt; is omitted
+|-
+| &lt;code&gt;$wgSaintapediaGraphDefaultLimit&lt;/code&gt;
+| &lt;code&gt;500&lt;/code&gt;
+| Default rows per Cargo query
+|-
+| &lt;code&gt;$wgSaintapediaGraphMaxLimit&lt;/code&gt;
+| &lt;code&gt;1000&lt;/code&gt;
+| Hard cap &apos;&apos;&apos;per query&apos;&apos;&apos; (dual mode can fetch 2×)
+|-
+| &lt;code&gt;$wgSaintapediaGraphClickable&lt;/code&gt;
+| &lt;code&gt;true&lt;/code&gt;
+| Default for &lt;code&gt;clickable=&lt;/code&gt;
+|-
+| &lt;code&gt;$wgSaintapediaGraphDefaultTheme&lt;/code&gt;
+| &lt;code&gt;default&lt;/code&gt;
+| Default Mermaid theme
+|-
+| &lt;code&gt;$wgSaintapediaGraphUseStandaloneRenderer&lt;/code&gt;
+| &lt;code&gt;true&lt;/code&gt;
+| &lt;code&gt;false&lt;/code&gt; prints source only (no JS)
+|-
+| &lt;code&gt;$wgSaintapediaGraphWarnCycles&lt;/code&gt;
+| &lt;code&gt;true&lt;/code&gt;
+| Default for &lt;code&gt;warn_cycles=&lt;/code&gt;
+|-
+| &lt;code&gt;$wgSaintapediaGraphBreakCycles&lt;/code&gt;
+| &lt;code&gt;false&lt;/code&gt;
+| Default for &lt;code&gt;break_cycles=&lt;/code&gt;
+|-
+| &lt;code&gt;$wgSaintapediaGraphStylePalette&lt;/code&gt;
+| 10 hex colors
+| Fills for &lt;code&gt;style_by&lt;/code&gt;
+|}
+
+The folder name on disk must be &lt;code&gt;extensions/SaintapediaGraph&lt;/code&gt; (ResourceLoader path). No &lt;code&gt;update.php&lt;/code&gt; run is required.
+
+Scripts are same-origin ResourceLoader (bundled Mermaid). No CDN. UI strings are English-only. CSP notes are in the extension README on GitHub.
+
+== Related pages ==
+
+* [[Help:Saintapedia Graph/Examples]] — one Help page per use (code + live graph)
+* [[Saintapedia Graph smoke]] — warning cases (local QA)
+* [[Special:CargoTables]] — declare / recreate Cargo tables
+* [[mw:Extension:Cargo|Cargo documentation]]
+* [[mw:Extension:SaintapediaGraph|Extension:SaintapediaGraph]] on mediawiki.org
+* [https://github.com/Saintapedia/SaintapediaGraph SaintapediaGraph on GitHub]
+
+[[Category:Help]]
+[[Category:Cargo]]
+[[Category:Saintapedia Graph]]
+</text>
+      <sha1 />
+    </revision>
+  </page>
+  <page>
+    <title>Template:Org chart</title>
+    <ns>10</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1068" xml:space="preserve">&lt;noinclude&gt;
+&apos;&apos;&apos;Template:Org chart&apos;&apos;&apos; — wrapper for [[Help:Saintapedia Graph]] hierarchy diagrams.
+
+&lt;code&gt;style&lt;/code&gt; / &lt;code&gt;subgraph&lt;/code&gt; must be real Cargo columns (e.g. Type, Country). Pass &lt;code&gt;table=&lt;/code&gt; for Parishes, OrgDemo, or any parent/child table.
+
+&lt;pre&gt;
+{{Org chart
+|table=OrgDemo
+|parent=ParentOrg
+|id=Name
+|label=Name
+|style=Type
+|subgraph=Country
+|where=
+|direction=TD
+|limit=200
+}}
+&lt;/pre&gt;
+
+[[Category:Saintapedia Graph templates]]
+&lt;/noinclude&gt;&lt;includeonly&gt;{{#saintapedia_graph:
+tables={{{table|Organizations}}}
+|fields=_pageName={{{id|Name}}},{{{parent|ParentOrg}}}{{#if:{{{style|}}}|,{{{style}}}}}{{#if:{{{subgraph|}}}|,{{{subgraph}}}}}
+|where={{{where|}}}
+|order by={{{order|{{{id|Name}}}}}}
+|limit={{{limit|200}}}
+|direction={{{direction|TD}}}
+|node_id={{{id|Name}}}
+|node_label={{{label|{{{id|Name}}}}}}
+|parent_field={{{parent|ParentOrg}}}
+|style_by={{{style|}}}
+|subgraph_by={{{subgraph|}}}
+|clickable={{{clickable|yes}}}
+|theme={{{theme|default}}}
+|warn_cycles={{{warn_cycles|yes}}}
+|break_cycles={{{break_cycles|no}}}
+}}&lt;/includeonly&gt;
+</text>
+      <sha1 />
+    </revision>
+  </page>
+  <page>
+    <title>Template:Funding network</title>
+    <ns>10</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1516" xml:space="preserve">&lt;noinclude&gt;
+&apos;&apos;&apos;Template:Funding network&apos;&apos;&apos; — dual-table funding diagram for [[Help:Saintapedia Graph]]
+(nodes from one table, edges from another). Defaults are Organizations / Grants; the bundled sample uses OrgDemo / GrantDemo.
+
+Uses &lt;code&gt;node_id=_pageName&lt;/code&gt; by default so Funder/Recipient page titles match.
+&lt;code&gt;style&lt;/code&gt; / &lt;code&gt;subgraph&lt;/code&gt; must be real Cargo columns on the nodes table.
+
+&lt;pre&gt;
+{{Funding network
+|nodes=OrgDemo
+|edges=GrantDemo
+|style=Type
+|subgraph=Country
+|source=Funder
+|target=Recipient
+|edge_label=Amount
+|edges_where=Year&gt;=2023
+|direction=LR
+|theme=forest
+|limit=300
+}}
+&lt;/pre&gt;
+
+[[Category:Saintapedia Graph templates]]
+&lt;/noinclude&gt;&lt;includeonly&gt;{{#saintapedia_graph:
+nodes_table={{{nodes|Organizations}}}
+|nodes_fields=_pageName,Name{{#if:{{{style|}}}|,{{{style}}}}}{{#if:{{{subgraph|}}}|,{{{subgraph}}}}}
+|nodes_where={{{nodes_where|}}}
+|edges_table={{{edges|Grants}}}
+|edges_fields={{{source|Funder}}},{{{target|Recipient}}}{{#if:{{{edge_label|Amount}}}|,{{{edge_label|Amount}}}}}
+|edges_where={{{edges_where|{{{where|}}}}}}
+|node_id={{{id|_pageName}}}
+|node_label={{{label|Name}}}
+|page_field={{{page|_pageName}}}
+|source_field={{{source|Funder}}}
+|target_field={{{target|Recipient}}}
+|edge_label={{{edge_label|Amount}}}
+|style_by={{{style|}}}
+|subgraph_by={{{subgraph|}}}
+|direction={{{direction|LR}}}
+|limit={{{limit|300}}}
+|clickable={{{clickable|yes}}}
+|theme={{{theme|forest}}}
+|warn_cycles={{{warn_cycles|yes}}}
+|break_cycles={{{break_cycles|no}}}
+}}&lt;/includeonly&gt;
+</text>
+      <sha1 />
+    </revision>
+  </page>
+  <page>
+    <title>Template:Saintapedia Graph examples</title>
+    <ns>10</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1324" xml:space="preserve">&lt;noinclude&gt;
+Right-hand nav for [[Help:Saintapedia Graph]] and the example series.
+Transclude with &lt;code&gt;&lt;nowiki&gt;{{Saintapedia Graph examples}}&lt;/nowiki&gt;&lt;/code&gt;.
+&lt;/noinclude&gt;{| class=&quot;wikitable&quot; style=&quot;float:right; clear:right; margin:0 0 1em 1.5em; width:16em; font-size:90%;&quot;
+! [[Help:Saintapedia Graph|Saintapedia Graph]]
+|-
+| [[Help:Saintapedia Graph|Help (reference)]]
+|-
+| [[Help:Saintapedia Graph/Examples|Examples index]]
+|-
+! Live on OrgDemo
+|-
+| [[Help:Saintapedia Graph/Province|Province]]
+|-
+| [[Help:Saintapedia Graph/One diocese|One diocese]]
+|-
+| [[Help:Saintapedia Graph/By country|By country]]
+|-
+| [[Help:Saintapedia Graph/Funding|Funding]]
+|-
+| [[Help:Saintapedia Graph/One funder|One funder]]
+|-
+| [[Help:Saintapedia Graph/Templates|Templates]]
+|-
+| [[Help:Saintapedia Graph/Raw source|Raw source]]
+|-
+! Your own tables
+|-
+| [[Help:Saintapedia Graph/Deaneries|Deaneries]]
+|-
+| [[Help:Saintapedia Graph/Religious houses|Religious houses]]
+|-
+| [[Help:Saintapedia Graph/Schools|Schools]]
+|-
+| [[Help:Saintapedia Graph/Episcopal lineage|Episcopal lineage]]
+|-
+| [[Help:Saintapedia Graph/Twin parishes|Twin parishes]]
+|-
+| [[Help:Saintapedia Graph/Patron saints|Patron saints]]
+|-
+| [[Help:Saintapedia Graph/Successors|Successors]]
+|}
+&lt;includeonly&gt;{{#if:{{{break|}}}|&lt;br style=&quot;clear:both;&quot; /&gt;}}&lt;/includeonly&gt;
+</text>
+      <sha1 />
+    </revision>
+  </page>
+</mediawiki>

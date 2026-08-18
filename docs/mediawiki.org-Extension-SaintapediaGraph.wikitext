@@ -56,11 +56,15 @@ It does '''not''' require [[Extension:Mermaid]]. Mermaid 10.9.1 is bundled and l
 |registration=required
 |localsettingsearly=wfLoadExtension( 'Cargo' );
 |custom-steps=
-* Optional: import the bundled help page and templates:
+* Optional: import the bundled help page and templates. Easiest is [[Special:Import]] of [https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-help.xml SaintapediaGraph-help.xml] (reference Help + wrappers) or [https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-examples.xml SaintapediaGraph-examples.xml] (plus OrgDemo / GrantDemo sample pages). Or from the shell:
 <syntaxhighlight lang="bash">
 php maintenance/run.php SaintapediaGraph:importPages
+# Sample diocese/parish Cargo tables (OrgDemo / GrantDemo, not Organization / Grant):
+php maintenance/run.php SaintapediaGraph:importPages --examples
+php extensions/Cargo/maintenance/cargoRecreateData.php --table OrgDemo
+php extensions/Cargo/maintenance/cargoRecreateData.php --table GrantDemo
 </syntaxhighlight>
-On MediaWiki 1.39 run <code>php extensions/SaintapediaGraph/maintenance/importPages.php</code> instead. Add <code>--dry-run</code> or <code>--overwrite</code> as needed.
+On MediaWiki 1.39 run <code>php extensions/SaintapediaGraph/maintenance/importPages.php</code> instead. Add <code>--dry-run</code> or <code>--overwrite</code> as needed. The sample uses fictional "Demo …" archdiocese / diocese / parish pages so it will not collide with a wiki's own Organization or Grant templates.
 }}
 
 The directory name must be <code>SaintapediaGraph</code> (the ResourceLoader remote path is hardcoded to that name). No <code>update.php</code> run is required.
@@ -123,6 +127,62 @@ nodes_table=Organizations
 </pre>
 
 In dual mode, edge endpoints are usually page titles. Prefer <code>node_id=_pageName</code> so they match organization pages.
+
+=== Other uses ===
+
+Same three modes cover most Saintapedia-style pages. Swap table names to match the wiki:
+
+{| class="wikitable"
+! Diagram
+! Mode
+! Idea
+|-
+| Archdiocese → diocese → parish
+| Hierarchy
+| <code>parent_field=Diocese</code> (or <code>ParentOrg</code>)
+|-
+| One diocese's parishes
+| Hierarchy
+| Add <code>where=Diocese="…"</code>
+|-
+| Deanery / family of parishes
+| Hierarchy
+| Parish parent = deanery page
+|-
+| Religious province → houses
+| Hierarchy
+| <code>parent_field=Province</code>
+|-
+| Catholic schools
+| Hierarchy
+| Parent = parish; <code>style_by=Level</code>
+|-
+| Episcopal consecration lineage
+| Hierarchy
+| <code>parent_field=Consecrator</code>
+|-
+| Foundation → parish grants
+| Dual-table
+| Nodes = places, edges = grant rows
+|-
+| One funder's portfolio
+| Edge
+| <code>where=Funder="…"</code>
+|-
+| Twin / clustered parishes
+| Edge
+| <code>link_style=&lt;--&gt;</code>
+|-
+| Patron saint of a place
+| Edge
+| Saint → Place
+|-
+| Suppressed see → successor
+| Edge
+| <code>target_field=SucceededBy</code>
+|}
+
+After <code>importPages --examples</code>, each of those is a <code>Help:Saintapedia Graph/…</code> page with the snippet and a live graph on the same page. Index: <code>Help:Saintapedia Graph/Examples</code>.
 
 === Debug ===
 

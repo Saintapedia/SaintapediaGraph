@@ -1,5 +1,6 @@
 {{#seo:|title=Help:Saintapedia Graph}}
 {{DISPLAYTITLE:Help:Saintapedia Graph}}
+{{Saintapedia Graph examples}}
 
 '''Saintapedia Graph''' turns [[mw:Extension:Cargo|Cargo]] tables into interactive [https://mermaid.js.org/ Mermaid] flowcharts. Typical uses on this wiki are '''organization charts''' (who reports to whom) and '''funding networks''' (who funded whom). Any parent/child or source/target relationship stored in Cargo can be drawn the same way.
 
@@ -21,10 +22,12 @@ Editors write a parser function (or a wrapper template). The extension runs one 
 
 === 1. Have Cargo tables ===
 
-'''Organizations''' (org chart / node list):
+Any parent/child or source/target Cargo table works — dioceses, parishes, religious orders, foundations, not only a table named Organizations.
+
+The bundled sample (import with <code>--examples</code>) uses '''OrgDemo''' / '''GrantDemo''' so it will not overwrite a wiki's Organization or Grant templates:
 
 <pre>
-{{#cargo_declare:_table=Organizations
+{{#cargo_declare:_table=OrgDemo
 |Name=String
 |ParentOrg=Page
 |Type=String
@@ -33,10 +36,8 @@ Editors write a parser function (or a wrapper template). The extension runs one 
 }}
 </pre>
 
-'''Grants''' (funding edges):
-
 <pre>
-{{#cargo_declare:_table=Grants
+{{#cargo_declare:_table=GrantDemo
 |Funder=Page
 |Recipient=Page
 |Amount=Float
@@ -44,6 +45,8 @@ Editors write a parser function (or a wrapper template). The extension runs one 
 |Program=String
 }}
 </pre>
+
+On a live diocese wiki, declare your own tables (for example <code>Parishes</code> with a Page-type <code>Diocese</code> column) and pass <code>table=Parishes</code> / <code>parent=Diocese</code> to [[Template:Org chart]].
 
 Store rows with <code>#cargo_store</code> (usually from an infobox template). Create or recreate tables at [[Special:CargoTables]] if they are missing.
 
@@ -53,7 +56,7 @@ Use '''Page'''-type fields for parents, funders, and recipients so node clicks o
 
 <pre>
 {{#saintapedia_graph:
-tables=Organizations
+tables=OrgDemo
 |fields=_pageName=Name,ParentOrg,Type,Country
 |parent_field=ParentOrg
 |node_id=Name
@@ -64,9 +67,11 @@ tables=Organizations
 }}
 </pre>
 
-Edges are '''parent → child''' (top-down reporting line).
+Edges are '''parent → child''' (archdiocese → diocese → parish, or any reporting line).
 
-Shorter: <code><nowiki>{{Org chart|style=Type|subgraph=Country}}</nowiki></code>
+Shorter: <code><nowiki>{{Org chart|table=OrgDemo|style=Type|subgraph=Country}}</nowiki></code>
+
+Real parishes: <code><nowiki>{{Org chart|table=Parishes|parent=Diocese|id=_pageName}}</nowiki></code>
 
 === 3. Funding network ===
 
@@ -74,9 +79,9 @@ Prefer '''dual-table''' mode when organizations live in one table and grants in 
 
 <pre>
 {{#saintapedia_graph:
-nodes_table=Organizations
+nodes_table=OrgDemo
 |nodes_fields=_pageName=Name,Type,Country
-|edges_table=Grants
+|edges_table=GrantDemo
 |edges_fields=Funder,Recipient,Amount
 |edges_where=Year>=2023
 |node_id=_pageName
@@ -91,7 +96,7 @@ nodes_table=Organizations
 }}
 </pre>
 
-Shorter: <code><nowiki>{{Funding network|style=Type|subgraph=Country|edges_where=Year>=2023}}</nowiki></code>
+Shorter: <code><nowiki>{{Funding network|nodes=OrgDemo|edges=GrantDemo|style=Type|subgraph=Country|edges_where=Year>=2023}}</nowiki></code>
 
 If you only have one table of links, use '''edge''' mode (one query):
 
@@ -109,8 +114,7 @@ tables=Grants
 
 === Live examples ===
 
-* [[Saintapedia Graph demo]] — seeded Organizations + Grants
-* [[Saintapedia Graph smoke]] — theme / limit warning cases
+Each example is a '''Help:''' subpage with the wikitext and (when OrgDemo / GrantDemo are imported) the live graph on the same page. Start at [[Help:Saintapedia Graph/Examples]].
 
 == How to pick a mode ==
 
@@ -310,7 +314,7 @@ Imported by the [[#Installing the help page|maintenance script]] (or by hand fro
 
 === <code><nowiki>{{Org chart}}</nowiki></code> ===
 
-Hierarchy over Organizations (override with <code>table=</code>).
+Hierarchy. Default table is Organizations; pass <code>table=OrgDemo</code> for the sample or <code>table=Parishes</code> for a real diocese wiki.
 
 {| class="wikitable"
 ! Argument
@@ -372,7 +376,7 @@ Hierarchy over Organizations (override with <code>table=</code>).
 
 === <code><nowiki>{{Funding network}}</nowiki></code> ===
 
-Dual-table Organizations + Grants.
+Dual-table nodes + edges. Defaults are Organizations / Grants; pass <code>nodes=OrgDemo</code> and <code>edges=GrantDemo</code> for the sample.
 
 {| class="wikitable"
 ! Argument
@@ -543,6 +547,22 @@ Not in this version: expand “everyone within N steps of X”, Sankey, hover fi
 
 == Installing the help page ==
 
+=== Special:Import (no shell) ===
+
+Download an XML dump from GitHub and import it at [[Special:Import]] (sysop / import right):
+
+* [https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-help.xml SaintapediaGraph-help.xml] — this Help page, [[Template:Org chart]], [[Template:Funding network]], [[Template:Saintapedia Graph examples]]
+* [https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-examples.xml SaintapediaGraph-examples.xml] — help '''plus''' OrgDemo / GrantDemo, the Demo … pages, and the [[Help:Saintapedia Graph/Examples|example series]]
+
+Save the file, then Special:Import → upload. Assign the edits to your account. After the examples dump, recreate Cargo:
+
+<pre>
+php extensions/Cargo/maintenance/cargoRecreateData.php --table OrgDemo
+php extensions/Cargo/maintenance/cargoRecreateData.php --table GrantDemo
+</pre>
+
+=== Maintenance script ===
+
 Admins (from the wiki root):
 
 <pre>
@@ -555,13 +575,23 @@ MediaWiki 1.39:
 php extensions/SaintapediaGraph/maintenance/importPages.php
 </pre>
 
-<code>--dry-run</code> lists create/update/skip. <code>--overwrite</code> replaces existing Help and templates.
+<code>--dry-run</code> lists create/update/skip. <code>--overwrite</code> replaces existing Help and templates. <code>--examples</code> also imports OrgDemo / GrantDemo and the [[Help:Saintapedia Graph/Examples|Help: example series]] (does '''not''' create Organization or Grant templates).
 
 That writes:
 
 * [[Help:Saintapedia Graph]] (this page)
 * [[Template:Org chart]]
 * [[Template:Funding network]]
+* [[Template:Saintapedia Graph examples]] (right-hand series table)
+
+With <code>--examples</code>, also [[Template:OrgDemo]], [[Template:GrantDemo]], the Demo … diocese/parish pages, <code>GrantDemo:</code> rows, and the demo page. Then recreate Cargo if needed:
+
+<pre>
+php extensions/Cargo/maintenance/cargoRecreateData.php --table OrgDemo
+php extensions/Cargo/maintenance/cargoRecreateData.php --table GrantDemo
+</pre>
+
+The public mediawiki.org listing is a separate paste file in the repo (<code>docs/mediawiki.org-Extension-SaintapediaGraph.wikitext</code>); it is not imported here.
 
 == Configuration (admins) ==
 
@@ -629,8 +659,8 @@ Scripts are same-origin ResourceLoader (bundled Mermaid). No CDN. UI strings are
 
 == Related pages ==
 
-* [[Saintapedia Graph demo]] — live org chart + funding network
-* [[Saintapedia Graph smoke]] — warning cases
+* [[Help:Saintapedia Graph/Examples]] — one Help page per use (code + live graph)
+* [[Saintapedia Graph smoke]] — warning cases (local QA)
 * [[Special:CargoTables]] — declare / recreate Cargo tables
 * [[mw:Extension:Cargo|Cargo documentation]]
 * [[mw:Extension:SaintapediaGraph|Extension:SaintapediaGraph]] on mediawiki.org

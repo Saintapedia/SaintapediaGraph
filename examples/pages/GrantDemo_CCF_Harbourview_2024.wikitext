@@ -1,0 +1,7 @@
+{{GrantDemo
+|Funder=Demo Catholic Community Foundation
+|Recipient=Demo Archdiocese of Harbourview
+|Amount=90000
+|Year=2024
+|Program=Seminary
+}}

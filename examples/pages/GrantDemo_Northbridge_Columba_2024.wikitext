@@ -1,0 +1,7 @@
+{{GrantDemo
+|Funder=Demo Archdiocese of Northbridge
+|Recipient=Demo Parish of St. Columba
+|Amount=25000
+|Year=2024
+|Program=Formation
+}}

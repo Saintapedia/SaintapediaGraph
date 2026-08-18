@@ -1,0 +1,51 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/Funding}}
+{{Saintapedia Graph examples}}
+
+Foundation / archdiocese / order → parish or diocese. Dual-table: colors and groups come from OrgDemo rows, arrows from GrantDemo.
+
+== Wikitext ==
+
+<pre>
+{{#saintapedia_graph:
+nodes_table=OrgDemo
+|nodes_fields=_pageName,Name,Type,Country
+|edges_table=GrantDemo
+|edges_fields=Funder,Recipient,Amount
+|edges_where=Year>=2023
+|node_id=_pageName
+|node_label=Name
+|source_field=Funder
+|target_field=Recipient
+|edge_label=Amount
+|style_by=Type
+|subgraph_by=Country
+|direction=LR
+|theme=forest
+|limit=300
+}}
+</pre>
+
+Shorter: <code><nowiki>{{Funding network|nodes=OrgDemo|edges=GrantDemo|style=Type|subgraph=Country|edges_where=Year>=2023}}</nowiki></code>.
+
+== Live ==
+
+{{#saintapedia_graph:
+nodes_table=OrgDemo
+|nodes_fields=_pageName,Name,Type,Country
+|edges_table=GrantDemo
+|edges_fields=Funder,Recipient,Amount
+|edges_where=Year>=2023
+|node_id=_pageName
+|node_label=Name
+|source_field=Funder
+|target_field=Recipient
+|edge_label=Amount
+|style_by=Type
+|subgraph_by=Country
+|direction=LR
+|theme=forest
+|limit=300
+}}
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

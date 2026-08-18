@@ -1,0 +1,35 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/By country}}
+{{Saintapedia Graph examples}}
+
+Same hierarchy as [[Help:Saintapedia Graph/Province]], grouped into subgraphs by <code>Country</code> (United States vs Canada in the sample). A national conference of bishops can use <code>subgraph_by=Country</code> or <code>style_by=Rite</code> the same way.
+
+== Wikitext ==
+
+<pre>
+{{#saintapedia_graph:
+tables=OrgDemo
+|fields=_pageName=Name,ParentOrg,Type,Country
+|parent_field=ParentOrg
+|node_id=Name
+|style_by=Type
+|subgraph_by=Country
+|direction=TD
+|clickable=yes
+}}
+</pre>
+
+== Live ==
+
+{{#saintapedia_graph:
+tables=OrgDemo
+|fields=_pageName=Name,ParentOrg,Type,Country
+|parent_field=ParentOrg
+|node_id=Name
+|style_by=Type
+|subgraph_by=Country
+|direction=TD
+|clickable=yes
+}}
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

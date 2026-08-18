@@ -1,0 +1,7 @@
+{{GrantDemo
+|Funder=Demo Catholic Community Foundation
+|Recipient=Demo Parish of St. Brigid
+|Amount=40000
+|Year=2024
+|Program=Religious education
+}}

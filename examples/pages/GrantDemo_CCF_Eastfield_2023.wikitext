@@ -1,0 +1,7 @@
+{{GrantDemo
+|Funder=Demo Catholic Community Foundation
+|Recipient=Demo Diocese of Eastfield
+|Amount=200000
+|Year=2023
+|Program=Diocesan ministries
+}}

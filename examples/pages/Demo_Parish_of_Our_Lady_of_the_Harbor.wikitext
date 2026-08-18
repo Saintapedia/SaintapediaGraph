@@ -1,0 +1,7 @@
+{{OrgDemo
+|Name=Demo Parish of Our Lady of the Harbor
+|ParentOrg=Demo Archdiocese of Harbourview
+|Type=Parish
+|Country=Canada
+|Website=
+}}
