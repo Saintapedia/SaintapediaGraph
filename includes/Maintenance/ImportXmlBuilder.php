@@ -16,9 +16,6 @@ class ImportXmlBuilder {
 	public static function build( array $pages, string $extensionRoot ): string {
 		$out = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 		$out .= '<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/"'
-			. ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
-			. ' xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/'
-			. ' http://www.mediawiki.org/xml/export-0.11.xsd"'
 			. ' version="0.11" xml:lang="en">' . "\n";
 		foreach ( $pages as $entry ) {
 			$path = PageCatalog::resolve( $extensionRoot, $entry['file'] );

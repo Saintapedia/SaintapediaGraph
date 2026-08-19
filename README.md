@@ -48,7 +48,7 @@ wfLoadExtension( 'SaintapediaGraph' );
 3. Check `Special:Version` for **Saintapedia Graph 0.2.5**.
 4. Import help + templates — **Special:Import** (no shell) or the maintenance script.
 
-**Special:Import:** download a dump, then `Special:Import` → upload (needs the `import` right):
+**Special:Import:** download the **raw** dump (file must start with `<?xml version="1.0"`), then `Special:Import` → upload (needs the `import` right). Do not save the GitHub HTML file page — that fails with `crossorigin`.
 
 | Dump | Contents |
 |---|---|
