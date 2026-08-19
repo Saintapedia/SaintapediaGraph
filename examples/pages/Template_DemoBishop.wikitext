@@ -1,0 +1,16 @@
+<noinclude>
+'''Template:DemoBishop''' is a '''Cargo template''' for [[Help:Saintapedia Graph/Episcopal lineage]] (table '''DemoBishop''').
+
+If you imported this page via Special:Import, edit and save once, then click '''Create data table''' under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoBishop
+|Consecrator=Page
+|See=String
+}}
+</noinclude><includeonly>{{#cargo_store:_table=DemoBishop
+|Consecrator={{{Consecrator|}}}
+|See={{{See|}}}
+}}
+'''{{PAGENAME}}'''{{#if:{{{See|}}}| — {{{See}}}}}{{#if:{{{Consecrator|}}}| — consecrated by [[{{{Consecrator}}}]]}}
+</includeonly>

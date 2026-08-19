@@ -1,13 +1,13 @@
 {{DISPLAYTITLE:Help:Saintapedia Graph/Episcopal lineage}}
 {{Saintapedia Graph examples}}
 
-Each bishop row points at the consecrating bishop (Page field). Mutual consecrations are directed cycles — warn or drop them. No Bishops table in the bundled sample.
+Each bishop row points at the consecrating bishop. Cargo template: [[Template:DemoBishop]] (table '''DemoBishop'''). [[Help:Saintapedia Graph/Create tables|Create the table]] first. Mutual consecrations are cycles — keep <code>warn_cycles=yes</code>.
 
 == Wikitext ==
 
 <pre>
 {{#saintapedia_graph:
-tables=Bishops
+tables=DemoBishop
 |fields=_pageName,Consecrator,See
 |parent_field=Consecrator
 |node_id=_pageName

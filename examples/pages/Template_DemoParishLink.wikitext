@@ -1,0 +1,18 @@
+<noinclude>
+'''Template:DemoParishLink''' is a '''Cargo template''' for [[Help:Saintapedia Graph/Twin parishes]] (table '''DemoParishLink''').
+
+If you imported this page via Special:Import, edit and save once, then click '''Create data table''' under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoParishLink
+|Parish=Page
+|LinkedParish=Page
+|Relation=String
+}}
+</noinclude><includeonly>{{#cargo_store:_table=DemoParishLink
+|Parish={{{Parish|}}}
+|LinkedParish={{{LinkedParish|}}}
+|Relation={{{Relation|}}}
+}}
+[[{{{Parish|}}}]] {{#if:{{{Relation|}}}|({{{Relation}}})}} [[{{{LinkedParish|}}}]]
+</includeonly>

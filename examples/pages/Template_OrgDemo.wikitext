@@ -1,10 +1,9 @@
 <noinclude>
-'''Template:OrgDemo''' — sample Cargo table for [[Help:Saintapedia Graph]].
+'''Template:OrgDemo''' is a '''Cargo template'''. It declares and stores the '''OrgDemo''' table (not Organization).
 
-Table name is '''OrgDemo''' (not Organization) so it will not collide with a wiki's own infobox.
+If you imported this page via Special:Import, edit and save once, then click '''Create data table''' under the declaration below. After that, [[Special:CargoTables/OrgDemo]] should list rows.
 
-Same shape works for archdioceses, dioceses, parishes, religious orders, and foundations: set <code>Type</code> and point <code>ParentOrg</code> at the parent page (empty for a root). On a real wiki, point <code><nowiki>{{Org chart|table=Parishes|parent=Diocese}}</nowiki></code> at your own tables instead of importing this one.
-
+== Cargo declaration ==
 {{#cargo_declare:_table=OrgDemo
 |Name=String
 |ParentOrg=Page

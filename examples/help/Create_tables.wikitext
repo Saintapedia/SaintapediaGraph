@@ -1,0 +1,74 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/Create tables}}
+{{Saintapedia Graph examples}}
+
+[[Template:Org chart]] and [[Template:Funding network]] are '''graph wrappers'''. They do not declare Cargo tables.
+
+Each sample table is a '''Cargo template''' with <code>#cargo_declare</code> (on the template page) and <code>#cargo_store</code> (when you transclude it). Special:Import copies the wikitext only — Cargo does not create the SQL table until you do this:
+
+# Open the template (list below).
+# If you just imported it, click '''Edit''' → '''Save''' (no changes needed). That registers the declaration.
+# On the template page, under '''Cargo declaration''', click '''Create data table''' (or '''Recreate data''' if it already exists).
+# Confirm at [[Special:CargoTables]].
+
+You need the <code>recreatecargodata</code> right (usually sysop).
+
+{| class="wikitable"
+! Cargo template
+! Table
+! Used on
+|-
+| [[Template:OrgDemo]]
+| OrgDemo
+| [[Help:Saintapedia Graph/Province|Province]], one diocese, by country, funding nodes
+|-
+| [[Template:GrantDemo]]
+| GrantDemo
+| [[Help:Saintapedia Graph/Funding|Funding]], one funder
+|-
+| [[Template:DemoPlace]]
+| DemoPlace
+| [[Help:Saintapedia Graph/Deaneries|Deaneries]]
+|-
+| [[Template:DemoHouse]]
+| DemoHouse
+| [[Help:Saintapedia Graph/Religious houses|Religious houses]]
+|-
+| [[Template:DemoSchool]]
+| DemoSchool
+| [[Help:Saintapedia Graph/Schools|Schools]]
+|-
+| [[Template:DemoBishop]]
+| DemoBishop
+| [[Help:Saintapedia Graph/Episcopal lineage|Episcopal lineage]]
+|-
+| [[Template:DemoParishLink]]
+| DemoParishLink
+| [[Help:Saintapedia Graph/Twin parishes|Twin parishes]]
+|-
+| [[Template:DemoPatronage]]
+| DemoPatronage
+| [[Help:Saintapedia Graph/Patron saints|Patron saints]]
+|-
+| [[Template:DemoSuccessor]]
+| DemoSuccessor
+| [[Help:Saintapedia Graph/Successors|Successors]]
+|}
+
+Names are all <code>Demo…</code> / OrgDemo / GrantDemo so they will not replace Parishes, Organizations, or Grant on a live wiki.
+
+If the wiki has shell access, this creates every sample table in one go:
+
+<pre>
+php extensions/Cargo/maintenance/cargoRecreateData.php --table OrgDemo
+php extensions/Cargo/maintenance/cargoRecreateData.php --table GrantDemo
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoPlace
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoHouse
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoSchool
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoBishop
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoParishLink
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoPatronage
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoSuccessor
+</pre>
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

@@ -10,7 +10,7 @@
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="21689" xml:space="preserve">{{#seo:|title=Help:Saintapedia Graph}}
+      <text bytes="21826" xml:space="preserve">{{#seo:|title=Help:Saintapedia Graph}}
 {{DISPLAYTITLE:Help:Saintapedia Graph}}
 {{Saintapedia Graph examples}}
 
@@ -126,7 +126,7 @@ tables=Grants
 
 === Live examples ===
 
-Each example is a &apos;&apos;&apos;Help:&apos;&apos;&apos; subpage with the wikitext and (when OrgDemo / GrantDemo are imported) the live graph on the same page. Start at [[Help:Saintapedia Graph/Examples]].
+Each example is a &apos;&apos;&apos;Help:&apos;&apos;&apos; subpage with the wikitext and (when the sample Cargo tables exist) the live graph on the same page. Start at [[Help:Saintapedia Graph/Examples]]. [[Template:Org chart]] does not declare a Cargo table — create tables from the Demo templates ([[Help:Saintapedia Graph/Create tables]]).
 
 == How to pick a mode ==
 
@@ -806,7 +806,7 @@ nodes_table={{{nodes|Organizations}}}
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="1324" xml:space="preserve">&lt;noinclude&gt;
+      <text bytes="1390" xml:space="preserve">&lt;noinclude&gt;
 Right-hand nav for [[Help:Saintapedia Graph]] and the example series.
 Transclude with &lt;code&gt;&lt;nowiki&gt;{{Saintapedia Graph examples}}&lt;/nowiki&gt;&lt;/code&gt;.
 &lt;/noinclude&gt;{| class=&quot;wikitable&quot; style=&quot;float:right; clear:right; margin:0 0 1em 1.5em; width:16em; font-size:90%;&quot;
@@ -815,6 +815,8 @@ Transclude with &lt;code&gt;&lt;nowiki&gt;{{Saintapedia Graph examples}}&lt;/now
 | [[Help:Saintapedia Graph|Help (reference)]]
 |-
 | [[Help:Saintapedia Graph/Examples|Examples index]]
+|-
+| [[Help:Saintapedia Graph/Create tables|Create Cargo tables]]
 |-
 ! Live on OrgDemo
 |-

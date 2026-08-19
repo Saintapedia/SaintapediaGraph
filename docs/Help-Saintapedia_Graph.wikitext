@@ -114,7 +114,7 @@ tables=Grants
 
 === Live examples ===
 
-Each example is a '''Help:''' subpage with the wikitext and (when OrgDemo / GrantDemo are imported) the live graph on the same page. Start at [[Help:Saintapedia Graph/Examples]].
+Each example is a '''Help:''' subpage with the wikitext and (when the sample Cargo tables exist) the live graph on the same page. Start at [[Help:Saintapedia Graph/Examples]]. [[Template:Org chart]] does not declare a Cargo table — create tables from the Demo templates ([[Help:Saintapedia Graph/Create tables]]).
 
 == How to pick a mode ==
 

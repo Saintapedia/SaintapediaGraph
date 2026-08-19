@@ -1,13 +1,13 @@
 {{DISPLAYTITLE:Help:Saintapedia Graph/Religious houses}}
 {{Saintapedia Graph examples}}
 
-Congregation → province → house. OrgDemo has a single religious-order row, not a houses table, so there is no live graph here. See [[Help:Saintapedia Graph/Province]] for the sample tree (it includes Demo Sisters of Mercy Outreach).
+Congregation → province → house. Cargo template: [[Template:DemoHouse]] (table '''DemoHouse'''). [[Help:Saintapedia Graph/Create tables|Create the table]] first. The OrgDemo sample also includes one order row; see [[Help:Saintapedia Graph/Province]].
 
 == Wikitext ==
 
 <pre>
 {{#saintapedia_graph:
-tables=ReligiousHouses
+tables=DemoHouse
 |fields=_pageName,Province,Institute,Country
 |parent_field=Province
 |node_id=_pageName

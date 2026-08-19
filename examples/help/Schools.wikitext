@@ -1,15 +1,15 @@
 {{DISPLAYTITLE:Help:Saintapedia Graph/Schools}}
 {{Saintapedia Graph examples}}
 
-Catholic schools under a parish or diocese. No Schools table in the bundled sample.
+Catholic schools under a parish or diocese. Cargo template: [[Template:DemoSchool]] (table '''DemoSchool'''). [[Help:Saintapedia Graph/Create tables|Create the table]] first.
 
-<code>Level</code> = Elementary / High school / University. Clicks go to the school page; the parish is the parent node.
+<code>Level</code> = Elementary / High school / University.
 
 == Wikitext ==
 
 <pre>
 {{#saintapedia_graph:
-tables=Schools
+tables=DemoSchool
 |fields=_pageName,Parish,Level,City
 |where=Diocese="Diocese of Eastfield"
 |parent_field=Parish

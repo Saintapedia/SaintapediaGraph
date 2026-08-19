@@ -1,0 +1,18 @@
+<noinclude>
+'''Template:DemoHouse''' is a '''Cargo template''' for [[Help:Saintapedia Graph/Religious houses]] (table '''DemoHouse''').
+
+If you imported this page via Special:Import, edit and save once, then click '''Create data table''' under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoHouse
+|Province=Page
+|Institute=String
+|Country=String
+}}
+</noinclude><includeonly>{{#cargo_store:_table=DemoHouse
+|Province={{{Province|}}}
+|Institute={{{Institute|}}}
+|Country={{{Country|}}}
+}}
+'''{{PAGENAME}}''' ({{{Institute|}}}){{#if:{{{Province|}}}| — [[{{{Province}}}]]}}
+</includeonly>

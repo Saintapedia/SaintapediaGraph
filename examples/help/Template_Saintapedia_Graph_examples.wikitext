@@ -8,6 +8,8 @@ Transclude with <code><nowiki>{{Saintapedia Graph examples}}</nowiki></code>.
 |-
 | [[Help:Saintapedia Graph/Examples|Examples index]]
 |-
+| [[Help:Saintapedia Graph/Create tables|Create Cargo tables]]
+|-
 ! Live on OrgDemo
 |-
 | [[Help:Saintapedia Graph/Province|Province]]

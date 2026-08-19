@@ -1,0 +1,20 @@
+<noinclude>
+'''Template:DemoSchool''' is a '''Cargo template''' for [[Help:Saintapedia Graph/Schools]] (table '''DemoSchool''').
+
+If you imported this page via Special:Import, edit and save once, then click '''Create data table''' under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoSchool
+|Parish=Page
+|Level=String
+|City=String
+|Diocese=Page
+}}
+</noinclude><includeonly>{{#cargo_store:_table=DemoSchool
+|Parish={{{Parish|}}}
+|Level={{{Level|}}}
+|City={{{City|}}}
+|Diocese={{{Diocese|}}}
+}}
+'''{{PAGENAME}}''' ({{{Level|}}}){{#if:{{{Parish|}}}| — parish: [[{{{Parish}}}]]}}
+</includeonly>

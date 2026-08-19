@@ -1,13 +1,13 @@
 {{DISPLAYTITLE:Help:Saintapedia Graph/Twin parishes}}
 {{Saintapedia Graph examples}}
 
-Twin parishes or a merged cluster. One row per pair — edge mode, not a hierarchy. No ParishLinks table in the bundled sample.
+Twin parishes or a merged cluster. Cargo template: [[Template:DemoParishLink]] (table '''DemoParishLink'''). [[Help:Saintapedia Graph/Create tables|Create the table]] first. One row per pair — edge mode, not a hierarchy.
 
 == Wikitext ==
 
 <pre>
 {{#saintapedia_graph:
-tables=ParishLinks
+tables=DemoParishLink
 |fields=Parish,LinkedParish,Relation
 |where=Relation="cluster" OR Relation="twin"
 |source_field=Parish

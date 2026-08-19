@@ -1,0 +1,18 @@
+<noinclude>
+'''Template:DemoPlace''' is a '''Cargo template''' for [[Help:Saintapedia Graph/Deaneries]] (table '''DemoPlace''').
+
+If you imported this page via Special:Import, edit and save once, then click '''Create data table''' under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoPlace
+|ParentPlace=Page
+|Kind=String
+|Diocese=Page
+}}
+</noinclude><includeonly>{{#cargo_store:_table=DemoPlace
+|ParentPlace={{{ParentPlace|}}}
+|Kind={{{Kind|}}}
+|Diocese={{{Diocese|}}}
+}}
+'''{{PAGENAME}}''' ({{{Kind|}}}){{#if:{{{ParentPlace|}}}| — parent: [[{{{ParentPlace}}}]]}}{{#if:{{{Diocese|}}}| — [[{{{Diocese}}}]]}}
+</includeonly>

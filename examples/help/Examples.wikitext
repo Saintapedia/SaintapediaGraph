@@ -1,7 +1,7 @@
 {{DISPLAYTITLE:Help:Saintapedia Graph/Examples}}
 {{Saintapedia Graph examples}}
 
-Each page below has the '''wikitext''' and, when the bundled OrgDemo / GrantDemo tables are present, a '''live graph''' on the same page. Import with <code>importPages --examples</code>.
+Each page below has the '''wikitext''' and, when the sample Cargo tables exist, a '''live graph''' on the same page. [[Template:Org chart]] is not a Cargo template — create tables from [[Help:Saintapedia Graph/Create tables]].
 
 {| class="wikitable"
 ! Page
@@ -38,31 +38,31 @@ Each page below has the '''wikitext''' and, when the bundled OrgDemo / GrantDemo
 |-
 | [[Help:Saintapedia Graph/Deaneries|Deaneries]]
 | Hierarchy
-| Code only — needs your Places table
+| [[Template:DemoPlace]] — create table, then add rows
 |-
 | [[Help:Saintapedia Graph/Religious houses|Religious houses]]
 | Hierarchy
-| Code only
+| [[Template:DemoHouse]]
 |-
 | [[Help:Saintapedia Graph/Schools|Schools]]
 | Hierarchy
-| Code only
+| [[Template:DemoSchool]]
 |-
 | [[Help:Saintapedia Graph/Episcopal lineage|Episcopal lineage]]
 | Hierarchy
-| Code only
+| [[Template:DemoBishop]]
 |-
 | [[Help:Saintapedia Graph/Twin parishes|Twin parishes]]
 | Edge
-| Code only
+| [[Template:DemoParishLink]]
 |-
 | [[Help:Saintapedia Graph/Patron saints|Patron saints]]
 | Edge
-| Code only
+| [[Template:DemoPatronage]]
 |-
 | [[Help:Saintapedia Graph/Successors|Successors]]
 | Edge
-| Code only
+| [[Template:DemoSuccessor]]
 |}
 
 Sample tables are '''OrgDemo''' / '''GrantDemo''' so they do not replace Organization or Grant. On a real diocese wiki, change the table and field names (for example <code>table=Parishes</code>, <code>parent=Diocese</code>).
