@@ -22,6 +22,9 @@ class ImportXmlBuilderTest extends TestCase {
 		}
 		$this->assertSame( array_column( PageCatalog::pages(), 'title' ), $titles );
 		$this->assertStringContainsString( 'xmlns="http://www.mediawiki.org/xml/export-0.11/"', $xml );
+		$this->assertStringStartsWith( '<?xml version="1.0" encoding="UTF-8"?>', $xml );
+		$this->assertStringNotContainsString( 'schemaLocation', $xml );
+		$this->assertDoesNotMatchRegularExpression( '/\scrossorigin(?!=)/', $xml );
 	}
 
 	public function testHelpPageUsesHelpNamespace(): void {
@@ -57,6 +60,10 @@ class ImportXmlBuilderTest extends TestCase {
 			array_column( PageCatalog::catalog( true ), 'title' ),
 			$this->xmlTitles( $examples )
 		);
+		$raw = file_get_contents( $examples );
+		$this->assertStringStartsWith( '<?xml version="1.0" encoding="UTF-8"?>', $raw );
+		$this->assertStringNotContainsString( 'schemaLocation', $raw );
+		$this->assertDoesNotMatchRegularExpression( '/\scrossorigin(?!=)/', $raw );
 	}
 
 	/**

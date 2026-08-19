@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" version="0.11" xml:lang="en">
   <page>
     <title>Help:Saintapedia Graph</title>
     <ns>12</ns>
@@ -10,7 +10,7 @@
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="21826" xml:space="preserve">{{#seo:|title=Help:Saintapedia Graph}}
+      <text bytes="22096" xml:space="preserve">{{#seo:|title=Help:Saintapedia Graph}}
 {{DISPLAYTITLE:Help:Saintapedia Graph}}
 {{Saintapedia Graph examples}}
 
@@ -566,7 +566,7 @@ Download an XML dump from GitHub and import it at [[Special:Import]] (sysop / im
 * [https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-help.xml SaintapediaGraph-help.xml] — this Help page, [[Template:Org chart]], [[Template:Funding network]], [[Template:Saintapedia Graph examples]]
 * [https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-examples.xml SaintapediaGraph-examples.xml] — help &apos;&apos;&apos;plus&apos;&apos;&apos; OrgDemo / GrantDemo, the Demo … pages, and the [[Help:Saintapedia Graph/Examples|example series]]
 
-Save the file, then Special:Import → upload. Assign the edits to your account. After the examples dump, recreate Cargo:
+Use the &apos;&apos;&apos;raw.githubusercontent.com&apos;&apos;&apos; link (the file must start with &lt;code&gt;&amp;lt;?xml version=&quot;1.0&quot;&lt;/code&gt;). Do &apos;&apos;&apos;not&apos;&apos;&apos; save the GitHub file &apos;&apos;page&apos;&apos; — that is HTML and Special:Import fails with &lt;code&gt;crossorigin&lt;/code&gt;. Right-click the raw link → Save as → &lt;code&gt;.xml&lt;/code&gt;, then Special:Import → upload. Assign the edits to your account. After the examples dump, recreate Cargo:
 
 &lt;pre&gt;
 php extensions/Cargo/maintenance/cargoRecreateData.php --table OrgDemo

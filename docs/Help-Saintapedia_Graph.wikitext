@@ -554,7 +554,7 @@ Download an XML dump from GitHub and import it at [[Special:Import]] (sysop / im
 * [https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-help.xml SaintapediaGraph-help.xml] — this Help page, [[Template:Org chart]], [[Template:Funding network]], [[Template:Saintapedia Graph examples]]
 * [https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-examples.xml SaintapediaGraph-examples.xml] — help '''plus''' OrgDemo / GrantDemo, the Demo … pages, and the [[Help:Saintapedia Graph/Examples|example series]]
 
-Save the file, then Special:Import → upload. Assign the edits to your account. After the examples dump, recreate Cargo:
+Use the '''raw.githubusercontent.com''' link (the file must start with <code>&lt;?xml version="1.0"</code>). Do '''not''' save the GitHub file ''page'' — that is HTML and Special:Import fails with <code>crossorigin</code>. Right-click the raw link → Save as → <code>.xml</code>, then Special:Import → upload. Assign the edits to your account. After the examples dump, recreate Cargo:
 
 <pre>
 php extensions/Cargo/maintenance/cargoRecreateData.php --table OrgDemo
