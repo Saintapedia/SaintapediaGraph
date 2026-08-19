@@ -61,6 +61,17 @@ class PageCatalogTest extends TestCase {
 
 		$this->assertContains( 'Template:OrgDemo', $titles );
 		$this->assertContains( 'Template:GrantDemo', $titles );
+		foreach ( [
+			'Template:DemoPlace',
+			'Template:DemoHouse',
+			'Template:DemoSchool',
+			'Template:DemoBishop',
+			'Template:DemoParishLink',
+			'Template:DemoPatronage',
+			'Template:DemoSuccessor',
+		] as $need ) {
+			$this->assertContains( $need, $titles );
+		}
 		$this->assertContains( 'Help:Saintapedia Graph/Examples', $titles );
 		$this->assertContains( 'Help:Saintapedia Graph/Province', $titles );
 		$this->assertContains( 'Help:Saintapedia Graph/Funding', $titles );
@@ -105,6 +116,27 @@ class PageCatalogTest extends TestCase {
 		$funding = $byTitle['Help:Saintapedia Graph/Funding'];
 		$this->assertStringContainsString( '<pre>', $funding );
 		$this->assertStringContainsString( 'edges=GrantDemo', $funding );
+	}
+
+	public function testCargoDemoTemplatesDeclareAndStore(): void {
+		$root = dirname( __DIR__, 2 );
+		$cargo = [];
+		foreach ( PageCatalog::examplePages() as $entry ) {
+			if ( !str_starts_with( $entry['title'], 'Template:' ) ) {
+				continue;
+			}
+			if ( $entry['title'] === 'Template:Saintapedia Graph examples' ) {
+				continue;
+			}
+			$text = file_get_contents( PageCatalog::resolve( $root, $entry['file'] ) );
+			$this->assertStringContainsString( '{{#cargo_declare:_table=', $text, $entry['title'] );
+			$this->assertStringContainsString( '{{#cargo_store:_table=', $text, $entry['title'] );
+			$this->assertStringContainsString( '== Cargo declaration ==', $text, $entry['title'] );
+			$cargo[] = $entry['title'];
+		}
+		$this->assertNotEmpty( $cargo );
+		$orgChart = file_get_contents( PageCatalog::resolve( $root, 'templates/Org_chart.wikitext' ) );
+		$this->assertStringNotContainsString( '#cargo_declare', $orgChart );
 	}
 
 	public function testExampleNavIsRightAlignedTable() {

@@ -1,0 +1,16 @@
+<noinclude>
+'''Template:DemoSuccessor''' is a '''Cargo template''' for [[Help:Saintapedia Graph/Successors]] (table '''DemoSuccessor''').
+
+If you imported this page via Special:Import, edit and save once, then click '''Create data table''' under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoSuccessor
+|SucceededBy=Page
+|Country=String
+}}
+</noinclude><includeonly>{{#cargo_store:_table=DemoSuccessor
+|SucceededBy={{{SucceededBy|}}}
+|Country={{{Country|}}}
+}}
+'''{{PAGENAME}}'''{{#if:{{{SucceededBy|}}}| → [[{{{SucceededBy}}}]]}}
+</includeonly>

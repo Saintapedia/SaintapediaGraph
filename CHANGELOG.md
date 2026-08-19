@@ -7,6 +7,7 @@
 - Help / README / mediawiki.org draft: gallery of uses (dioceses, deaneries, orders, schools, consecrators, grants, patrons, clusters).
 - Example series lives under **Help:Saintapedia Graph/…** — one page per use with the snippet and the live graph together. `Saintapedia Graph demo` redirects to `Help:Saintapedia Graph/Examples`.
 - Special:Import dumps on GitHub: `docs/import/SaintapediaGraph-help.xml` and `SaintapediaGraph-examples.xml` (`php maintenance/buildImportXml.php`).
+- Each example has a Cargo template (`#cargo_declare` + `#cargo_store`). Graph wrappers are not Cargo templates. After Special:Import: null-edit the template, then '''Create data table''' (`Help:Saintapedia Graph/Create tables`).
 
 ## 0.2.5 — 2026-08-15
 

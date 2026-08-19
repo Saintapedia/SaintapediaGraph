@@ -10,7 +10,7 @@
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="21689" xml:space="preserve">{{#seo:|title=Help:Saintapedia Graph}}
+      <text bytes="21826" xml:space="preserve">{{#seo:|title=Help:Saintapedia Graph}}
 {{DISPLAYTITLE:Help:Saintapedia Graph}}
 {{Saintapedia Graph examples}}
 
@@ -126,7 +126,7 @@ tables=Grants
 
 === Live examples ===
 
-Each example is a &apos;&apos;&apos;Help:&apos;&apos;&apos; subpage with the wikitext and (when OrgDemo / GrantDemo are imported) the live graph on the same page. Start at [[Help:Saintapedia Graph/Examples]].
+Each example is a &apos;&apos;&apos;Help:&apos;&apos;&apos; subpage with the wikitext and (when the sample Cargo tables exist) the live graph on the same page. Start at [[Help:Saintapedia Graph/Examples]]. [[Template:Org chart]] does not declare a Cargo table — create tables from the Demo templates ([[Help:Saintapedia Graph/Create tables]]).
 
 == How to pick a mode ==
 
@@ -806,7 +806,7 @@ nodes_table={{{nodes|Organizations}}}
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="1324" xml:space="preserve">&lt;noinclude&gt;
+      <text bytes="1390" xml:space="preserve">&lt;noinclude&gt;
 Right-hand nav for [[Help:Saintapedia Graph]] and the example series.
 Transclude with &lt;code&gt;&lt;nowiki&gt;{{Saintapedia Graph examples}}&lt;/nowiki&gt;&lt;/code&gt;.
 &lt;/noinclude&gt;{| class=&quot;wikitable&quot; style=&quot;float:right; clear:right; margin:0 0 1em 1.5em; width:16em; font-size:90%;&quot;
@@ -815,6 +815,8 @@ Transclude with &lt;code&gt;&lt;nowiki&gt;{{Saintapedia Graph examples}}&lt;/now
 | [[Help:Saintapedia Graph|Help (reference)]]
 |-
 | [[Help:Saintapedia Graph/Examples|Examples index]]
+|-
+| [[Help:Saintapedia Graph/Create tables|Create Cargo tables]]
 |-
 ! Live on OrgDemo
 |-
@@ -863,13 +865,12 @@ Transclude with &lt;code&gt;&lt;nowiki&gt;{{Saintapedia Graph examples}}&lt;/now
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="965" xml:space="preserve">&lt;noinclude&gt;
-&apos;&apos;&apos;Template:OrgDemo&apos;&apos;&apos; — sample Cargo table for [[Help:Saintapedia Graph]].
+      <text bytes="792" xml:space="preserve">&lt;noinclude&gt;
+&apos;&apos;&apos;Template:OrgDemo&apos;&apos;&apos; is a &apos;&apos;&apos;Cargo template&apos;&apos;&apos;. It declares and stores the &apos;&apos;&apos;OrgDemo&apos;&apos;&apos; table (not Organization).
 
-Table name is &apos;&apos;&apos;OrgDemo&apos;&apos;&apos; (not Organization) so it will not collide with a wiki&apos;s own infobox.
+If you imported this page via Special:Import, edit and save once, then click &apos;&apos;&apos;Create data table&apos;&apos;&apos; under the declaration below. After that, [[Special:CargoTables/OrgDemo]] should list rows.
 
-Same shape works for archdioceses, dioceses, parishes, religious orders, and foundations: set &lt;code&gt;Type&lt;/code&gt; and point &lt;code&gt;ParentOrg&lt;/code&gt; at the parent page (empty for a root). On a real wiki, point &lt;code&gt;&lt;nowiki&gt;{{Org chart|table=Parishes|parent=Diocese}}&lt;/nowiki&gt;&lt;/code&gt; at your own tables instead of importing this one.
-
+== Cargo declaration ==
 {{#cargo_declare:_table=OrgDemo
 |Name=String
 |ParentOrg=Page
@@ -900,13 +901,12 @@ Same shape works for archdioceses, dioceses, parishes, religious orders, and fou
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="800" xml:space="preserve">&lt;noinclude&gt;
-&apos;&apos;&apos;Template:GrantDemo&apos;&apos;&apos; — sample funding-edge table for [[Help:Saintapedia Graph]].
+      <text bytes="767" xml:space="preserve">&lt;noinclude&gt;
+&apos;&apos;&apos;Template:GrantDemo&apos;&apos;&apos; is a &apos;&apos;&apos;Cargo template&apos;&apos;&apos;. It declares and stores the &apos;&apos;&apos;GrantDemo&apos;&apos;&apos; table (not Grant).
 
-Table name is &apos;&apos;&apos;GrantDemo&apos;&apos;&apos; (not Grant) so it will not collide with a wiki&apos;s own grant template.
+If you imported this page via Special:Import, edit and save once, then click &apos;&apos;&apos;Create data table&apos;&apos;&apos; under the declaration below. After that, [[Special:CargoTables/GrantDemo]] should list rows.
 
-&lt;code&gt;Funder&lt;/code&gt; / &lt;code&gt;Recipient&lt;/code&gt; are &apos;&apos;&apos;Page&apos;&apos;&apos; fields. They can be a foundation, archdiocese, diocese, parish, or order — the same pattern as a real Grants table.
-
+== Cargo declaration ==
 {{#cargo_declare:_table=GrantDemo
 |Funder=Page
 |Recipient=Page
@@ -922,6 +922,228 @@ Table name is &apos;&apos;&apos;GrantDemo&apos;&apos;&apos; (not Grant) so it wi
 |Program={{{Program|}}}
 }}
 Grant: [[{{{Funder}}}]] → [[{{{Recipient}}}]] — {{{Amount|?}}} ({{{Year|}}}){{#if:{{{Program|}}}| — {{{Program}}}}}
+&lt;/includeonly&gt;
+</text>
+      <sha1 />
+    </revision>
+  </page>
+  <page>
+    <title>Template:DemoPlace</title>
+    <ns>10</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="655" xml:space="preserve">&lt;noinclude&gt;
+&apos;&apos;&apos;Template:DemoPlace&apos;&apos;&apos; is a &apos;&apos;&apos;Cargo template&apos;&apos;&apos; for [[Help:Saintapedia Graph/Deaneries]] (table &apos;&apos;&apos;DemoPlace&apos;&apos;&apos;).
+
+If you imported this page via Special:Import, edit and save once, then click &apos;&apos;&apos;Create data table&apos;&apos;&apos; under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoPlace
+|ParentPlace=Page
+|Kind=String
+|Diocese=Page
+}}
+&lt;/noinclude&gt;&lt;includeonly&gt;{{#cargo_store:_table=DemoPlace
+|ParentPlace={{{ParentPlace|}}}
+|Kind={{{Kind|}}}
+|Diocese={{{Diocese|}}}
+}}
+&apos;&apos;&apos;{{PAGENAME}}&apos;&apos;&apos; ({{{Kind|}}}){{#if:{{{ParentPlace|}}}| — parent: [[{{{ParentPlace}}}]]}}{{#if:{{{Diocese|}}}| — [[{{{Diocese}}}]]}}
+&lt;/includeonly&gt;
+</text>
+      <sha1 />
+    </revision>
+  </page>
+  <page>
+    <title>Template:DemoHouse</title>
+    <ns>10</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="616" xml:space="preserve">&lt;noinclude&gt;
+&apos;&apos;&apos;Template:DemoHouse&apos;&apos;&apos; is a &apos;&apos;&apos;Cargo template&apos;&apos;&apos; for [[Help:Saintapedia Graph/Religious houses]] (table &apos;&apos;&apos;DemoHouse&apos;&apos;&apos;).
+
+If you imported this page via Special:Import, edit and save once, then click &apos;&apos;&apos;Create data table&apos;&apos;&apos; under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoHouse
+|Province=Page
+|Institute=String
+|Country=String
+}}
+&lt;/noinclude&gt;&lt;includeonly&gt;{{#cargo_store:_table=DemoHouse
+|Province={{{Province|}}}
+|Institute={{{Institute|}}}
+|Country={{{Country|}}}
+}}
+&apos;&apos;&apos;{{PAGENAME}}&apos;&apos;&apos; ({{{Institute|}}}){{#if:{{{Province|}}}| — [[{{{Province}}}]]}}
+&lt;/includeonly&gt;
+</text>
+      <sha1 />
+    </revision>
+  </page>
+  <page>
+    <title>Template:DemoSchool</title>
+    <ns>10</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="622" xml:space="preserve">&lt;noinclude&gt;
+&apos;&apos;&apos;Template:DemoSchool&apos;&apos;&apos; is a &apos;&apos;&apos;Cargo template&apos;&apos;&apos; for [[Help:Saintapedia Graph/Schools]] (table &apos;&apos;&apos;DemoSchool&apos;&apos;&apos;).
+
+If you imported this page via Special:Import, edit and save once, then click &apos;&apos;&apos;Create data table&apos;&apos;&apos; under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoSchool
+|Parish=Page
+|Level=String
+|City=String
+|Diocese=Page
+}}
+&lt;/noinclude&gt;&lt;includeonly&gt;{{#cargo_store:_table=DemoSchool
+|Parish={{{Parish|}}}
+|Level={{{Level|}}}
+|City={{{City|}}}
+|Diocese={{{Diocese|}}}
+}}
+&apos;&apos;&apos;{{PAGENAME}}&apos;&apos;&apos; ({{{Level|}}}){{#if:{{{Parish|}}}| — parish: [[{{{Parish}}}]]}}
+&lt;/includeonly&gt;
+</text>
+      <sha1 />
+    </revision>
+  </page>
+  <page>
+    <title>Template:DemoBishop</title>
+    <ns>10</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="607" xml:space="preserve">&lt;noinclude&gt;
+&apos;&apos;&apos;Template:DemoBishop&apos;&apos;&apos; is a &apos;&apos;&apos;Cargo template&apos;&apos;&apos; for [[Help:Saintapedia Graph/Episcopal lineage]] (table &apos;&apos;&apos;DemoBishop&apos;&apos;&apos;).
+
+If you imported this page via Special:Import, edit and save once, then click &apos;&apos;&apos;Create data table&apos;&apos;&apos; under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoBishop
+|Consecrator=Page
+|See=String
+}}
+&lt;/noinclude&gt;&lt;includeonly&gt;{{#cargo_store:_table=DemoBishop
+|Consecrator={{{Consecrator|}}}
+|See={{{See|}}}
+}}
+&apos;&apos;&apos;{{PAGENAME}}&apos;&apos;&apos;{{#if:{{{See|}}}| — {{{See}}}}}{{#if:{{{Consecrator|}}}| — consecrated by [[{{{Consecrator}}}]]}}
+&lt;/includeonly&gt;
+</text>
+      <sha1 />
+    </revision>
+  </page>
+  <page>
+    <title>Template:DemoParishLink</title>
+    <ns>10</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="635" xml:space="preserve">&lt;noinclude&gt;
+&apos;&apos;&apos;Template:DemoParishLink&apos;&apos;&apos; is a &apos;&apos;&apos;Cargo template&apos;&apos;&apos; for [[Help:Saintapedia Graph/Twin parishes]] (table &apos;&apos;&apos;DemoParishLink&apos;&apos;&apos;).
+
+If you imported this page via Special:Import, edit and save once, then click &apos;&apos;&apos;Create data table&apos;&apos;&apos; under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoParishLink
+|Parish=Page
+|LinkedParish=Page
+|Relation=String
+}}
+&lt;/noinclude&gt;&lt;includeonly&gt;{{#cargo_store:_table=DemoParishLink
+|Parish={{{Parish|}}}
+|LinkedParish={{{LinkedParish|}}}
+|Relation={{{Relation|}}}
+}}
+[[{{{Parish|}}}]] {{#if:{{{Relation|}}}|({{{Relation}}})}} [[{{{LinkedParish|}}}]]
+&lt;/includeonly&gt;
+</text>
+      <sha1 />
+    </revision>
+  </page>
+  <page>
+    <title>Template:DemoPatronage</title>
+    <ns>10</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="598" xml:space="preserve">&lt;noinclude&gt;
+&apos;&apos;&apos;Template:DemoPatronage&apos;&apos;&apos; is a &apos;&apos;&apos;Cargo template&apos;&apos;&apos; for [[Help:Saintapedia Graph/Patron saints]] (table &apos;&apos;&apos;DemoPatronage&apos;&apos;&apos;).
+
+If you imported this page via Special:Import, edit and save once, then click &apos;&apos;&apos;Create data table&apos;&apos;&apos; under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoPatronage
+|Saint=Page
+|Place=Page
+|Feast=String
+}}
+&lt;/noinclude&gt;&lt;includeonly&gt;{{#cargo_store:_table=DemoPatronage
+|Saint={{{Saint|}}}
+|Place={{{Place|}}}
+|Feast={{{Feast|}}}
+}}
+[[{{{Saint|}}}]] — patron of [[{{{Place|}}}]]{{#if:{{{Feast|}}}| ({{{Feast}}})}}
+&lt;/includeonly&gt;
+</text>
+      <sha1 />
+    </revision>
+  </page>
+  <page>
+    <title>Template:DemoSuccessor</title>
+    <ns>10</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="576" xml:space="preserve">&lt;noinclude&gt;
+&apos;&apos;&apos;Template:DemoSuccessor&apos;&apos;&apos; is a &apos;&apos;&apos;Cargo template&apos;&apos;&apos; for [[Help:Saintapedia Graph/Successors]] (table &apos;&apos;&apos;DemoSuccessor&apos;&apos;&apos;).
+
+If you imported this page via Special:Import, edit and save once, then click &apos;&apos;&apos;Create data table&apos;&apos;&apos; under the declaration below.
+
+== Cargo declaration ==
+{{#cargo_declare:_table=DemoSuccessor
+|SucceededBy=Page
+|Country=String
+}}
+&lt;/noinclude&gt;&lt;includeonly&gt;{{#cargo_store:_table=DemoSuccessor
+|SucceededBy={{{SucceededBy|}}}
+|Country={{{Country|}}}
+}}
+&apos;&apos;&apos;{{PAGENAME}}&apos;&apos;&apos;{{#if:{{{SucceededBy|}}}| → [[{{{SucceededBy}}}]]}}
 &lt;/includeonly&gt;
 </text>
       <sha1 />
@@ -1294,10 +1516,10 @@ Grant: [[{{{Funder}}}]] → [[{{{Recipient}}}]] — {{{Amount|?}}} ({{{Year|}}})
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="1928" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Examples}}
+      <text bytes="2080" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Examples}}
 {{Saintapedia Graph examples}}
 
-Each page below has the &apos;&apos;&apos;wikitext&apos;&apos;&apos; and, when the bundled OrgDemo / GrantDemo tables are present, a &apos;&apos;&apos;live graph&apos;&apos;&apos; on the same page. Import with &lt;code&gt;importPages --examples&lt;/code&gt;.
+Each page below has the &apos;&apos;&apos;wikitext&apos;&apos;&apos; and, when the sample Cargo tables exist, a &apos;&apos;&apos;live graph&apos;&apos;&apos; on the same page. [[Template:Org chart]] is not a Cargo template — create tables from [[Help:Saintapedia Graph/Create tables]].
 
 {| class=&quot;wikitable&quot;
 ! Page
@@ -1334,34 +1556,122 @@ Each page below has the &apos;&apos;&apos;wikitext&apos;&apos;&apos; and, when t
 |-
 | [[Help:Saintapedia Graph/Deaneries|Deaneries]]
 | Hierarchy
-| Code only — needs your Places table
+| [[Template:DemoPlace]] — create table, then add rows
 |-
 | [[Help:Saintapedia Graph/Religious houses|Religious houses]]
 | Hierarchy
-| Code only
+| [[Template:DemoHouse]]
 |-
 | [[Help:Saintapedia Graph/Schools|Schools]]
 | Hierarchy
-| Code only
+| [[Template:DemoSchool]]
 |-
 | [[Help:Saintapedia Graph/Episcopal lineage|Episcopal lineage]]
 | Hierarchy
-| Code only
+| [[Template:DemoBishop]]
 |-
 | [[Help:Saintapedia Graph/Twin parishes|Twin parishes]]
 | Edge
-| Code only
+| [[Template:DemoParishLink]]
 |-
 | [[Help:Saintapedia Graph/Patron saints|Patron saints]]
 | Edge
-| Code only
+| [[Template:DemoPatronage]]
 |-
 | [[Help:Saintapedia Graph/Successors|Successors]]
 | Edge
-| Code only
+| [[Template:DemoSuccessor]]
 |}
 
 Sample tables are &apos;&apos;&apos;OrgDemo&apos;&apos;&apos; / &apos;&apos;&apos;GrantDemo&apos;&apos;&apos; so they do not replace Organization or Grant. On a real diocese wiki, change the table and field names (for example &lt;code&gt;table=Parishes&lt;/code&gt;, &lt;code&gt;parent=Diocese&lt;/code&gt;).
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]
+</text>
+      <sha1 />
+    </revision>
+  </page>
+  <page>
+    <title>Help:Saintapedia Graph/Create tables</title>
+    <ns>12</ns>
+    <revision>
+      <contributor>
+        <username>SaintapediaGraph</username>
+      </contributor>
+      <origin>0</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2761" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Create tables}}
+{{Saintapedia Graph examples}}
+
+[[Template:Org chart]] and [[Template:Funding network]] are &apos;&apos;&apos;graph wrappers&apos;&apos;&apos;. They do not declare Cargo tables.
+
+Each sample table is a &apos;&apos;&apos;Cargo template&apos;&apos;&apos; with &lt;code&gt;#cargo_declare&lt;/code&gt; (on the template page) and &lt;code&gt;#cargo_store&lt;/code&gt; (when you transclude it). Special:Import copies the wikitext only — Cargo does not create the SQL table until you do this:
+
+# Open the template (list below).
+# If you just imported it, click &apos;&apos;&apos;Edit&apos;&apos;&apos; → &apos;&apos;&apos;Save&apos;&apos;&apos; (no changes needed). That registers the declaration.
+# On the template page, under &apos;&apos;&apos;Cargo declaration&apos;&apos;&apos;, click &apos;&apos;&apos;Create data table&apos;&apos;&apos; (or &apos;&apos;&apos;Recreate data&apos;&apos;&apos; if it already exists).
+# Confirm at [[Special:CargoTables]].
+
+You need the &lt;code&gt;recreatecargodata&lt;/code&gt; right (usually sysop).
+
+{| class=&quot;wikitable&quot;
+! Cargo template
+! Table
+! Used on
+|-
+| [[Template:OrgDemo]]
+| OrgDemo
+| [[Help:Saintapedia Graph/Province|Province]], one diocese, by country, funding nodes
+|-
+| [[Template:GrantDemo]]
+| GrantDemo
+| [[Help:Saintapedia Graph/Funding|Funding]], one funder
+|-
+| [[Template:DemoPlace]]
+| DemoPlace
+| [[Help:Saintapedia Graph/Deaneries|Deaneries]]
+|-
+| [[Template:DemoHouse]]
+| DemoHouse
+| [[Help:Saintapedia Graph/Religious houses|Religious houses]]
+|-
+| [[Template:DemoSchool]]
+| DemoSchool
+| [[Help:Saintapedia Graph/Schools|Schools]]
+|-
+| [[Template:DemoBishop]]
+| DemoBishop
+| [[Help:Saintapedia Graph/Episcopal lineage|Episcopal lineage]]
+|-
+| [[Template:DemoParishLink]]
+| DemoParishLink
+| [[Help:Saintapedia Graph/Twin parishes|Twin parishes]]
+|-
+| [[Template:DemoPatronage]]
+| DemoPatronage
+| [[Help:Saintapedia Graph/Patron saints|Patron saints]]
+|-
+| [[Template:DemoSuccessor]]
+| DemoSuccessor
+| [[Help:Saintapedia Graph/Successors|Successors]]
+|}
+
+Names are all &lt;code&gt;Demo…&lt;/code&gt; / OrgDemo / GrantDemo so they will not replace Parishes, Organizations, or Grant on a live wiki.
+
+If the wiki has shell access, this creates every sample table in one go:
+
+&lt;pre&gt;
+php extensions/Cargo/maintenance/cargoRecreateData.php --table OrgDemo
+php extensions/Cargo/maintenance/cargoRecreateData.php --table GrantDemo
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoPlace
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoHouse
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoSchool
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoBishop
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoParishLink
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoPatronage
+php extensions/Cargo/maintenance/cargoRecreateData.php --table DemoSuccessor
+&lt;/pre&gt;
 
 [[Category:Help]]
 [[Category:Saintapedia Graph]]
@@ -1732,18 +2042,16 @@ tables=OrgDemo
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="710" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Deaneries}}
+      <text bytes="620" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Deaneries}}
 {{Saintapedia Graph examples}}
 
-Diocese → deanery → parish. The bundled OrgDemo sample has no deanery layer, so there is no live graph here. See [[Help:Saintapedia Graph/Province]] for a parent/child diagram.
-
-Store the deanery as the parish&apos;s parent; give each deanery page a parent of the diocese. &lt;code&gt;Kind&lt;/code&gt; values like Diocese / Deanery / Parish color the layers.
+Diocese → deanery → parish. Cargo template: [[Template:DemoPlace]] (table &apos;&apos;&apos;DemoPlace&apos;&apos;&apos;). [[Help:Saintapedia Graph/Create tables|Create the table]] first, then add pages that transclude &lt;code&gt;&lt;nowiki&gt;{{DemoPlace|Kind=Deanery|…}}&lt;/nowiki&gt;&lt;/code&gt;.
 
 == Wikitext ==
 
 &lt;pre&gt;
 {{#saintapedia_graph:
-tables=Places
+tables=DemoPlace
 |fields=_pageName,ParentPlace,Kind
 |where=Diocese=&quot;Diocese of Eastfield&quot;
 |parent_field=ParentPlace
@@ -1770,16 +2078,16 @@ tables=Places
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="625" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Religious houses}}
+      <text bytes="637" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Religious houses}}
 {{Saintapedia Graph examples}}
 
-Congregation → province → house. OrgDemo has a single religious-order row, not a houses table, so there is no live graph here. See [[Help:Saintapedia Graph/Province]] for the sample tree (it includes Demo Sisters of Mercy Outreach).
+Congregation → province → house. Cargo template: [[Template:DemoHouse]] (table &apos;&apos;&apos;DemoHouse&apos;&apos;&apos;). [[Help:Saintapedia Graph/Create tables|Create the table]] first. The OrgDemo sample also includes one order row; see [[Help:Saintapedia Graph/Province]].
 
 == Wikitext ==
 
 &lt;pre&gt;
 {{#saintapedia_graph:
-tables=ReligiousHouses
+tables=DemoHouse
 |fields=_pageName,Province,Institute,Country
 |parent_field=Province
 |node_id=_pageName
@@ -1807,18 +2115,18 @@ tables=ReligiousHouses
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="565" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Schools}}
+      <text bytes="598" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Schools}}
 {{Saintapedia Graph examples}}
 
-Catholic schools under a parish or diocese. No Schools table in the bundled sample.
+Catholic schools under a parish or diocese. Cargo template: [[Template:DemoSchool]] (table &apos;&apos;&apos;DemoSchool&apos;&apos;&apos;). [[Help:Saintapedia Graph/Create tables|Create the table]] first.
 
-&lt;code&gt;Level&lt;/code&gt; = Elementary / High school / University. Clicks go to the school page; the parish is the parent node.
+&lt;code&gt;Level&lt;/code&gt; = Elementary / High school / University.
 
 == Wikitext ==
 
 &lt;pre&gt;
 {{#saintapedia_graph:
-tables=Schools
+tables=DemoSchool
 |fields=_pageName,Parish,Level,City
 |where=Diocese=&quot;Diocese of Eastfield&quot;
 |parent_field=Parish
@@ -1845,16 +2153,16 @@ tables=Schools
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="545" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Episcopal lineage}}
+      <text bytes="633" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Episcopal lineage}}
 {{Saintapedia Graph examples}}
 
-Each bishop row points at the consecrating bishop (Page field). Mutual consecrations are directed cycles — warn or drop them. No Bishops table in the bundled sample.
+Each bishop row points at the consecrating bishop. Cargo template: [[Template:DemoBishop]] (table &apos;&apos;&apos;DemoBishop&apos;&apos;&apos;). [[Help:Saintapedia Graph/Create tables|Create the table]] first. Mutual consecrations are cycles — keep &lt;code&gt;warn_cycles=yes&lt;/code&gt;.
 
 == Wikitext ==
 
 &lt;pre&gt;
 {{#saintapedia_graph:
-tables=Bishops
+tables=DemoBishop
 |fields=_pageName,Consecrator,See
 |parent_field=Consecrator
 |node_id=_pageName
@@ -1883,16 +2191,16 @@ tables=Bishops
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="535" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Twin parishes}}
+      <text bytes="633" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Twin parishes}}
 {{Saintapedia Graph examples}}
 
-Twin parishes or a merged cluster. One row per pair — edge mode, not a hierarchy. No ParishLinks table in the bundled sample.
+Twin parishes or a merged cluster. Cargo template: [[Template:DemoParishLink]] (table &apos;&apos;&apos;DemoParishLink&apos;&apos;&apos;). [[Help:Saintapedia Graph/Create tables|Create the table]] first. One row per pair — edge mode, not a hierarchy.
 
 == Wikitext ==
 
 &lt;pre&gt;
 {{#saintapedia_graph:
-tables=ParishLinks
+tables=DemoParishLink
 |fields=Parish,LinkedParish,Relation
 |where=Relation=&quot;cluster&quot; OR Relation=&quot;twin&quot;
 |source_field=Parish
@@ -1920,16 +2228,16 @@ tables=ParishLinks
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="423" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Patron saints}}
+      <text bytes="511" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Patron saints}}
 {{Saintapedia Graph examples}}
 
-Patron saint → parish or place. Edge mode. No Patronage table in the bundled sample.
+Patron saint → parish or place. Cargo template: [[Template:DemoPatronage]] (table &apos;&apos;&apos;DemoPatronage&apos;&apos;&apos;). [[Help:Saintapedia Graph/Create tables|Create the table]] first.
 
 == Wikitext ==
 
 &lt;pre&gt;
 {{#saintapedia_graph:
-tables=Patronage
+tables=DemoPatronage
 |fields=Saint,Place,Feast
 |source_field=Saint
 |target_field=Place
@@ -1956,18 +2264,17 @@ tables=Patronage
       <origin>0</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="558" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Successors}}
+      <text bytes="501" xml:space="preserve">{{DISPLAYTITLE:Help:Saintapedia Graph/Successors}}
 {{Saintapedia Graph examples}}
 
-Suppressed diocese → successor see. If &lt;code&gt;SucceededBy IS NOT NULL&lt;/code&gt; is invalid in your Cargo version, store a boolean &lt;code&gt;IsSuppressed&lt;/code&gt; and filter on that. No successor column in OrgDemo.
+Suppressed diocese → successor see. Cargo template: [[Template:DemoSuccessor]] (table &apos;&apos;&apos;DemoSuccessor&apos;&apos;&apos;). [[Help:Saintapedia Graph/Create tables|Create the table]] first.
 
 == Wikitext ==
 
 &lt;pre&gt;
 {{#saintapedia_graph:
-tables=Dioceses
+tables=DemoSuccessor
 |fields=_pageName,SucceededBy,Country
-|where=SucceededBy IS NOT NULL
 |source_field=_pageName
 |target_field=SucceededBy
 |direction=LR

@@ -1,13 +1,13 @@
 {{DISPLAYTITLE:Help:Saintapedia Graph/Patron saints}}
 {{Saintapedia Graph examples}}
 
-Patron saint → parish or place. Edge mode. No Patronage table in the bundled sample.
+Patron saint → parish or place. Cargo template: [[Template:DemoPatronage]] (table '''DemoPatronage'''). [[Help:Saintapedia Graph/Create tables|Create the table]] first.
 
 == Wikitext ==
 
 <pre>
 {{#saintapedia_graph:
-tables=Patronage
+tables=DemoPatronage
 |fields=Saint,Place,Feast
 |source_field=Saint
 |target_field=Place

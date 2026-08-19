@@ -49,6 +49,34 @@ class PageCatalog {
 				'file' => 'examples/pages/Template_GrantDemo.wikitext',
 			],
 			[
+				'title' => 'Template:DemoPlace',
+				'file' => 'examples/pages/Template_DemoPlace.wikitext',
+			],
+			[
+				'title' => 'Template:DemoHouse',
+				'file' => 'examples/pages/Template_DemoHouse.wikitext',
+			],
+			[
+				'title' => 'Template:DemoSchool',
+				'file' => 'examples/pages/Template_DemoSchool.wikitext',
+			],
+			[
+				'title' => 'Template:DemoBishop',
+				'file' => 'examples/pages/Template_DemoBishop.wikitext',
+			],
+			[
+				'title' => 'Template:DemoParishLink',
+				'file' => 'examples/pages/Template_DemoParishLink.wikitext',
+			],
+			[
+				'title' => 'Template:DemoPatronage',
+				'file' => 'examples/pages/Template_DemoPatronage.wikitext',
+			],
+			[
+				'title' => 'Template:DemoSuccessor',
+				'file' => 'examples/pages/Template_DemoSuccessor.wikitext',
+			],
+			[
 				'title' => 'Demo Archdiocese of Northbridge',
 				'file' => 'examples/pages/Demo_Archdiocese_of_Northbridge.wikitext',
 			],
@@ -119,6 +147,10 @@ class PageCatalog {
 			[
 				'title' => 'Help:Saintapedia Graph/Examples',
 				'file' => 'examples/help/Examples.wikitext',
+			],
+			[
+				'title' => 'Help:Saintapedia Graph/Create tables',
+				'file' => 'examples/help/Create_tables.wikitext',
 			],
 			[
 				'title' => 'Help:Saintapedia Graph/Province',
