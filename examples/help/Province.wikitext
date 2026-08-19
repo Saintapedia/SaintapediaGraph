@@ -1,0 +1,41 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/Province}}
+{{Saintapedia Graph examples}}
+
+Archdiocese → diocese → parish (and a religious order / foundation). Same pattern as a real Places or Parishes table with a Page-type parent column.
+
+== Wikitext ==
+
+<pre>
+{{#saintapedia_graph:
+tables=OrgDemo
+|fields=_pageName=Name,ParentOrg,Type,Country
+|parent_field=ParentOrg
+|node_id=Name
+|node_label=Name
+|style_by=Type
+|subgraph_by=Country
+|direction=TD
+|clickable=yes
+}}
+</pre>
+
+On your wiki: <code>tables=Parishes</code> and <code>parent_field=Diocese</code> (or <code><nowiki>{{Org chart|table=Parishes|parent=Diocese|id=_pageName|style=Kind}}</nowiki></code>).
+
+== Live ==
+
+{{#saintapedia_graph:
+tables=OrgDemo
+|fields=_pageName=Name,ParentOrg,Type,Country
+|parent_field=ParentOrg
+|node_id=Name
+|node_label=Name
+|style_by=Type
+|subgraph_by=Country
+|direction=TD
+|clickable=yes
+}}
+
+Click a node to open that demo page.
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

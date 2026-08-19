@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- `importPages --examples` imports collision-safe '''OrgDemo''' / '''GrantDemo''' Cargo templates, a fictional archdiocese → diocese → parish tree, sample grants, and `Saintapedia Graph demo`. Not imported by default (a wiki may already have Organization / Grant).
+- mediawiki.org draft documents the example import. Paste `docs/mediawiki.org-Extension-SaintapediaGraph.wikitext` by hand; it is not a wiki catalog page.
+- Help / README / mediawiki.org draft: gallery of uses (dioceses, deaneries, orders, schools, consecrators, grants, patrons, clusters).
+- Example series lives under **Help:Saintapedia Graph/…** — one page per use with the snippet and the live graph together. `Saintapedia Graph demo` redirects to `Help:Saintapedia Graph/Examples`.
+- Special:Import dumps on GitHub: `docs/import/SaintapediaGraph-help.xml` and `SaintapediaGraph-examples.xml` (`php maintenance/buildImportXml.php`).
+
 ## 0.2.5 — 2026-08-15
 
 Deploy this tag (or `main` after it), not `v0.2.4`. The `v0.2.4` tag is docs-only and still initializes Mermaid with `securityLevel: 'loose'`.

@@ -1,0 +1,7 @@
+{{GrantDemo
+|Funder=Demo Archdiocese of Harbourview
+|Recipient=Demo Parish of Our Lady of the Harbor
+|Amount=30000
+|Year=2024
+|Program=Parish support
+}}

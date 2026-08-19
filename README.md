@@ -46,7 +46,16 @@ wfLoadExtension( 'SaintapediaGraph' );
 ```
 
 3. Check `Special:Version` for **Saintapedia Graph 0.2.5**.
-4. Import help + templates:
+4. Import help + templates — **Special:Import** (no shell) or the maintenance script.
+
+**Special:Import:** download a dump, then `Special:Import` → upload (needs the `import` right):
+
+| Dump | Contents |
+|---|---|
+| [SaintapediaGraph-help.xml](https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-help.xml) | Help, `Org chart`, `Funding network`, right-hand examples table |
+| [SaintapediaGraph-examples.xml](https://raw.githubusercontent.com/Saintapedia/SaintapediaGraph/main/docs/import/SaintapediaGraph-examples.xml) | Help **plus** OrgDemo / GrantDemo, Demo … pages, and `Help:Saintapedia Graph/…` |
+
+Also in the repo at `docs/import/`. Regenerated with `php maintenance/buildImportXml.php`.
 
 ```sh
 # MediaWiki 1.40+
@@ -56,11 +65,20 @@ php extensions/SaintapediaGraph/maintenance/importPages.php
 
 # Preview:  --dry-run
 # Replace:  --overwrite
+# Also import OrgDemo/GrantDemo sample diocese/parish pages:
+#   --examples
 ```
 
-That writes `Help:Saintapedia Graph`, `Template:Org chart`, and `Template:Funding network`.
+That writes `Help:Saintapedia Graph`, `Template:Org chart`, `Template:Funding network`, and `Template:Saintapedia Graph examples` (right-hand series table). With `--examples` it also writes `Template:OrgDemo`, `Template:GrantDemo`, the sample diocese/parish pages, and the **Help:Saintapedia Graph/…** example series (code + live graph on each page). Table names are **OrgDemo** / **GrantDemo** so they do not collide with a wiki's Organization or Grant templates. The old title `Saintapedia Graph demo` redirects to `Help:Saintapedia Graph/Examples`.
 
-No `update.php` run is required (no database tables).
+After `--examples`, if [[Special:CargoTables]] has no rows:
+
+```sh
+php extensions/Cargo/maintenance/cargoRecreateData.php --table OrgDemo
+php extensions/Cargo/maintenance/cargoRecreateData.php --table GrantDemo
+```
+
+No `update.php` run is required (no database tables of our own).
 
 ## Configuration
 
@@ -149,8 +167,8 @@ Names are case-insensitive; spaces and hyphens become underscores (`join on` = `
 
 | Template | Mode | Useful arguments |
 |----------|------|------------------|
-| `{{Org chart}}` | Hierarchy over `Organizations` | `table`, `parent`, `id`, `label`, `style`, `subgraph`, `where`, `order`, `direction`, `limit` (default 200), `theme`, `clickable`, `warn_cycles`, `break_cycles` |
-| `{{Funding network}}` | Dual `Organizations` + `Grants` | `nodes`, `edges`, `source`, `target`, `id` (default `_pageName`), `label` (default `Name`), `edge_label` (default `Amount`), `style`, `subgraph`, `edges_where` / `where`, `nodes_where`, `direction` (default `LR`), `theme` (default `forest`), `limit` (default 300) |
+| `{{Org chart}}` | Hierarchy (defaults assume `Organizations`; pass `table=` for Parishes, OrgDemo, …) | `table`, `parent`, `id`, `label`, `style`, `subgraph`, `where`, `order`, `direction`, `limit` (default 200), `theme`, `clickable`, `warn_cycles`, `break_cycles` |
+| `{{Funding network}}` | Dual nodes + edges (defaults `Organizations` / `Grants`; pass `nodes=` / `edges=` for OrgDemo / GrantDemo) | `nodes`, `edges`, `source`, `target`, `id` (default `_pageName`), `label` (default `Name`), `edge_label` (default `Amount`), `style`, `subgraph`, `edges_where` / `where`, `nodes_where`, `direction` (default `LR`), `theme` (default `forest`), `limit` (default 300) |
 
 `style` / `subgraph` must be real columns. See the help page for the full argument → parser-function map.
 
@@ -170,11 +188,28 @@ Not in 0.2.5: N-hop expand, Sankey, hover field tooltips, SVG/PNG export.
 
 ## Examples
 
+After `--examples`, each use is its own Help page (wikitext + live graph): [Help:Saintapedia Graph/Examples](docs/Help-Saintapedia_Graph.wikitext). Patterns below are the ones most wikis copy first.
+
+| Use | Mode | Starter |
+|---|---|---|
+| Archdiocese → diocese → parish | Hierarchy | `{{Org chart\|table=Parishes\|parent=Diocese\|id=_pageName}}` |
+| One diocese only | Hierarchy | add `where=Diocese="…"` |
+| Religious houses in a province | Hierarchy | `parent_field=Province` |
+| Catholic schools | Hierarchy | parent = parish; `style_by=Level` |
+| Episcopal lineage | Hierarchy | `parent_field=Consecrator` |
+| Grants this year | Dual | `{{Funding network\|nodes=Places\|edges=Grants\|edges_where=Year>=2023}}` |
+| One foundation's giving | Edge | `where=Funder="…"` |
+| Twin / clustered parishes | Edge | `link_style=<-->` |
+| Patron saint → place | Edge | `source_field=Saint` `target_field=Place` |
+| Suppressed see → successor | Edge | `source_field=_pageName` `target_field=SucceededBy` |
+
 ### Org chart
+
+Works for archdioceses, dioceses, parishes, orders — any parent/child Cargo table. The bundled sample uses **OrgDemo**:
 
 ```wikitext
 {{#saintapedia_graph:
-tables=Organizations
+tables=OrgDemo
 |fields=_pageName=Name,ParentOrg,Type,Country
 |parent_field=ParentOrg
 |node_id=Name
@@ -184,15 +219,17 @@ tables=Organizations
 }}
 ```
 
-Or: `{{Org chart|style=Type|subgraph=Country}}`
+Or: `{{Org chart|table=OrgDemo|style=Type|subgraph=Country}}`
+
+On a real diocese wiki: `{{Org chart|table=Parishes|parent=Diocese|id=_pageName}}`.
 
 ### Dual-table funding network
 
 ```wikitext
 {{#saintapedia_graph:
-nodes_table=Organizations
+nodes_table=OrgDemo
 |nodes_fields=_pageName=Name,Type,Country
-|edges_table=Grants
+|edges_table=GrantDemo
 |edges_fields=Funder,Recipient,Amount
 |edges_where=Year>=2023
 |node_id=_pageName
@@ -207,7 +244,20 @@ nodes_table=Organizations
 }}
 ```
 
-Or: `{{Funding network|style=Type|subgraph=Country|edges_where=Year>=2023}}`
+Or: `{{Funding network|nodes=OrgDemo|edges=GrantDemo|style=Type|subgraph=Country|edges_where=Year>=2023}}`
+
+### Patronage or twin parishes (edge)
+
+```wikitext
+{{#saintapedia_graph:
+tables=Patronage
+|fields=Saint,Place,Feast
+|source_field=Saint
+|target_field=Place
+|edge_label=Feast
+|direction=LR
+}}
+```
 
 ### Single-query join
 
@@ -225,10 +275,10 @@ tables=Grants,Organizations
 ## Maintenance
 
 ```sh
-php maintenance/run.php SaintapediaGraph:importPages [--dry-run] [--overwrite]
+php maintenance/run.php SaintapediaGraph:importPages [--dry-run] [--overwrite] [--examples]
 ```
 
-Catalog of imported pages: `includes/Maintenance/PageCatalog.php` (unit-tested without MediaWiki).
+Catalog of imported pages: `includes/Maintenance/PageCatalog.php` (unit-tested without MediaWiki). `--examples` is opt-in (OrgDemo / GrantDemo + demo page). The mediawiki.org listing is a paste file only: `docs/mediawiki.org-Extension-SaintapediaGraph.wikitext` — do not import it onto the target wiki.
 
 ## CSP and languages
 
@@ -260,8 +310,8 @@ CI runs that suite on PHP 8.1, 8.2, and 8.3.
 After `wfLoadExtension( 'SaintapediaGraph' )` on a wiki:
 
 1. `Special:Version` shows **0.2.5** and `ext.saintapediaGraph`.
-2. `php maintenance/run.php SaintapediaGraph:importPages` (add `--overwrite` if pages exist).
-3. Confirm Help + both templates.
+2. `php maintenance/run.php SaintapediaGraph:importPages` (add `--overwrite` if pages exist; add `--examples` for OrgDemo/GrantDemo).
+3. Confirm Help + both templates (and, with `--examples`, `Help:Saintapedia Graph/Examples`).
 4. Render an org chart and a dual-table funding graph.
 5. Click a node — stay on-wiki.
 6. `theme=forset` still renders and warns.

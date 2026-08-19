@@ -1,0 +1,21 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/Successors}}
+{{Saintapedia Graph examples}}
+
+Suppressed diocese → successor see. If <code>SucceededBy IS NOT NULL</code> is invalid in your Cargo version, store a boolean <code>IsSuppressed</code> and filter on that. No successor column in OrgDemo.
+
+== Wikitext ==
+
+<pre>
+{{#saintapedia_graph:
+tables=Dioceses
+|fields=_pageName,SucceededBy,Country
+|where=SucceededBy IS NOT NULL
+|source_field=_pageName
+|target_field=SucceededBy
+|direction=LR
+|clickable=yes
+}}
+</pre>
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

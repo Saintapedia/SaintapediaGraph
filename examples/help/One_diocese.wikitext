@@ -1,0 +1,35 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/One diocese}}
+{{Saintapedia Graph examples}}
+
+One diocese and the parishes that name it as parent. On a real wiki filter <code>where=Diocese="…"</code>.
+
+== Wikitext ==
+
+<pre>
+{{#saintapedia_graph:
+tables=OrgDemo
+|fields=_pageName=Name,ParentOrg,Type
+|where=Name="Demo Diocese of Eastfield" OR ParentOrg="Demo Diocese of Eastfield"
+|parent_field=ParentOrg
+|node_id=Name
+|style_by=Type
+|direction=TD
+|clickable=yes
+}}
+</pre>
+
+== Live ==
+
+{{#saintapedia_graph:
+tables=OrgDemo
+|fields=_pageName=Name,ParentOrg,Type
+|where=Name="Demo Diocese of Eastfield" OR ParentOrg="Demo Diocese of Eastfield"
+|parent_field=ParentOrg
+|node_id=Name
+|style_by=Type
+|direction=TD
+|clickable=yes
+}}
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

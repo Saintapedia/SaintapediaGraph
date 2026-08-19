@@ -1,0 +1,7 @@
+{{OrgDemo
+|Name=Demo Archdiocese of Harbourview
+|ParentOrg=
+|Type=Archdiocese
+|Country=Canada
+|Website=
+}}

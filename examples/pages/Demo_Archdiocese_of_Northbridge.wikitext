@@ -1,0 +1,7 @@
+{{OrgDemo
+|Name=Demo Archdiocese of Northbridge
+|ParentOrg=
+|Type=Archdiocese
+|Country=United States
+|Website=
+}}

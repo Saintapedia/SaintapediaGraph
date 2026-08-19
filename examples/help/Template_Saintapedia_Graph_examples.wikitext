@@ -1,0 +1,43 @@
+<noinclude>
+Right-hand nav for [[Help:Saintapedia Graph]] and the example series.
+Transclude with <code><nowiki>{{Saintapedia Graph examples}}</nowiki></code>.
+</noinclude>{| class="wikitable" style="float:right; clear:right; margin:0 0 1em 1.5em; width:16em; font-size:90%;"
+! [[Help:Saintapedia Graph|Saintapedia Graph]]
+|-
+| [[Help:Saintapedia Graph|Help (reference)]]
+|-
+| [[Help:Saintapedia Graph/Examples|Examples index]]
+|-
+! Live on OrgDemo
+|-
+| [[Help:Saintapedia Graph/Province|Province]]
+|-
+| [[Help:Saintapedia Graph/One diocese|One diocese]]
+|-
+| [[Help:Saintapedia Graph/By country|By country]]
+|-
+| [[Help:Saintapedia Graph/Funding|Funding]]
+|-
+| [[Help:Saintapedia Graph/One funder|One funder]]
+|-
+| [[Help:Saintapedia Graph/Templates|Templates]]
+|-
+| [[Help:Saintapedia Graph/Raw source|Raw source]]
+|-
+! Your own tables
+|-
+| [[Help:Saintapedia Graph/Deaneries|Deaneries]]
+|-
+| [[Help:Saintapedia Graph/Religious houses|Religious houses]]
+|-
+| [[Help:Saintapedia Graph/Schools|Schools]]
+|-
+| [[Help:Saintapedia Graph/Episcopal lineage|Episcopal lineage]]
+|-
+| [[Help:Saintapedia Graph/Twin parishes|Twin parishes]]
+|-
+| [[Help:Saintapedia Graph/Patron saints|Patron saints]]
+|-
+| [[Help:Saintapedia Graph/Successors|Successors]]
+|}
+<includeonly>{{#if:{{{break|}}}|<br style="clear:both;" />}}</includeonly>

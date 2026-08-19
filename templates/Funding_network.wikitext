@@ -1,14 +1,14 @@
 <noinclude>
 '''Template:Funding network''' — dual-table funding diagram for [[Help:Saintapedia Graph]]
-(nodes from Organizations, edges from Grants).
+(nodes from one table, edges from another). Defaults are Organizations / Grants; the bundled sample uses OrgDemo / GrantDemo.
 
 Uses <code>node_id=_pageName</code> by default so Funder/Recipient page titles match.
 <code>style</code> / <code>subgraph</code> must be real Cargo columns on the nodes table.
 
 <pre>
 {{Funding network
-|nodes=Organizations
-|edges=Grants
+|nodes=OrgDemo
+|edges=GrantDemo
 |style=Type
 |subgraph=Country
 |source=Funder

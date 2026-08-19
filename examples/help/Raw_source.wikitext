@@ -1,0 +1,31 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/Raw source}}
+{{Saintapedia Graph examples}}
+
+<code>format=raw</code> prints Mermaid instead of drawing. Use this while matching column names.
+
+== Wikitext ==
+
+<pre>
+{{#saintapedia_graph:
+tables=OrgDemo
+|fields=_pageName=Name,ParentOrg,Type
+|parent_field=ParentOrg
+|node_id=Name
+|format=raw
+|limit=20
+}}
+</pre>
+
+== Live ==
+
+{{#saintapedia_graph:
+tables=OrgDemo
+|fields=_pageName=Name,ParentOrg,Type
+|parent_field=ParentOrg
+|node_id=Name
+|format=raw
+|limit=20
+}}
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

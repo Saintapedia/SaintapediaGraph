@@ -1,7 +1,9 @@
-== Grants table ==
+== GrantDemo table (bundled sample) ==
+
+Does not use the name Grant. Funder/Recipient can be a foundation, diocese, parish, or order.
 
 <pre>
-{{#cargo_declare:_table=Grants
+{{#cargo_declare:_table=GrantDemo
 |Funder=Page
 |Recipient=Page
 |Amount=Float
@@ -14,7 +16,7 @@
 
 <pre>
 {{#saintapedia_graph:
-tables=Grants
+tables=GrantDemo
 |fields=Funder,Recipient,Amount,Year
 |where=Year>=2023
 |order by=Amount DESC
@@ -26,3 +28,5 @@ tables=Grants
 |clickable=yes
 }}
 </pre>
+
+Dual-table (colors from OrgDemo): <code><nowiki>{{Funding network|nodes=OrgDemo|edges=GrantDemo|style=Type}}</nowiki></code>.

@@ -1,0 +1,24 @@
+{{DISPLAYTITLE:Help:Saintapedia Graph/Deaneries}}
+{{Saintapedia Graph examples}}
+
+Diocese → deanery → parish. The bundled OrgDemo sample has no deanery layer, so there is no live graph here. See [[Help:Saintapedia Graph/Province]] for a parent/child diagram.
+
+Store the deanery as the parish's parent; give each deanery page a parent of the diocese. <code>Kind</code> values like Diocese / Deanery / Parish color the layers.
+
+== Wikitext ==
+
+<pre>
+{{#saintapedia_graph:
+tables=Places
+|fields=_pageName,ParentPlace,Kind
+|where=Diocese="Diocese of Eastfield"
+|parent_field=ParentPlace
+|node_id=_pageName
+|style_by=Kind
+|direction=TD
+|clickable=yes
+}}
+</pre>
+
+[[Category:Help]]
+[[Category:Saintapedia Graph]]

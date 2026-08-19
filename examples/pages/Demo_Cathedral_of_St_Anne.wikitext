@@ -1,0 +1,7 @@
+{{OrgDemo
+|Name=Demo Cathedral of St. Anne
+|ParentOrg=Demo Diocese of Eastfield
+|Type=Parish
+|Country=United States
+|Website=
+}}

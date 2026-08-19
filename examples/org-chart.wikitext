@@ -1,7 +1,9 @@
-== Organizations table ==
+== OrgDemo table (bundled sample) ==
+
+Does not use the name Organization. Same columns work for archdioceses, dioceses, and parishes.
 
 <pre>
-{{#cargo_declare:_table=Organizations
+{{#cargo_declare:_table=OrgDemo
 |Name=String
 |ParentOrg=Page
 |Type=String
@@ -14,15 +16,17 @@
 
 <pre>
 {{#saintapedia_graph:
-tables=Organizations
+tables=OrgDemo
 |fields=_pageName=Name,ParentOrg,Type
-|where=Type="Nonprofit" OR Type="Foundation" OR Type="Company"
 |order by=Name
 |limit=200
 |direction=TD
 |node_id=Name
 |node_label=Name
 |parent_field=ParentOrg
+|style_by=Type
 |clickable=yes
 }}
 </pre>
+
+On a real wiki: <code><nowiki>{{Org chart|table=Parishes|parent=Diocese|id=_pageName}}</nowiki></code>.

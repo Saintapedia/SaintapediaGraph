@@ -1,0 +1,7 @@
+{{OrgDemo
+|Name=Demo Diocese of Eastfield
+|ParentOrg=Demo Archdiocese of Northbridge
+|Type=Diocese
+|Country=United States
+|Website=
+}}

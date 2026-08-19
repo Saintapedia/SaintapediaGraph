@@ -43,6 +43,8 @@ Other candidates considered: Relations, OrgViz, Network, LinkMap, Flow, Connect,
 - [x] Tag **v0.2.2** / **v0.2.3** / **v0.2.4** (0.2.4 is docs-only — do not deploy it)
 - [ ] Tag **v0.2.5** after this release PR (`antiscript` + pre-prod fixes)
 - [x] Local Canasta smoke including `antiscript` clicks
+- [x] Opt-in `importPages --examples` (OrgDemo / GrantDemo diocese–parish sample)
+- [x] Special:Import XML dumps in `docs/import/`
 - [ ] Create https://www.mediawiki.org/wiki/Extension:SaintapediaGraph from the draft
 - [ ] Enable on production Saintapedia (deploy **v0.2.5**, not v0.2.4)
 

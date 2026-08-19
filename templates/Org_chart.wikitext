@@ -1,11 +1,11 @@
 <noinclude>
 '''Template:Org chart''' — wrapper for [[Help:Saintapedia Graph]] hierarchy diagrams.
 
-<code>style</code> / <code>subgraph</code> must be real Cargo columns (e.g. Type, Country).
+<code>style</code> / <code>subgraph</code> must be real Cargo columns (e.g. Type, Country). Pass <code>table=</code> for Parishes, OrgDemo, or any parent/child table.
 
 <pre>
 {{Org chart
-|table=Organizations
+|table=OrgDemo
 |parent=ParentOrg
 |id=Name
 |label=Name
